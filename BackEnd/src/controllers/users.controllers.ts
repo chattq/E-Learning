@@ -21,7 +21,6 @@ class UserController {
   }
   async loginController(req: Request, res: Response) {
     const { email, password } = req.body
-
     const result = await userService.login(email)
     const inforUser = (await userService.getUserByEmail(email)) as RegisterReqBody[]
 
