@@ -1,4 +1,4 @@
-import db from '~/config/database.config'
+import { mariaDBQuery } from '~/config/database.config'
 
 import { useGetTime } from '~/utils/useGetTime'
 import { hasPassword } from '~/utils/crypto'
@@ -14,10 +14,9 @@ class UserModel {
   createUser(payload: RegisterReqBody) {
     const { getTimeMoment } = useGetTime()
     const { name, email, password, date_of_birth } = payload
-
     const insertQuery = `INSERT INTO users (id, name, email, password, date_of_birth, created_at) VALUES (?, ?, ?, ?, ?, ?)`
     return new Promise((resolve, reject) => {
-      db.query(
+      mariaDBQuery(
         insertQuery,
         [email.toUpperCase(), name, email, hasPassword(password), date_of_birth, getTimeMoment()],
         (err: any, results: any) => {
@@ -33,7 +32,7 @@ class UserModel {
 
   getUserByEmail(email: string) {
     return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM `users` WHERE `email` = ?', [email], (err: any, results: any) => {
+      mariaDBQuery('SELECT * FROM `users` WHERE `email` = ?', [email], (err: any, results: any) => {
         if (err) {
           reject(err)
         } else {
@@ -44,7 +43,7 @@ class UserModel {
   }
   getUserByEmailAndPassword(email: string, password: string) {
     return new Promise((resolve, reject) => {
-      db.query(
+      mariaDBQuery(
         'SELECT * FROM `users` WHERE `email` = ? AND `password`= ?',
         [email, hasPassword(password)],
         (err: any, results: any) => {

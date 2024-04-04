@@ -1,0 +1,34 @@
+#scp -pr . root@103.124.93.29:/root/
+
+version: '3.8'
+services:
+  mariadb-container:
+    container_name: mariadb-container
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: 123456
+      MARIADB_DATABASE: elearningapp
+    ports:
+      - 3308:3306
+    #- ./sql/shopapp.sql:/docker-entrypoint-initdb.d/init-script.sql
+
+  phpmyadmin8-container:
+    #intel host
+    image: phpmyadmin/phpmyadmin
+    #mac m1 host
+    #image: arm64v8/phpmyadmin
+    container_name: phpmyadmin8-container
+    restart: always
+    depends_on:
+      - mariadb-container
+    ports:
+      - '8100:80' #port mapping
+    environment:
+      PMA_HOST: mariadb-container #phpMyAdmin Host, PMA = PHP My Amin
+#docker-compose -f ./deployment.yaml rm -s -f mariadb-container // xóa
+#docker-compose -f ./deployment.yaml up -d mariadb-container // tạo mới
+
+#docker-compose -f ./deployment.yaml rm -s -f phpmyadmin8-container
+#docker-compose -f ./deployment.yaml up -d phpmyadmin8-container
+

@@ -3,7 +3,7 @@ import usersRouter from './routes/users.routes'
 import { defaultErrorHandler } from './middlewares/error.middlewares'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
-import { checkMySQLConnection } from './middlewares/databaseConnect.middlewares'
+import { checkMariaDBConnection } from './middlewares/databaseConnect.middlewares'
 import mediasRouter from './routes/medias.routes'
 import { initFolder } from './utils/file'
 
@@ -13,12 +13,12 @@ const app = express()
 const httpServer = createServer(app)
 
 const port = process.env.PORT
-
-app.use(checkMySQLConnection)
+initFolder()
+app.use(checkMariaDBConnection)
 app.use(express.urlencoded())
 
 // tạo folder upload
-initFolder()
+
 app.use(express.json())
 
 app.use('/users', usersRouter)
