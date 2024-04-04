@@ -6,6 +6,8 @@ import { Server } from 'socket.io'
 import { checkMariaDBConnection } from './middlewares/databaseConnect.middlewares'
 import mediasRouter from './routes/medias.routes'
 import { initFolder } from './utils/file'
+import path from 'path'
+import { UPLOAD_DIR } from './constants/dir'
 
 require('dotenv').config()
 
@@ -23,6 +25,7 @@ app.use(express.json())
 
 app.use('/users', usersRouter)
 app.use('/medias', mediasRouter)
+app.use('/uploads', express.static(UPLOAD_DIR)) // trỏ đến link chứa file
 
 app.use(defaultErrorHandler)
 

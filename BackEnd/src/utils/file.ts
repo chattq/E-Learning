@@ -1,23 +1,26 @@
 import { Request } from 'express'
 import formidable from 'formidable'
 import fs from 'fs'
-import path from 'path'
+import { UPLOAD_TEMP_DIR } from '~/constants/dir'
 
 export const initFolder = () => {
-  const uploadFolderPath = path.resolve('uploads/images')
-  if (!fs.existsSync(uploadFolderPath)) {
-    fs.mkdirSync(uploadFolderPath, {
+  if (!fs.existsSync(UPLOAD_TEMP_DIR)) {
+    fs.mkdirSync(UPLOAD_TEMP_DIR, {
       recursive: true // mục đích là tạo folder
     })
   }
 }
 
-export const handleUploadSingleImage = async (req: Request) => {
+export const handleFileUpload = async (req: Request) => {
   const form = formidable({
-    uploadDir: path.resolve('uploads'),
+    uploadDir: UPLOAD_TEMP_DIR,
     maxFiles: 1,
     keepExtensions: true,
-    maxFileSize: 300 * 1024 //300kb
+    // maxFileSize: 300 * 1024 //300kb
+
+    filter: function ({ name, originalFilename, mimetype }) {
+      return true
+    }
   })
 
   return new Promise((resolve, reject) => {
@@ -25,7 +28,13 @@ export const handleUploadSingleImage = async (req: Request) => {
       if (err) {
         return reject(err)
       }
-      resolve(files)
+      resolve(files.file[0])
     })
   })
+}
+
+export const getNameFormFullName = (fullname: string) => {
+  const namearr = fullname.split('.')
+  namearr.pop()
+  return namearr.join('')
 }
