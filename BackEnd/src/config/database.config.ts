@@ -1,8 +1,8 @@
-import mysql from 'mariaDB'
+import mariaDB from 'mariaDB'
 
 require('dotenv').config()
 // Create the connection pool. The pool-specific settings are the defaults
-export const db = mysql.createPool({
+export const db = mariaDB.createPool({
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT),
   user: process.env.DB_USERNAME,
