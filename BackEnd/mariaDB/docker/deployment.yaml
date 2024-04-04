@@ -2,16 +2,15 @@
 
 version: '3.8'
 services:
-  mysql8-container:
-    container_name: mysql8-container
-    image: mysql:8.2.0
+  mariadb-container:
+    container_name: mariadb-container
+    image: mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: shopappnodejs
+      MARIADB_ROOT_PASSWORD: 123456
+      MARIADB_DATABASE: elearningapp
     ports:
       - 3308:3306
-    #volumes:
     #- ./sql/shopapp.sql:/docker-entrypoint-initdb.d/init-script.sql
 
   phpmyadmin8-container:
@@ -22,19 +21,14 @@ services:
     container_name: phpmyadmin8-container
     restart: always
     depends_on:
-      - mysql8-container
+      - mariadb-container
     ports:
       - '8100:80' #port mapping
     environment:
-      PMA_HOST: mysql8-container #phpMyAdmin Host, PMA = PHP My Amin
-
-#docker-compose -f ./deployment.yaml rm -s -f mysql8-container // xóa
-#docker-compose -f ./deployment.yaml up -d mysql8-container // tạo mới
+      PMA_HOST: mariadb-container #phpMyAdmin Host, PMA = PHP My Amin
+#docker-compose -f ./deployment.yaml rm -s -f mariadb-container // xóa
+#docker-compose -f ./deployment.yaml up -d mariadb-container // tạo mới
 
 #docker-compose -f ./deployment.yaml rm -s -f phpmyadmin8-container
 #docker-compose -f ./deployment.yaml up -d phpmyadmin8-container
 
-networks:
-  shopapp-network:
-    name: shopapp-network
-    driver: bridge
