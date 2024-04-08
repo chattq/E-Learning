@@ -1,10 +1,44 @@
 .ant-layout-header {
   padding: 0 20px 0 20px;
 }
-.box-shadow-header {
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1);
+// .box-shadow-header {
+//   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1);
+// }
+.header-wrapper {
+  border-bottom: 1px solid #d7d7d7 !important;
 }
 .sider-bar {
-  width: 235px !important;
-  max-width: 235px !important;
+  width: 240px !important;
+  max-width: 240px !important;
+  border-right: 1px solid #d7d7d7 !important;
+}
+.scrollable-wrapper::-webkit-scrollbar {
+  width: 0; /* Chiều rộng của thanh cuộn */
+}
+
+/* Nếu bạn muốn tùy chỉnh hơn */
+.scrollable-wrapper::-webkit-scrollbar-track {
+  background: transparent; /* Màu nền của track */
+}
+
+.scrollable-wrapper::-webkit-scrollbar-thumb {
+  background: transparent; /* Màu của thumb */
+}
+.scrollable-wrapper:hover {
+  overflow-y: auto;
+}
+
+/* Ẩn thanh cuộn */
+.scrollable-wrapper::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Hiển thị thanh cuộn khi hover */
+.scrollable-wrapper:hover::-webkit-scrollbar {
+  width: 7px; /* Độ rộng của thanh cuộn */
+}
+
+/* Màu của thanh cuộn khi hover */
+.scrollable-wrapper:hover::-webkit-scrollbar-thumb {
+  background-color: #d4d3d3;
 }
