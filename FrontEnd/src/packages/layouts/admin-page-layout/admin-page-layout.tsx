@@ -49,7 +49,7 @@ export default function AdminPageLayout({ children }: any) {
           backgroundColor: "#fff",
           lineHeight: "56px",
         }}
-        className="box-shadow-header">
+        className="box-shadow-header header-wrapper">
         <div></div>
         <div></div>
         <Space size={20}>
@@ -80,17 +80,18 @@ export default function AdminPageLayout({ children }: any) {
           marginTop: "60px",
         }}>
         <Sider
-          width="222px"
+          width="230px"
           style={{
-            overflowY: "scroll",
+            overflowY: "auto",
             position: "fixed",
             left: 0,
             top: 56,
             bottom: 0,
             width: 222,
             background: "#fff",
+            paddingTop: "5px",
           }}
-          className="sider-bar">
+          className="sider-bar scrollable-wrapper">
           <Menu
             // onClick={hanldeClickItemSideBar}
             className="nav-menu-items"
@@ -103,7 +104,7 @@ export default function AdminPageLayout({ children }: any) {
         <Layout
           className="Layout_content"
           style={{
-            marginLeft: 237,
+            marginLeft: 240,
           }}>
           <Content>
             <div
