@@ -17,3 +17,32 @@ export interface ApiResponse<T> {
   PageIndex?: number;
   PageSize?: number;
 }
+export interface UploadedFile {
+  FileId: string;
+  NodeID: string;
+  NetworkID: string;
+  SolutionCode: string;
+  FileUrlLocal: string;
+  FileUrlFS: string;
+  FileFullName: string;
+  FileType: string;
+  FileSize: number;
+  FileContent: string;
+  RefNo: string;
+  RefType: string;
+  FileIdDelete: string;
+  CreateDTimeUTC: string;
+  CreateBy: string;
+  LUDTimeUTC: string;
+  LUBy: string;
+  UpdDTimeUTC: string;
+  UpdBy: string;
+  DeleteDTimeUTC: string;
+  DeleteBy: string;
+  FlagIsDeleted: string;
+  FlagIsRecycle: string;
+  LogLUDTimeUTC: string;
+  LogLUBy: string;
+  isUploading?: boolean;
+  Idx?: any;
+}

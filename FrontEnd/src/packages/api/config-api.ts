@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import { useFileApi } from "./API/FileApi";
 
 export const createApiBase = () => {
   const api = axios.create({
@@ -41,5 +42,10 @@ export const createApiBase = () => {
 };
 export const createClientGateApi = () => {
   const apiBase = createApiBase();
+
+  const useUploadFile = useFileApi(apiBase);
+  return {
+    ...useUploadFile,
+  };
 };
 export const useConfigAPI = () => {};
