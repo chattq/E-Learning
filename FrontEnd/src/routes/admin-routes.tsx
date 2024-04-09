@@ -4,6 +4,7 @@ import { RouteItem } from "../types";
 import DashBoardLayout from "../pages/DashBoardLayout/DashBoardLayout";
 import ProductList from "../pages/Mst_Product/Product_List/Product_List";
 import ProductAdd from "../pages/Mst_Product/Product_Add/Product_Add";
+import Ad_Category from "../pages/PageAdmin/Ad_Category/Ad_Category";
 
 export const adminRoutes: RouteItem[] = [
   {
@@ -139,6 +140,14 @@ export const adminRoutes: RouteItem[] = [
         mainMenuKey: "product",
         permissionCode: "",
         getPageElement: () => <ProductAdd />,
+      },
+      {
+        key: "productNew",
+        path: "admin/category",
+        subMenuTitle: "Category",
+        mainMenuKey: "product",
+        permissionCode: "",
+        getPageElement: () => <Ad_Category />,
       },
     ],
   },
