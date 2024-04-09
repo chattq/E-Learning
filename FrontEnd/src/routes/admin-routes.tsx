@@ -16,7 +16,7 @@ export const adminRoutes: RouteItem[] = [
     permissionCode: "",
     children: [
       {
-        key: "productOrderAll",
+        key: "product1",
         path: "portal/productOrder/all",
         subMenuTitle: "Tất cả",
         mainMenuKey: "productOrder",
@@ -24,7 +24,7 @@ export const adminRoutes: RouteItem[] = [
         getPageElement: () => <ProductList />,
       },
       {
-        key: "productOrderAll",
+        key: "product2",
         path: "portal/productOrder/cancel",
         subMenuTitle: "Thêm bài tập",
         mainMenuKey: "productOrder",
@@ -32,7 +32,7 @@ export const adminRoutes: RouteItem[] = [
         getPageElement: () => <ProductList />,
       },
       {
-        key: "productOrderAll",
+        key: "product3",
         path: "portal/productOrder/cancel",
         subMenuTitle: "Giao bài tập hàng loạt",
         mainMenuKey: "productOrder",
@@ -110,7 +110,7 @@ export const adminRoutes: RouteItem[] = [
     ],
   },
   {
-    key: "product",
+    key: "categoryALL",
     path: "",
     mainMenuTitle: "Tài Chính",
     icon: <ShoppingCartOutlined />,
@@ -142,7 +142,7 @@ export const adminRoutes: RouteItem[] = [
         getPageElement: () => <ProductAdd />,
       },
       {
-        key: "productNew",
+        key: "category",
         path: "admin/category",
         subMenuTitle: "Category",
         mainMenuKey: "product",
