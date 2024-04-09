@@ -2,16 +2,16 @@ import { Avatar, Badge, Layout, Menu, MenuProps, Space } from "antd";
 import { UserOutlined, BellFilled } from "@ant-design/icons";
 import "./admin-page-layout.scss";
 import { protectedRoutes } from "../../../app-routers";
-import { useWindowSize } from "../../hooks/useWindowSize";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+
 type MenuItem = Required<MenuProps>["items"][number];
 export default function AdminPageLayout({ children }: any) {
   const { Header, Content, Sider } = Layout;
 
   const itemsSideBar: MenuItem[] = protectedRoutes
     .filter((val: any) => val.mainMenuTitle !== "")
-    .map((item, index) => {
+    .map((item, index: any) => {
       return {
         key: item.key,
         icon: item.icon,
@@ -28,7 +28,6 @@ export default function AdminPageLayout({ children }: any) {
       };
     });
   const navigate = useNavigate();
-  const windowSize = useWindowSize();
 
   const handleNavigationSidebarClick = (val: any) => {
     navigate(`/${val.path}`);
@@ -50,8 +49,6 @@ export default function AdminPageLayout({ children }: any) {
           lineHeight: "56px",
         }}
         className="box-shadow-header header-wrapper">
-        <div></div>
-        <div></div>
         <Space size={20}>
           <Badge count={100} size="default" offset={[0, 0]}>
             <Avatar
@@ -93,7 +90,6 @@ export default function AdminPageLayout({ children }: any) {
           }}
           className="sider-bar scrollable-wrapper">
           <Menu
-            // onClick={hanldeClickItemSideBar}
             className="nav-menu-items"
             mode="inline"
             defaultOpenKeys={protectedRoutes.map((item: any) => item.key)}
