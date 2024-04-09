@@ -17,7 +17,7 @@ const httpServer = createServer(app)
 const port = process.env.PORT
 initFolder()
 app.use(checkMariaDBConnection)
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: true }))
 
 // tạo folder upload
 

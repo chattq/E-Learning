@@ -4,136 +4,194 @@ import { USERS_MESSAGES } from '~/constants/messages-error/users.messagerError'
 import { ErrorWithStatus } from '~/models/Errors'
 import userModel from '~/models/requests/users/users.models'
 import userService from '~/services/users.services'
+import { verifyToken } from '~/utils/jwt'
 import { validate } from '~/utils/validation'
 export const loginValidator = validate(
-  checkSchema({
-    email: {
-      notEmpty: {
-        errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED
-      },
-      in: ['body'],
-      isEmail: true,
-      trim: true,
-      custom: {
-        options: async (value: string, { req }) => {
-          const { email, password } = req.body
-          const isExist = (await userModel.getUserByEmailAndPassword(email, password)) as any
-          if (isExist?.length === 0) {
-            throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_AND_PASSWORD_REQUIRED, status: 400 })
+  checkSchema(
+    {
+      email: {
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED
+        },
+        in: ['body'],
+        isEmail: true,
+        trim: true,
+        custom: {
+          options: async (value: string, { req }) => {
+            const { email, password } = req.body
+            const isExist = (await userModel.getUserByEmailAndPassword(email, password)) as any
+            if (isExist?.length === 0) {
+              throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_AND_PASSWORD_REQUIRED, status: 400 })
+            }
+            return true
           }
-          return true
+        }
+      },
+      password: {
+        notEmpty: true,
+        isStrongPassword: {
+          options: {
+            minLength: 6,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 1
+          },
+          errorMessage:
+            'Password must be at least 6 characters, and at least 1 lowercase,1 uppercase,1 numbers, 1 symbols'
+        },
+        in: ['body'],
+        isLength: {
+          options: { min: 6, max: 50 },
+          errorMessage: 'Password must be at least 6 characters long'
         }
       }
     },
-    password: {
-      notEmpty: true,
-      isStrongPassword: {
-        options: {
-          minLength: 6,
-          minLowercase: 1,
-          minUppercase: 1,
-          minNumbers: 1,
-          minSymbols: 1
-        },
-        errorMessage:
-          'Password must be at least 6 characters, and at least 1 lowercase,1 uppercase,1 numbers, 1 symbols'
-      },
-      in: ['body'],
-      isLength: {
-        options: { min: 6, max: 50 },
-        errorMessage: 'Password must be at least 6 characters long'
-      }
-    }
-  })
+    ['body']
+  )
 )
 export const registerValidator = validate(
-  checkSchema({
-    name: {
-      notEmpty: {
-        errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED
-      },
-      in: 'body',
-      isString: {
-        errorMessage: USERS_MESSAGES.NAME_MUST_BE_A_STRING
-      },
-      trim: true,
-      escape: true
-    },
-    email: {
-      notEmpty: {
-        errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED
-      },
-      in: ['body'],
-      isEmail: true,
-      trim: true,
-      custom: {
-        options: async (value: string) => {
-          const isExist = (await userService.getUserByEmail(value)) as any
-          console.log(72, isExist)
-          if (isExist?.length > 0) {
-            throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_ALREADY_EXIST, status: 400 })
-          }
-          return true
-        }
-      }
-    },
-    password: {
-      notEmpty: true,
-      isStrongPassword: {
-        options: {
-          minLength: 6,
-          minLowercase: 1,
-          minUppercase: 1,
-          minNumbers: 1,
-          minSymbols: 1
+  checkSchema(
+    {
+      name: {
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED
         },
-        errorMessage:
-          'Password must be at least 6 characters, and at least 1 lowercase,1 uppercase,1 numbers, 1 symbols'
-      },
-      in: ['body'],
-      isLength: {
-        options: { min: 6, max: 50 },
-        errorMessage: 'Password must be at least 6 characters long'
-      }
-    },
-    confirm_password: {
-      notEmpty: true,
-      isStrongPassword: {
-        errorMessage:
-          'Password must be at least 6 characters, and at least 1 lowercase,1 uppercase,1 numbers, 1 symbols',
-        options: {
-          minLength: 6,
-          minLowercase: 1,
-          minUppercase: 1,
-          minNumbers: 1,
-          minSymbols: 1
-        }
-      },
-      in: ['body'],
-      isLength: {
-        options: { min: 6, max: 50 },
-        errorMessage: 'Password must be at least 6 characters long'
-      },
-      custom: {
-        options: (value, { req }) => {
-          if (value !== req.body.password) {
-            throw new Error('Passwords do not match')
-          }
-          return true
+        in: 'body',
+        isString: {
+          errorMessage: USERS_MESSAGES.NAME_MUST_BE_A_STRING
         },
-        errorMessage: 'Passwords do not match'
-      }
-    },
-    date_of_birth: {
-      isDate: {
-        options: {
-          format: 'YYYY-MM-DD'
+        trim: true,
+        escape: true
+      },
+      email: {
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED
+        },
+        in: ['body'],
+        isEmail: true,
+        trim: true,
+        custom: {
+          options: async (value: string) => {
+            const isExist = (await userService.getUserByEmail(value)) as any
+            console.log(72, isExist)
+            if (isExist?.length > 0) {
+              throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_ALREADY_EXIST, status: 400 })
+            }
+            return true
+          }
         }
       },
-      notEmpty: true,
-      in: ['body'],
-      isISO8601: true,
-      errorMessage: 'Invalid date of birth'
-    }
-  })
+      password: {
+        notEmpty: true,
+        isStrongPassword: {
+          options: {
+            minLength: 6,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 1
+          },
+          errorMessage:
+            'Password must be at least 6 characters, and at least 1 lowercase,1 uppercase,1 numbers, 1 symbols'
+        },
+        in: ['body'],
+        isLength: {
+          options: { min: 6, max: 50 },
+          errorMessage: 'Password must be at least 6 characters long'
+        }
+      },
+      confirm_password: {
+        notEmpty: true,
+        isStrongPassword: {
+          errorMessage:
+            'Password must be at least 6 characters, and at least 1 lowercase,1 uppercase,1 numbers, 1 symbols',
+          options: {
+            minLength: 6,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 1
+          }
+        },
+        in: ['body'],
+        isLength: {
+          options: { min: 6, max: 50 },
+          errorMessage: 'Password must be at least 6 characters long'
+        },
+        custom: {
+          options: (value, { req }) => {
+            if (value !== req.body.password) {
+              throw new Error('Passwords do not match')
+            }
+            return true
+          },
+          errorMessage: 'Passwords do not match'
+        }
+      },
+      date_of_birth: {
+        isDate: {
+          options: {
+            format: 'YYYY-MM-DD'
+          }
+        },
+        notEmpty: true,
+        in: ['body'],
+        isISO8601: true,
+        errorMessage: 'Invalid date of birth'
+      }
+    },
+    ['body']
+  )
+)
+
+export const accessTokenValidator = validate(
+  checkSchema(
+    {
+      Authorization: {
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.ACCESS_TOKEN_IS_REQUIRED
+        },
+        custom: {
+          options: async (value: string, { req }) => {
+            const access_token = value.split(' ')[1]
+            if (!access_token) {
+              throw new ErrorWithStatus({ message: USERS_MESSAGES.ACCESS_TOKEN_IS_REQUIRED, status: 401 })
+            }
+            const decoded_authorization = await verifyToken({ token: access_token })
+            req.decoded_authorization = decoded_authorization
+            return true
+          }
+        }
+      }
+    },
+    ['headers']
+  )
+)
+export const refreshTokenValidator = validate(
+  checkSchema(
+    {
+      refresh_token: {
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.REFRESH_TOKEN_IS_REQUIRED
+        },
+        custom: {
+          options: async (value: string, { req }) => {
+            try {
+              const decoded_refresh_token = await verifyToken({ token: value })
+              req.decoded_authorization = decoded_refresh_token
+            } catch (error) {
+              throw new ErrorWithStatus({
+                message: USERS_MESSAGES.REFRESH_TOKEN_IS_INVALID,
+                status: 401
+              })
+            }
+
+            return true
+          }
+        }
+      }
+    },
+    ['body']
+  )
 )

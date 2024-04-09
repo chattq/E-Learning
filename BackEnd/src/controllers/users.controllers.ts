@@ -33,6 +33,9 @@ class UserController {
       }
     })
   }
+  async getMeController(req: Request, res: Response, next: NextFunction) {
+    // console.log(req.decoded_authorization as TokenPayload)
+  }
 }
 const userController = new UserController()
 export default userController
