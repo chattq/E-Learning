@@ -11,11 +11,14 @@ export const USERS_MESSAGES = {
   PASSWORD_IS_REQUIRED: 'Password is required',
   PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50: 'Password must be from 6 to 50 characters',
   PASSWORD_MUST_BE_STRONG: 'Password must be',
-  ACCESS_TOKEN_IS_REQUIRED: 'Access token is required',
+  ACCESS_TOKEN_IS_REQUIRED: 'Please login',
   REFRESH_TOKEN_IS_REQUIRED: 'Refresh token is required',
   ACCESS_TOKEN_IS_INVALID: 'Access token is invalid',
   REFRESH_TOKEN_IS_INVALID: 'Refresh token is invalid',
   ACCESS_TOKEN_IS_EXPIRED: 'Access token is expired',
   REFRESH_TOKEN_IS_EXPIRED: 'Refresh token is expired',
-  ACCESS_TOKEN_IS_NOT_VALID: 'Access token is not valid'
+  ACCESS_TOKEN_IS_NOT_VALID: 'Access token is not valid',
+  REFRESH_TOKEN_IS_NOT_EXIST: 'Refresh token is not exist',
+  LOGOUT_SUCCESS: 'Logout successfully',
+  EMAIL_VERIFY_TOKEN_IS_REQUIRED: 'Email verify token is required'
 } as const

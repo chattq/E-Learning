@@ -1,11 +1,17 @@
-import { Request, Response, NextFunction } from 'express'
+import { config } from 'dotenv'
+import { Request } from 'express'
 import { checkSchema } from 'express-validator'
-import { USERS_MESSAGES } from '~/constants/messages-error/users.messagerError'
+import { JsonWebTokenError } from 'jsonwebtoken'
+import { capitalize } from 'lodash'
+import { httpStatus } from '~/constants/httpStatus'
+import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
 import { ErrorWithStatus } from '~/models/Errors'
 import userModel from '~/models/requests/users/users.models'
 import userService from '~/services/users.services'
 import { verifyToken } from '~/utils/jwt'
 import { validate } from '~/utils/validation'
+config()
+
 export const loginValidator = validate(
   checkSchema(
     {
@@ -74,7 +80,6 @@ export const registerValidator = validate(
         custom: {
           options: async (value: string) => {
             const isExist = (await userService.getUserByEmail(value)) as any
-            console.log(72, isExist)
             if (isExist?.length > 0) {
               throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_ALREADY_EXIST, status: 400 })
             }
@@ -149,17 +154,21 @@ export const accessTokenValidator = validate(
   checkSchema(
     {
       Authorization: {
-        notEmpty: {
-          errorMessage: USERS_MESSAGES.ACCESS_TOKEN_IS_REQUIRED
-        },
         custom: {
           options: async (value: string, { req }) => {
-            const access_token = value.split(' ')[1]
+            const access_token = (value || '').split(' ')[1]
             if (!access_token) {
               throw new ErrorWithStatus({ message: USERS_MESSAGES.ACCESS_TOKEN_IS_REQUIRED, status: 401 })
             }
-            const decoded_authorization = await verifyToken({ token: access_token })
-            req.decoded_authorization = decoded_authorization
+            try {
+              const decoded_authorization = await verifyToken({
+                token: access_token,
+                secretOrPublickey: process.env.JWT_SECRET_ACCESS_TOKEN as string
+              })
+              ;(req as Request).decoded_authorization = decoded_authorization
+            } catch (error) {
+              throw new ErrorWithStatus({ message: capitalize((error as JsonWebTokenError).message), status: 401 })
+            }
             return true
           }
         }
@@ -172,21 +181,59 @@ export const refreshTokenValidator = validate(
   checkSchema(
     {
       refresh_token: {
-        notEmpty: {
-          errorMessage: USERS_MESSAGES.REFRESH_TOKEN_IS_REQUIRED
-        },
+        trim: true,
         custom: {
           options: async (value: string, { req }) => {
+            console.log(value)
             try {
-              const decoded_refresh_token = await verifyToken({ token: value })
-              req.decoded_authorization = decoded_refresh_token
+              // const [decoded_refresh_token, refreshToken] = await Promise.all([
+              //   verifyToken({ token: value }),
+              //   'lưu token  vào db'
+              // ])
+              const decoded_refresh_token = await verifyToken({
+                token: value,
+                secretOrPublickey: process.env.JWT_SECRET_REFRESH_TOKEN as string
+              })
+              ;(req as Request).decoded_refresh_token = decoded_refresh_token
+              // if (refreshToken === null) {
+              //   throw new ErrorWithStatus({ message: USERS_MESSAGES.REFRESH_TOKEN_IS_NOT_EXIST, status: 401 })
+              // }
+              // thêm bước kiểm tra có trong db hay không =>>> chưa thiết kế nên chưa làm
             } catch (error) {
+              if (error instanceof JsonWebTokenError) {
+                throw new ErrorWithStatus({
+                  message: capitalize(error.message),
+                  status: 401
+                })
+              }
+              throw error
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['body']
+  )
+)
+export const emailVerifyTokenValidator = validate(
+  checkSchema(
+    {
+      email_verify_token: {
+        trim: true,
+        custom: {
+          options: async (value: string, { req }) => {
+            if (!value) {
               throw new ErrorWithStatus({
-                message: USERS_MESSAGES.REFRESH_TOKEN_IS_INVALID,
-                status: 401
+                message: USERS_MESSAGES.EMAIL_VERIFY_TOKEN_IS_REQUIRED,
+                status: httpStatus.UNAUTHORIZED
               })
             }
-
+            const decoded_email_verify_token = await verifyToken({
+              token: value,
+              secretOrPublickey: process.env.JWT_SECRET_EMAIL_VERIFY_TOKEN as string
+            })
+            ;(req as Request).decoded_authorization = decoded_email_verify_token
             return true
           }
         }

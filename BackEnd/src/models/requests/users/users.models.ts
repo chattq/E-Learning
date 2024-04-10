@@ -2,14 +2,8 @@ import { mariaDBQuery } from '~/config/database.config'
 
 import { useGetTime } from '~/utils/useGetTime'
 import { hasPassword } from '~/utils/crypto'
+import { RegisterReqBody } from './users.requests'
 
-export interface RegisterReqBody {
-  name?: string
-  email: string
-  password: string
-  confirm_password?: string
-  date_of_birth?: string
-}
 class UserModel {
   createUser(payload: RegisterReqBody) {
     const { getTimeMoment } = useGetTime()
@@ -46,6 +40,21 @@ class UserModel {
       mariaDBQuery(
         'SELECT * FROM `users` WHERE `email` = ? AND `password`= ?',
         [email, hasPassword(password)],
+        (err: any, results: any) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(results)
+          }
+        }
+      )
+    })
+  }
+  logout(refresh_token: string) {
+    return new Promise((resolve, reject) => {
+      mariaDBQuery(
+        'SELECT * FROM `users` WHERE `email` = ? AND `password`= ?',
+        [refresh_token],
         (err: any, results: any) => {
           if (err) {
             reject(err)
