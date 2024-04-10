@@ -1,7 +1,8 @@
 import { config } from 'dotenv'
 import { TokenType } from '~/constants/enums'
+import userModel from '~/models/requests/users/users.models'
+import { RegisterReqBody } from '~/models/requests/users/users.requests'
 
-import userModel, { RegisterReqBody } from '~/models/requests/users/users.models'
 import { signToken } from '~/utils/jwt'
 config()
 
@@ -12,6 +13,7 @@ class UserService {
         user_id,
         token_type: TokenType.AccessToken
       },
+      privateKey: process.env.JWT_SECRET_ACCESS_TOKEN as string,
       options: {
         expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN
       }
@@ -23,6 +25,7 @@ class UserService {
         user_id,
         token_type: TokenType.RefreshToken
       },
+      privateKey: process.env.JWT_SECRET_REFRESH_TOKEN as string,
       options: {
         expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN
       }
@@ -46,10 +49,14 @@ class UserService {
   }
   async login(user_id: string) {
     const [Access_token, Refresh_token] = await this.signAccessAndRefreshToken(user_id)
+    // lưu  Refresh_token vào db ====> chưa làm trên db
     return {
       Access_token,
       Refresh_token
     }
+  }
+  async logout(refresh_token: string) {
+    await userModel.logout(refresh_token)
   }
 }
 const userService = new UserService()

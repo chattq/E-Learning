@@ -37,7 +37,7 @@ export default function AdminPageLayout({ children }: any) {
     <Layout>
       <Header
         style={{
-          height: "56px",
+          height: "60px",
           position: "fixed",
           display: "flex",
           justifyContent: "space-between",
@@ -46,9 +46,11 @@ export default function AdminPageLayout({ children }: any) {
           right: 0,
           zIndex: 100,
           backgroundColor: "#fff",
-          lineHeight: "56px",
+          lineHeight: "60px",
         }}
         className="box-shadow-header header-wrapper">
+        <div></div>
+        <div></div>
         <Space size={20}>
           <Badge count={100} size="default" offset={[0, 0]}>
             <Avatar

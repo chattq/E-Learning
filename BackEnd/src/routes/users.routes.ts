@@ -16,10 +16,18 @@ usersRouter.post(
   '/logout',
   accessTokenValidator,
   refreshTokenValidator,
-  wrapRequestHandler((req, res) => {
-    res.json({ message: 'User logged out' })
-  })
+  wrapRequestHandler(userController.logoutController)
 )
+usersRouter.post('/verify-email', refreshTokenValidator, wrapRequestHandler(userController.logoutController))
+
+/**
+ * Description: verify email when user client click on the link in email
+ * Path: /resen-verify-email
+ * Method: Post
+ * Header: {Authorization: 'Bearer ' + <accessToken>}
+ * Body: {}
+ */
+usersRouter.post('/resent-verify-email', accessTokenValidator, wrapRequestHandler(userController.logoutController))
 
 /**
  * Description: get my profile
