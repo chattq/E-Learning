@@ -2,12 +2,13 @@ import { Avatar, Badge, Layout, Menu, MenuProps, Space } from "antd";
 import { UserOutlined, BellFilled } from "@ant-design/icons";
 import "./admin-page-layout.scss";
 import { protectedRoutes } from "../../../app-routers";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 type MenuItem = Required<MenuProps>["items"][number];
 export default function AdminPageLayout({ children }: any) {
   const { Header, Content, Sider } = Layout;
+  const { pathname: currentPath } = useLocation();
 
   const itemsSideBar: MenuItem[] = protectedRoutes
     .filter((val: any) => val.mainMenuTitle !== "")
@@ -19,7 +20,7 @@ export default function AdminPageLayout({ children }: any) {
         className: "menu-items-nav",
         children: item?.children?.map((child, index) => {
           return {
-            key: child.key,
+            key: `/${child.path}`,
             label: child.subMenuTitle,
             onClick: () => handleNavigationSidebarClick(child),
             className: "menu-items-nav",
@@ -79,7 +80,7 @@ export default function AdminPageLayout({ children }: any) {
           marginTop: "60px",
         }}>
         <Sider
-          width="230px"
+          width="250px"
           style={{
             overflowY: "auto",
             position: "fixed",
@@ -97,12 +98,13 @@ export default function AdminPageLayout({ children }: any) {
             defaultOpenKeys={protectedRoutes.map((item: any) => item.key)}
             style={{ height: "100%", borderRight: 0 }}
             items={itemsSideBar}
+            selectedKeys={[currentPath]}
           />
         </Sider>
         <Layout
           className="Layout_content"
           style={{
-            marginLeft: 240,
+            marginLeft: 250,
           }}>
           <Content>
             <div

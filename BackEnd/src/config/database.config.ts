@@ -9,7 +9,8 @@ export const db = mariaDB.createPool({
   database: process.env.DB_NAME_DATABASE,
   password: process.env.DB_PASSWORD,
   connectionLimit: 100,
-  idleTimeout: 60000 // idle connections timeout, in milliseconds, the default value 60000
+  idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
+  checkDuplicate: true // check trùng dữ liệu
 })
 
 export const mariaDBQuery = async (query: any, value: any, callBack: any) => {

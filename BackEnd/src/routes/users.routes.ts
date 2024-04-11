@@ -19,6 +19,13 @@ usersRouter.post(
   refreshTokenValidator,
   wrapRequestHandler(userController.logoutController)
 )
+/**
+ * Description:
+ * Path: /verify-email
+ * Method: Post
+ * Header:
+ * Body: email_verify_token
+ */
 usersRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(userController.logoutController))
 
 /**
