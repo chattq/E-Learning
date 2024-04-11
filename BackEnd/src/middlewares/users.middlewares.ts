@@ -133,17 +133,6 @@ export const registerValidator = validate(
           },
           errorMessage: 'Passwords do not match'
         }
-      },
-      date_of_birth: {
-        isDate: {
-          options: {
-            format: 'YYYY-MM-DD'
-          }
-        },
-        notEmpty: true,
-        in: ['body'],
-        isISO8601: true,
-        errorMessage: 'Invalid date of birth'
       }
     },
     ['body']
@@ -165,6 +154,7 @@ export const accessTokenValidator = validate(
                 token: access_token,
                 secretOrPublickey: process.env.JWT_SECRET_ACCESS_TOKEN as string
               })
+              console.log(157, decoded_authorization)
               ;(req as Request).decoded_authorization = decoded_authorization
             } catch (error) {
               throw new ErrorWithStatus({ message: capitalize((error as JsonWebTokenError).message), status: 401 })
@@ -184,20 +174,18 @@ export const refreshTokenValidator = validate(
         trim: true,
         custom: {
           options: async (value: string, { req }) => {
-            console.log(value)
             try {
-              // const [decoded_refresh_token, refreshToken] = await Promise.all([
-              //   verifyToken({ token: value }),
-              //   'lưu token  vào db'
-              // ])
               const decoded_refresh_token = await verifyToken({
                 token: value,
                 secretOrPublickey: process.env.JWT_SECRET_REFRESH_TOKEN as string
               })
+
+              const refreshToken = await userModel.findRefreshToken(value, decoded_refresh_token.user_id)
               ;(req as Request).decoded_refresh_token = decoded_refresh_token
-              // if (refreshToken === null) {
-              //   throw new ErrorWithStatus({ message: USERS_MESSAGES.REFRESH_TOKEN_IS_NOT_EXIST, status: 401 })
-              // }
+
+              if (!refreshToken) {
+                throw new ErrorWithStatus({ message: USERS_MESSAGES.REFRESH_TOKEN_IS_NOT_EXIST, status: 401 })
+              }
               // thêm bước kiểm tra có trong db hay không =>>> chưa thiết kế nên chưa làm
             } catch (error) {
               if (error instanceof JsonWebTokenError) {
