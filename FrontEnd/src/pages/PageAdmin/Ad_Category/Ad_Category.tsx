@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import AdminPageLayout from "../../../packages/layouts/admin-page-layout/admin-page-layout";
 
-import { Space, Switch, Table } from "antd";
+import { Button, Space, Switch, Table } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
+import { PopupAddCategory } from "./use-popup/popup-add-category";
 
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
 
@@ -15,6 +16,8 @@ interface DataType {
 }
 export default function Ad_Category() {
   const [checkStrictly, setCheckStrictly] = useState(false);
+
+  const popupPopupRef = useRef<any>(null);
   const columns: TableColumnsType<DataType> = [
     {
       title: "Name",
@@ -118,13 +121,17 @@ export default function Ad_Category() {
     },
     checkStrictly: true,
   };
+
+  const handleShowPopupAdd = () => {
+    popupPopupRef.current.showPopup();
+    console.log(123, "a", popupPopupRef);
+  };
   return (
     <AdminPageLayout>
       <div className="px-4 pt-3">
         <div className="p-[24px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff]">
           <Space align="center" style={{ marginBottom: 16 }}>
-            CheckStrictly:{" "}
-            <Switch checked={checkStrictly} onChange={setCheckStrictly} />
+            <Button onClick={handleShowPopupAdd}>Thêm mới</Button>
           </Space>
           <Table
             expandable={{ defaultExpandedRowKeys: [1] }}
@@ -136,6 +143,7 @@ export default function Ad_Category() {
           />
         </div>
       </div>
+      <PopupAddCategory ref={popupPopupRef} />
     </AdminPageLayout>
   );
 }
