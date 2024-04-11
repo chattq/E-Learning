@@ -69,6 +69,24 @@ export const adminRoutes: RouteItem[] = [
       },
     ],
   },
+  {
+    key: "Admin_category",
+    path: "",
+    mainMenuTitle: "Tài Chính",
+    icon: <ShoppingCartOutlined />,
+    mainMenuKey: "product",
+    permissionCode: "",
+    children: [
+      {
+        key: "category",
+        path: "admin/category",
+        subMenuTitle: "Category",
+        mainMenuKey: "product",
+        permissionCode: "",
+        getPageElement: () => <Ad_Category />,
+      },
+    ],
+  },
   // {
   //   key: "product",
   //   path: "",
