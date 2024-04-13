@@ -102,12 +102,6 @@ CREATE TABLE `course_categories` (
   FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
   FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
--- Cập nhật ràng buộc ngoại trong bảng categories
-ALTER TABLE `categories` ADD CONSTRAINT `fk_category_course_categories`
-FOREIGN KEY (`category_id`) REFERENCES `course_categories` (`category_id`);
 
--- Cập nhật ràng buộc ngoại trong bảng courses
-ALTER TABLE `courses` ADD CONSTRAINT `fk_course_course_categories`
-FOREIGN KEY (`course_id`) REFERENCES `course_categories` (`course_id`);
 
 

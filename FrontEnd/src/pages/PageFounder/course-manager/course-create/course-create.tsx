@@ -17,7 +17,7 @@ export default function CourseCreate() {
         <div className="h-[63px]"></div>
         <CardLayout
           className={
-            "pb-[16px] fixed bottom-0 z-10 mb-0 right-[15px] left-[266px] boxShadowButton rounded-none"
+            "pb-[15px] fixed bottom-0 z-10 mb-[0px] right-[15px] left-[266px] boxShadowButton rounded-none"
           }>
           <div className="flex gap-4 justify-end">
             <Button color="red">Primary</Button>

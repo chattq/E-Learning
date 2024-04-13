@@ -5,7 +5,7 @@ export const useCategoriesApi = (apiBase: AxiosInstance) => {
   return {
     Categories_GetAllActive: async (): Promise<ApiResponse<string>> => {
       return await apiBase.post<any, ApiResponse<string>>(
-        "/MstDealer/ExportTemplate",
+        "/AdCategories/getAllActive",
         {}
       );
     },

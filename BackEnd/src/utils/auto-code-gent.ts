@@ -22,12 +22,12 @@ export const useAutoCodeGen = () => {
     const randomChars = generateRandomChars(5)
 
     // Sắp xếp thời gian và ngày ngẫu nhiên
-    const timeArray = [day, hours, minutes, seconds]
+    const timeArray = [month, day, hours, minutes, seconds]
     timeArray.sort(() => Math.random() - 0.5)
     const randomizedTime = timeArray.join('')
 
     // Tạo mã category_id
-    const category_id = `24${year}${month}CTGRCODE${randomizedTime}${randomChars}`
+    const category_id = `${year}CTGRCODE${randomizedTime}${randomChars}`
 
     return category_id
   }

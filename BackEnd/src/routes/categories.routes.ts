@@ -19,15 +19,18 @@ const categoriesRouter = Router()
  * Header:
  * Body: strJson
  */
-// {
-//   CategoryCode:"",
-//   CategoryName: "",
-//   CategoryParentCode: "",
-//   CategoryDesc: "",
-//   FlagActive: 1,
-//   CreatedBy: "",
-//   CreatedDate: "",
-// }
 categoriesRouter.post('/create', accessTokenValidator, wrapRequestHandler(categoryController.categoryCreate))
+/**
+ * Description: lấy tất cả categories active
+ * Path: /AdCategories/getAllActive
+ * Method: Post
+ * Header:
+ * Body:
+ */
+categoriesRouter.post(
+  '/getAllActive',
+  accessTokenValidator,
+  wrapRequestHandler(categoryController.categoryGetAllActive)
+)
 
 export default categoriesRouter
