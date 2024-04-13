@@ -8,6 +8,8 @@ import mediasRouter from './routes/medias.routes'
 import { initFolder } from './utils/file'
 import path from 'path'
 import { UPLOAD_DIR } from './constants/dir'
+import categoriesRouter from './routes/categories.routes'
+import cors from 'cors'
 
 require('dotenv').config()
 
@@ -22,9 +24,15 @@ app.use(express.urlencoded({ extended: true }))
 // tạo folder upload
 
 app.use(express.json())
+const corsOptions = {
+  origin: 'http://localhost:5000'
+}
+
+app.use(cors(corsOptions))
 
 app.use('/users', usersRouter)
 app.use('/medias', mediasRouter)
+app.use('/AdCategories', categoriesRouter)
 app.use('/uploads', express.static(UPLOAD_DIR)) // trỏ đến link chứa file
 
 app.use(defaultErrorHandler)

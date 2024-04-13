@@ -154,7 +154,7 @@ export const accessTokenValidator = validate(
                 token: access_token,
                 secretOrPublickey: process.env.JWT_SECRET_ACCESS_TOKEN as string
               })
-              console.log(157, decoded_authorization)
+
               ;(req as Request).decoded_authorization = decoded_authorization
             } catch (error) {
               throw new ErrorWithStatus({ message: capitalize((error as JsonWebTokenError).message), status: 401 })

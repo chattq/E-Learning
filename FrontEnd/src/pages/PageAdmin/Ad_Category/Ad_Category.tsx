@@ -4,6 +4,10 @@ import AdminPageLayout from "../../../packages/layouts/admin-page-layout/admin-p
 import { Button, Space, Switch, Table } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
 import { PopupAddCategory } from "./use-popup/popup-add-category";
+import { useWindowSize } from "../../../packages/hooks/useWindowSize";
+import { useConfigAPI } from "../../../packages/api/config-api";
+import { useQuery } from "@tanstack/react-query";
+import { formatDataCategories } from "./components/format-data-categories";
 
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
 
@@ -15,92 +19,53 @@ interface DataType {
   children?: DataType[];
 }
 export default function Ad_Category() {
-  const [checkStrictly, setCheckStrictly] = useState(false);
+  const api = useConfigAPI();
+
+  const { data: Categories_GetAllActive } = useQuery({
+    queryKey: ["Categories_GetAllActive"],
+    queryFn: async () => {
+      const response = await api.Categories_GetAllActive();
+      if (response.isSuccess) {
+        return response.data;
+      } else {
+        console.log(response);
+      }
+    },
+  });
+  console.log(34, formatDataCategories(Categories_GetAllActive));
 
   const popupPopupRef = useRef<any>(null);
+  // const columns: TableColumnsType<DataType> = [
+  //   {
+  //     title: "CategoryName",
+  //     dataIndex: "CategoryName",
+  //     key: "CategoryName",
+  //     render: (text) => <a>{text}</a>,
+  //   },
+  //   {
+  //     title: "CategoryDesc",
+  //     dataIndex: "CategoryDesc",
+  //     key: "CategoryDesc",
+  //     width: "12%",
+  //   },
+  // ];
   const columns: TableColumnsType<DataType> = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: "CategoryCode",
+      dataIndex: "CategoryCode",
+      key: "CategoryCode",
+    },
+    {
+      title: "CategoryName",
+      dataIndex: "CategoryName",
+      key: "CategoryName",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
+      title: "CategoryDesc",
+      dataIndex: "CategoryDesc",
+      key: "CategoryDesc",
       width: "12%",
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
-      width: "30%",
-      key: "address",
-    },
-  ];
-
-  const data: DataType[] = [
-    {
-      key: 1,
-      name: "John Brown sr.",
-      age: 60,
-      address: "New York No. 1 Lake Park",
-      children: [
-        {
-          key: 11,
-          name: "John Brown",
-          age: 42,
-          address: "New York No. 2 Lake Park",
-        },
-        {
-          key: 12,
-          name: "John Brown jr.",
-          age: 30,
-          address: "New York No. 3 Lake Park",
-          children: [
-            {
-              key: 121,
-              name: "Jimmy Brown",
-              age: 16,
-              address: "New York No. 3 Lake Park",
-            },
-          ],
-        },
-        {
-          key: 13,
-          name: "Jim Green sr.",
-          age: 72,
-          address: "London No. 1 Lake Park",
-          children: [
-            {
-              key: 131,
-              name: "Jim Green",
-              age: 42,
-              address: "London No. 2 Lake Park",
-              children: [
-                {
-                  key: 1311,
-                  name: "Jim Green jr.",
-                  age: 25,
-                  address: "London No. 3 Lake Park",
-                },
-                {
-                  key: 1312,
-                  name: "Jimmy Green sr.",
-                  age: 18,
-                  address: "London No. 4 Lake Park",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      key: 2,
-      name: "Joe Black",
-      age: 32,
-      address: "Sydney No. 1 Lake Park",
     },
   ];
 
@@ -126,18 +91,26 @@ export default function Ad_Category() {
     popupPopupRef.current.showPopup();
     console.log(123, "a", popupPopupRef);
   };
+  const windowSize = useWindowSize();
   return (
     <AdminPageLayout>
-      <div className="px-4 pt-3">
-        <div className="p-[24px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff]">
+      <div className="px-4 pt-4">
+        <div
+          className="p-[24px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff]"
+          style={{
+            height: windowSize.height - 93,
+          }}>
           <Space align="center" style={{ marginBottom: 16 }}>
             <Button onClick={handleShowPopupAdd}>Thêm mới</Button>
           </Space>
           <Table
+            rowKey={"CategoryCode"}
+            style={{ maxHeight: windowSize.height - 180, overflowY: "auto" }}
             expandable={{ defaultExpandedRowKeys: [1] }}
             columns={columns}
             rowSelection={rowSelection}
-            dataSource={data}
+            dataSource={formatDataCategories(Categories_GetAllActive)}
+            // dataSource={data}
             pagination={false}
             bordered
           />
