@@ -18,14 +18,16 @@ export default function AdminPageLayout({ children }: any) {
         icon: item.icon,
         label: item.mainMenuTitle,
         className: "menu-items-nav",
-        children: item?.children?.map((child, index) => {
-          return {
-            key: `/${child.path}`,
-            label: child.subMenuTitle,
-            onClick: () => handleNavigationSidebarClick(child),
-            className: "menu-items-nav",
-          };
-        }),
+        children: item?.children
+          ?.filter((val: any) => val.subMenuTitle !== "")
+          .map((child, index) => {
+            return {
+              key: `/${child.path}`,
+              label: child.subMenuTitle,
+              onClick: () => handleNavigationSidebarClick(child),
+              className: "menu-items-nav",
+            };
+          }),
       };
     });
   const navigate = useNavigate();

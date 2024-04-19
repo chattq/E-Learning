@@ -7,6 +7,8 @@ import ProductAdd from "../pages/Mst_Product/Product_Add/Product_Add";
 import Ad_Category from "../pages/PageAdmin/Ad_Category/Ad_Category";
 import CourseManager from "../pages/PageFounder/course-manager/course-manager";
 import CourseCreate from "../pages/PageFounder/course-manager/course-create/course-create";
+import CourseOnline from "../pages/PageUser/Courses/CourseOnline";
+import CourseRoom from "../pages/PageUser/Courses/CourseRoom";
 
 export const adminRoutes: RouteItem[] = [
   {
@@ -84,6 +86,32 @@ export const adminRoutes: RouteItem[] = [
         mainMenuKey: "product",
         permissionCode: "",
         getPageElement: () => <Ad_Category />,
+      },
+    ],
+  },
+  {
+    key: "courses",
+    path: "",
+    mainMenuTitle: "Khóa học online",
+    icon: <ShoppingCartOutlined />,
+    mainMenuKey: "product",
+    permissionCode: "",
+    children: [
+      {
+        key: "course_online",
+        path: "admin/Course_online",
+        subMenuTitle: "Khóa học online",
+        mainMenuKey: "product",
+        permissionCode: "",
+        getPageElement: () => <CourseOnline />,
+      },
+      {
+        key: "course_Room",
+        path: "admin/Course_online/room/:id",
+        subMenuTitle: "",
+        mainMenuKey: "product",
+        permissionCode: "",
+        getPageElement: () => <CourseRoom />,
       },
     ],
   },
