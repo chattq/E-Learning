@@ -88,11 +88,7 @@ export const InforBaseCourse = forwardRef(() => {
           </div>
         </Space>
       </Form.Item>
-      <Form.Item
-        name="VideoIntro"
-        label="Video intro"
-        className="labelCustom"
-        rules={[{ required: true, message: "Không được để trống ô" }]}>
+      <Form.Item name="VideoIntro" label="Video intro" className="labelCustom">
         <Space size={30} align="center">
           <UploadFileCustom />
           <div>
@@ -106,14 +102,14 @@ export const InforBaseCourse = forwardRef(() => {
       </Form.Item>
       <Form.Item
         name="ProductName"
-        label="Tên sản phẩm"
+        label="Tên khóa học"
         rules={[{ required: true, message: "Không được để trống ô" }]}>
         <Input showCount maxLength={120} placeholder="Nhập vào" />
       </Form.Item>
 
       <Form.Item
         name="ProductCategory"
-        label="Ngành hàng"
+        label="Danh mục"
         rules={[
           {
             required: true,
@@ -132,7 +128,6 @@ export const InforBaseCourse = forwardRef(() => {
           },
         ]}>
         <Select
-          defaultValue="online"
           onChange={handleChange}
           options={[
             { value: "video", label: "Video" },
@@ -142,7 +137,7 @@ export const InforBaseCourse = forwardRef(() => {
       </Form.Item>
       <Form.Item
         name="ProductDes"
-        label="Mô tả sản phẩm"
+        label="Mô tả khóa học"
         rules={[
           {
             type: "array",

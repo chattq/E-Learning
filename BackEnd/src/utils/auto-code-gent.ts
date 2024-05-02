@@ -1,5 +1,5 @@
 function generateRandomChars(length: any) {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.'
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.'
   let randomChars = ''
   for (let i = 0; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * chars.length)
@@ -22,12 +22,12 @@ export const useAutoCodeGen = () => {
     const randomChars = generateRandomChars(5)
 
     // Sắp xếp thời gian và ngày ngẫu nhiên
-    const timeArray = [month, day, hours, minutes, seconds]
+    const timeArray = [month, day, hours, minutes, seconds, randomChars]
     timeArray.sort(() => Math.random() - 0.5)
     const randomizedTime = timeArray.join('')
 
     // Tạo mã category_id
-    const category_id = `${year}CTGRCODE${randomizedTime}${randomChars}`
+    const category_id = `${year}CTGRCODE${randomizedTime}`
 
     return category_id
   }

@@ -8,6 +8,7 @@ import { useWindowSize } from "../../../packages/hooks/useWindowSize";
 import { useConfigAPI } from "../../../packages/api/config-api";
 import { useQuery } from "@tanstack/react-query";
 import { formatDataCategories } from "./components/format-data-categories";
+import { CategoryResponse } from "../../../packages/types/api.types";
 
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
 
@@ -20,8 +21,9 @@ interface DataType {
 }
 export default function Ad_Category() {
   const api = useConfigAPI();
+  const tableRef = useRef<any>(null);
 
-  const { data: Categories_GetAllActive } = useQuery({
+  const { data: Categories_GetAllActive, isLoading } = useQuery({
     queryKey: ["Categories_GetAllActive"],
     queryFn: async () => {
       const response = await api.Categories_GetAllActive();
@@ -32,7 +34,6 @@ export default function Ad_Category() {
       }
     },
   });
-  console.log(34, formatDataCategories(Categories_GetAllActive));
 
   const popupPopupRef = useRef<any>(null);
   // const columns: TableColumnsType<DataType> = [
@@ -51,11 +52,6 @@ export default function Ad_Category() {
   // ];
   const columns: TableColumnsType<DataType> = [
     {
-      title: "CategoryCode",
-      dataIndex: "CategoryCode",
-      key: "CategoryCode",
-    },
-    {
       title: "CategoryName",
       dataIndex: "CategoryName",
       key: "CategoryName",
@@ -65,7 +61,6 @@ export default function Ad_Category() {
       title: "CategoryDesc",
       dataIndex: "CategoryDesc",
       key: "CategoryDesc",
-      width: "12%",
     },
   ];
 
@@ -89,7 +84,6 @@ export default function Ad_Category() {
 
   const handleShowPopupAdd = () => {
     popupPopupRef.current.showPopup();
-    console.log(123, "a", popupPopupRef);
   };
   const windowSize = useWindowSize();
   return (
@@ -104,19 +98,28 @@ export default function Ad_Category() {
             <Button onClick={handleShowPopupAdd}>Thêm mới</Button>
           </Space>
           <Table
+            ref={tableRef}
+            loading={isLoading}
             rowKey={"CategoryCode"}
-            style={{ maxHeight: windowSize.height - 180, overflowY: "auto" }}
-            expandable={{ defaultExpandedRowKeys: [1] }}
+            expandable={{
+              expandedRowKeys: Categories_GetAllActive?.map(
+                (item: any) => item.CategoryCode
+              ),
+            }}
+            scroll={{ y: windowSize.height - 240 }}
             columns={columns}
             rowSelection={rowSelection}
             dataSource={formatDataCategories(Categories_GetAllActive)}
-            // dataSource={data}
             pagination={false}
             bordered
           />
         </div>
       </div>
-      <PopupAddCategory ref={popupPopupRef} />
+      <PopupAddCategory
+        ref={popupPopupRef}
+        tableRef={tableRef}
+        dataCategory={Categories_GetAllActive as CategoryResponse[]}
+      />
     </AdminPageLayout>
   );
 }

@@ -32,3 +32,11 @@ export interface UploadedFile {
   isUploading?: boolean;
   Idx?: any;
 }
+
+export interface CategoryResponse {
+  CategoryCode: string;
+  CategoryName: string;
+  CategoryParentCode: string;
+  CategoryDesc: string;
+  FlagActive: string;
+}

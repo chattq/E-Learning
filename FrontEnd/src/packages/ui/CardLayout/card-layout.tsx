@@ -10,7 +10,11 @@ export const CardLayout = forwardRef(
     return (
       <div
         className={`px-[24px] pb-[24px] pt-[16px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff] ${className}`}>
-        {title && <div className="font-bold text-[20px]">{title}</div>}
+        {title && (
+          <div className="font-bold text-[20px] border-b-[0.5px] pb-1">
+            {title}
+          </div>
+        )}
         {children}
       </div>
     );

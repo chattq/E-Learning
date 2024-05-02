@@ -11,13 +11,18 @@ export const createApiBase = () => {
       "Content-Type": "application/x-www-form-urlencoded",
     },
   });
-  api.interceptors.request.use((config) => {
-    if (accessToken && config.headers) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
+  api.interceptors.request.use(
+    (config) => {
+      if (accessToken && config.headers) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+        return config;
+      }
       return config;
+    },
+    (error) => {
+      return Promise.reject(error);
     }
-    return config;
-  });
+  );
 
   api.interceptors.response.use(
     function (response) {
@@ -40,8 +45,12 @@ export const createApiBase = () => {
     function (error: AxiosError) {
       if (error?.response?.status === 401) {
         location.href = "/login";
+      } else {
+        alert(error.message);
+
+        return null;
       }
-      return Promise.reject(error.response?.data);
+      return Promise.reject(error);
     }
   );
   return api;
