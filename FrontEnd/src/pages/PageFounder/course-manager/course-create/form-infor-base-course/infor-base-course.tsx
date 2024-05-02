@@ -128,7 +128,6 @@ export const InforBaseCourse = forwardRef(() => {
           },
         ]}>
         <Select
-          defaultValue="online"
           onChange={handleChange}
           options={[
             { value: "video", label: "Video" },

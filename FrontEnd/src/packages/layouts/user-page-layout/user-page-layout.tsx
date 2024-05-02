@@ -1,35 +1,72 @@
 import { Avatar, Badge, Input, Layout, Menu, MenuProps, Space } from "antd";
-import { UserOutlined, BellFilled } from "@ant-design/icons";
-import "./admin-page-layout.scss";
+import {
+  UserOutlined,
+  BellFilled,
+  ShoppingCartOutlined,
+  BarsOutlined,
+  SnippetsOutlined,
+  SolutionOutlined,
+  ScheduleOutlined,
+  HomeOutlined,
+} from "@ant-design/icons";
+import "./user-page-layout.scss";
 import { protectedRoutes } from "../../../app-routers";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { userRoutes } from "../../../routes/user-routes";
+import React from "react";
+import { nanoid } from "nanoid";
 
 type MenuItem = Required<MenuProps>["items"][number];
-export default function AdminPageLayout({ children }: any) {
+export default function UserPageLayout({ children }: any) {
   const { Header, Content, Sider } = Layout;
   const { pathname: currentPath } = useLocation();
+  const siderBar = [
+    {
+      key: "users_post",
+      path: "",
+      mainMenuTitle: "Trang chủ",
+      permissionCode: "",
+      icon: <HomeOutlined size={20} />,
+    },
+    {
+      key: "users_post1",
+      path: "/posts",
+      mainMenuTitle: "Trang cá nhân",
+      permissionCode: "",
+      icon: <UserOutlined size={20} />,
+    },
+    {
+      key: "users_post2",
+      path: "/posts",
+      mainMenuTitle: "bài viết",
+      permissionCode: "",
+      icon: <SnippetsOutlined size={20} />,
+    },
+    {
+      key: "users_post3",
+      path: "/posts",
+      mainMenuTitle: "Khóa học của tôi",
+      permissionCode: "",
+      icon: <SolutionOutlined size={20} />,
+    },
+    {
+      key: "users_post4",
+      path: "/posts",
+      mainMenuTitle: "Sự kiện",
+      permissionCode: "",
+      icon: <ScheduleOutlined size={20} />,
+    },
+  ];
 
-  const itemsSideBar: MenuItem[] = protectedRoutes
-    .filter((val: any) => val.mainMenuTitle !== "")
-    .map((item, index: any) => {
-      return {
-        key: item.key,
-        icon: item.icon,
-        label: item.mainMenuTitle,
-        className: "menu-items-nav",
-        children: item?.children
-          ?.filter((val: any) => val.subMenuTitle !== "")
-          .map((child, index) => {
-            return {
-              key: `/${child.path}`,
-              label: child.subMenuTitle,
-              onClick: () => handleNavigationSidebarClick(child),
-              className: "menu-items-nav",
-            };
-          }),
-      };
-    });
+  const itemsSideBar: MenuItem[] = siderBar.map((item, index: any) => {
+    return {
+      key: item.key,
+      icon: item.icon,
+      label: item.mainMenuTitle,
+      className: "menu-items-nav h-[50px]",
+      onClick: () => handleNavigationSidebarClick(item),
+    };
+  });
   const navigate = useNavigate();
 
   const handleNavigationSidebarClick = (val: any) => {
@@ -84,20 +121,21 @@ export default function AdminPageLayout({ children }: any) {
           marginTop: "65px",
         }}>
         <Sider
-          width="250px"
+          width="96px"
+          collapsed={true}
           style={{
             overflowY: "auto",
             position: "fixed",
             left: 0,
-            top: 56,
+            top: 65,
             bottom: 0,
-            width: 222,
+            width: 96,
             background: "#fff",
             paddingTop: "5px",
           }}
-          className="sider-bar scrollable-wrapper">
+          className="scrollable-wrapper border-r-[0.5px]">
           <Menu
-            className="nav-menu-items"
+            className=""
             mode="inline"
             defaultOpenKeys={protectedRoutes.map((item: any) => item.key)}
             style={{ height: "100%", borderRight: 0 }}
@@ -108,7 +146,7 @@ export default function AdminPageLayout({ children }: any) {
         <Layout
           className="Layout_content"
           style={{
-            marginLeft: 250,
+            marginLeft: "80px",
           }}>
           <Content>
             <div

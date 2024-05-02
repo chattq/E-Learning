@@ -1,9 +1,9 @@
-import { Avatar, Badge, Input, Layout, Space } from "antd";
-import { UserOutlined, BellFilled } from "@ant-design/icons";
-import "./admin-page-layout.scss";
+import { Avatar, Badge, Layout, Space } from "antd";
+import "./room-layout.scss";
+import { BellFilled, UserOutlined } from "@ant-design/icons";
 
-export default function AdminPageLayoutNoSideBar({ children }: any) {
-  const { Header, Content } = Layout;
+export default function RoomLayout({ children }: any) {
+  const { Content, Header } = Layout;
 
   return (
     <Layout>
@@ -22,9 +22,7 @@ export default function AdminPageLayoutNoSideBar({ children }: any) {
         }}
         className="box-shadow-header header-wrapper">
         <div></div>
-        <div className="w-[25%]">
-          <Input placeholder="search" />
-        </div>
+        <div></div>
         <Space size={20}>
           <Badge count={100} size="default" offset={[0, 0]}>
             <Avatar

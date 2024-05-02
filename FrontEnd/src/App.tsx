@@ -4,12 +4,13 @@ import { protectedRoutes } from "./app-routers";
 import DashBoardLayout from "./pages/DashBoardLayout/DashBoardLayout";
 import Login from "./pages/Login/Login";
 import { nanoid } from "nanoid";
+import UserDasboard from "./pages/PageUser/UserDasboard/UserDasboard";
 
 function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/" element={<DashBoardLayout />} />
+      <Route path="/" element={<UserDasboard />} />
       {protectedRoutes.map((route) => {
         return (
           <Route key={nanoid()}>
