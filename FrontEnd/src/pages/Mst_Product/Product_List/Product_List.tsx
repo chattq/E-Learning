@@ -17,7 +17,7 @@ export default function ProductList() {
     {
       key: "1",
       label: "Tab 1",
-      children: "Content of Tab Pane 1",
+      children: "Content of Tab Pane 1 hihi",
     },
     {
       key: "2",

@@ -10,7 +10,7 @@ type FieldType = {
   remember?: string;
 };
 
-export default function Login() {
+export default function Register() {
   const api = useConfigAPI();
   const navigate = useNavigate();
   const onFinish: FormProps<FieldType>["onFinish"] = async (
@@ -40,20 +40,20 @@ export default function Login() {
     <>
       <Row>
         <Col span={12} className="right"></Col>
-        <Col span={12} className="formLogin">
-          <h4>Đăng nhập</h4>
+        <Col span={12} className="formRegister">
+          <h4>Đăng ký</h4>
           <div className="groupButton">
+            <Button className="buttonLogin" onClick={handleClickLogin}>
+              Đăng nhập
+            </Button>
             <Button
-              className="buttonLogin"
+              className="buttonLogin "
               style={{
                 backgroundColor: "white",
                 color: "#bb0000 ",
               }}
-              onClick={handleClickLogin}
+              onClick={handleClickRegister}
             >
-              Đăng nhập
-            </Button>
-            <Button className="buttonLogin " onClick={handleClickRegister}>
               Đăng ký
             </Button>
           </div>
@@ -63,11 +63,11 @@ export default function Login() {
             // labelCol={{ span: 8 }}
             // wrapperCol={{ span: 16 }}
             style={{ maxWidth: "100%" }}
-            initialValues={{
-              remember: true,
-              email: "quang@gmail.com",
-              password: "123456@tQ",
-            }}
+            // initialValues={{
+            //   remember: true,
+            //   email: "quang@gmail.com",
+            //   password: "123456@tQ",
+            // }}
             layout="vertical"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -80,7 +80,7 @@ export default function Login() {
                 { required: true, message: "Please input your username!" },
               ]}
             >
-              <Input defaultValue={"quang@gmail.com"} />
+              <Input placeholder="Email" />
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -90,31 +90,18 @@ export default function Login() {
                 { required: true, message: "Please input your password!" },
               ]}
             >
-              <Input.Password defaultValue={"123456@tQ"} />
+              <Input.Password placeholder="Mật Khẩu" />
             </Form.Item>
-            <div className="remember">
-              <Form.Item<FieldType>
-                name="remember"
-                valuePropName="checked"
-                // wrapperCol={{ offset: 8, span: 12 }}
-              >
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
-              <div style={{ top: "1px" }}>Quên mất khẩu?</div>
-            </div>
-            <div>
-              Bạn chưa có tài khoản?{" "}
-              <span
-                onClick={handleClickRegister}
-                style={{
-                  color: "#bb0000",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                }}
-              >
-                Đăng ký
-              </span>
-            </div>
+            <Form.Item<FieldType>
+              label="Nhập Lại Mật Khẩu"
+              name="password"
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
+            >
+              <Input.Password placeholder="Nhập Lại Mật Khẩu" />
+            </Form.Item>
+
             <Form.Item>
               <Button htmlType="submit" className="btnLogin">
                 Submit
