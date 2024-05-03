@@ -31,8 +31,8 @@ export default function UserPageLayout({ children }: any) {
       icon: <UserOutlined size={20} />,
     },
     {
-      key: "users_post2",
-      path: "/posts",
+      key: "blog",
+      path: "/blog",
       mainMenuTitle: "bài viết",
       permissionCode: "",
       icon: <SnippetsOutlined size={20} />,
@@ -83,7 +83,8 @@ export default function UserPageLayout({ children }: any) {
           backgroundColor: "#fff",
           lineHeight: "65px",
         }}
-        className="box-shadow-header header-wrapper">
+        className="box-shadow-header header-wrapper"
+      >
         <div></div>
         <div className="w-[25%]">
           <Input placeholder="search" />
@@ -114,7 +115,8 @@ export default function UserPageLayout({ children }: any) {
       <Layout
         style={{
           marginTop: "65px",
-        }}>
+        }}
+      >
         <Sider
           collapsed={true}
           style={{
@@ -126,7 +128,8 @@ export default function UserPageLayout({ children }: any) {
             background: "#fff",
             paddingTop: "5px",
           }}
-          className="scrollable-wrapper sider_bar_user_page border-r-[0.5px]">
+          className="scrollable-wrapper sider_bar_user_page border-r-[0.5px]"
+        >
           <Menu
             className=""
             mode="inline"
@@ -141,12 +144,14 @@ export default function UserPageLayout({ children }: any) {
         className="Layout_content"
         style={{
           marginLeft: "80px",
-        }}>
+        }}
+      >
         <Content>
           <div
             style={{
               width: "100%",
-            }}>
+            }}
+          >
             {children}
           </div>
         </Content>

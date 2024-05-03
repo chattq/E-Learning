@@ -9,6 +9,7 @@ import CourseManager from "../pages/PageFounder/course-manager/course-manager";
 import CourseCreate from "../pages/PageFounder/course-manager/course-create/course-create";
 import CourseOnline from "../pages/PageUser/Courses/course-online/CourseOnline";
 import CourseRoom from "../pages/PageUser/Courses/CourseRoom";
+import BlogList from "../pages/Blog/BlogList";
 
 export const adminRoutes: RouteItem[] = [
   {
@@ -115,48 +116,48 @@ export const adminRoutes: RouteItem[] = [
       },
     ],
   },
-  // {
-  //   key: "product",
-  //   path: "",
-  //   mainMenuTitle: "Kênh Marketing",
-  //   icon: <ShoppingCartOutlined />,
-  //   mainMenuKey: "product",
-  //   permissionCode: "",
-  //   children: [
-  //     {
-  //       key: "productAll",
-  //       path: "portal/product/list/all",
-  //       subMenuTitle: "Quảng Cáo",
-  //       mainMenuKey: "product",
-  //       permissionCode: "",
-  //       getPageElement: () => <ProductList />,
-  //     },
-  //     {
-  //       key: "productNew",
-  //       path: "portal/product/new",
-  //       subMenuTitle: "Khuyến Mãi",
-  //       mainMenuKey: "product",
-  //       permissionCode: "",
-  //       getPageElement: () => <ProductAdd />,
-  //     },
-  //     {
-  //       key: "productNew",
-  //       path: "portal/product/new",
-  //       subMenuTitle: "Flash Sale",
-  //       mainMenuKey: "product",
-  //       permissionCode: "",
-  //       getPageElement: () => <ProductAdd />,
-  //     },
-  //     {
-  //       key: "productNew",
-  //       path: "portal/product/new",
-  //       subMenuTitle: "Mã Giảm Giá",
-  //       mainMenuKey: "product",
-  //       permissionCode: "",
-  //       getPageElement: () => <ProductAdd />,
-  //     },
-  //   ],
-  // },
+  {
+    key: "blog",
+    path: "",
+    mainMenuTitle: "Quản lý blog",
+    icon: <ShoppingCartOutlined />,
+    mainMenuKey: "product",
+    permissionCode: "",
+    children: [
+      {
+        key: "blogall",
+        path: "/blog/list/all",
+        subMenuTitle: "Blog",
+        mainMenuKey: "bloglist",
+        permissionCode: "",
+        getPageElement: () => <BlogList />,
+      },
+      // {
+      //   key: "productNew",
+      //   path: "portal/product/new",
+      //   subMenuTitle: "Khuyến Mãi",
+      //   mainMenuKey: "product",
+      //   permissionCode: "",
+      //   getPageElement: () => <ProductAdd />,
+      // },
+      // {
+      //   key: "productNew",
+      //   path: "portal/product/new",
+      //   subMenuTitle: "Flash Sale",
+      //   mainMenuKey: "product",
+      //   permissionCode: "",
+      //   getPageElement: () => <ProductAdd />,
+      // },
+      // {
+      //   key: "productNew",
+      //   path: "portal/product/new",
+      //   subMenuTitle: "Mã Giảm Giá",
+      //   mainMenuKey: "product",
+      //   permissionCode: "",
+      //   getPageElement: () => <ProductAdd />,
+      // },
+    ],
+  },
   // {
   //   key: "categoryALL",
   //   path: "",
