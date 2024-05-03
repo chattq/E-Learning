@@ -2,8 +2,6 @@ import { Avatar, Badge, Input, Layout, Menu, MenuProps, Space } from "antd";
 import {
   UserOutlined,
   BellFilled,
-  ShoppingCartOutlined,
-  BarsOutlined,
   SnippetsOutlined,
   SolutionOutlined,
   ScheduleOutlined,
@@ -12,9 +10,6 @@ import {
 import "./user-page-layout.scss";
 import { protectedRoutes } from "../../../app-routers";
 import { useLocation, useNavigate } from "react-router-dom";
-import { userRoutes } from "../../../routes/user-routes";
-import React from "react";
-import { nanoid } from "nanoid";
 
 type MenuItem = Required<MenuProps>["items"][number];
 export default function UserPageLayout({ children }: any) {
@@ -121,7 +116,6 @@ export default function UserPageLayout({ children }: any) {
           marginTop: "65px",
         }}>
         <Sider
-          width="96px"
           collapsed={true}
           style={{
             overflowY: "auto",
@@ -129,11 +123,10 @@ export default function UserPageLayout({ children }: any) {
             left: 0,
             top: 65,
             bottom: 0,
-            width: 96,
             background: "#fff",
             paddingTop: "5px",
           }}
-          className="scrollable-wrapper border-r-[0.5px]">
+          className="scrollable-wrapper sider_bar_user_page border-r-[0.5px]">
           <Menu
             className=""
             mode="inline"
@@ -143,20 +136,20 @@ export default function UserPageLayout({ children }: any) {
             selectedKeys={[currentPath]}
           />
         </Sider>
-        <Layout
-          className="Layout_content"
-          style={{
-            marginLeft: "80px",
-          }}>
-          <Content>
-            <div
-              style={{
-                width: "100%",
-              }}>
-              {children}
-            </div>
-          </Content>
-        </Layout>
+      </Layout>
+      <Layout
+        className="Layout_content"
+        style={{
+          marginLeft: "80px",
+        }}>
+        <Content>
+          <div
+            style={{
+              width: "100%",
+            }}>
+            {children}
+          </div>
+        </Content>
       </Layout>
     </Layout>
   );
