@@ -2,14 +2,18 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import { protectedRoutes } from "./app-routers";
 import DashBoardLayout from "./pages/DashBoardLayout/DashBoardLayout";
+import Login from "./pages/Login/Login";
+import { nanoid } from "nanoid";
+import UserDasboard from "./pages/PageUser/UserDasboard/UserDasboard";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<DashBoardLayout />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<UserDasboard />} />
       {protectedRoutes.map((route) => {
         return (
-          <Route>
+          <Route key={nanoid()}>
             {route.children &&
               route.children.length > 0 &&
               route.children.map((child) => {

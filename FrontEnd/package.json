@@ -11,17 +11,24 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.1",
-    "@tanstack/react-query": "^5.24.8",
+    "@tanstack/react-query": "^5.29.0",
+    "@types/react-star-ratings": "^2.3.3",
     "antd": "^5.15.0",
+    "axios": "^1.6.8",
     "date-fns": "^3.3.1",
-    "jotai": "^2.7.0",
+    "jotai": "^2.8.0",
     "lodash": "^4.17.21",
     "nanoid": "^5.0.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.0",
+    "react-player": "^2.16.0",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.22.2",
-    "sass": "^1.71.1"
+    "react-star-ratings": "^2.3.0",
+    "sass": "^1.71.1",
+    "socket.io-client": "^4.7.5",
+    "ts-pattern": "^5.1.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

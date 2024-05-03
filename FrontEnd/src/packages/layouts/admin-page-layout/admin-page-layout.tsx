@@ -1,34 +1,36 @@
-import { Avatar, Badge, Layout, Menu, MenuProps, Space } from "antd";
+import { Avatar, Badge, Input, Layout, Menu, MenuProps, Space } from "antd";
 import { UserOutlined, BellFilled } from "@ant-design/icons";
 import "./admin-page-layout.scss";
 import { protectedRoutes } from "../../../app-routers";
-import { useWindowSize } from "../../hooks/useWindowSize";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+
 type MenuItem = Required<MenuProps>["items"][number];
 export default function AdminPageLayout({ children }: any) {
   const { Header, Content, Sider } = Layout;
+  const { pathname: currentPath } = useLocation();
 
   const itemsSideBar: MenuItem[] = protectedRoutes
     .filter((val: any) => val.mainMenuTitle !== "")
-    .map((item, index) => {
+    .map((item, index: any) => {
       return {
         key: item.key,
         icon: item.icon,
         label: item.mainMenuTitle,
         className: "menu-items-nav",
-        children: item?.children?.map((child, index) => {
-          return {
-            key: child.key,
-            label: child.subMenuTitle,
-            onClick: () => handleNavigationSidebarClick(child),
-            className: "menu-items-nav",
-          };
-        }),
+        children: item?.children
+          ?.filter((val: any) => val.subMenuTitle !== "")
+          .map((child, index) => {
+            return {
+              key: `/${child.path}`,
+              label: child.subMenuTitle,
+              onClick: () => handleNavigationSidebarClick(child),
+              className: "menu-items-nav",
+            };
+          }),
       };
     });
   const navigate = useNavigate();
-  const windowSize = useWindowSize();
 
   const handleNavigationSidebarClick = (val: any) => {
     navigate(`/${val.path}`);
@@ -38,7 +40,7 @@ export default function AdminPageLayout({ children }: any) {
     <Layout>
       <Header
         style={{
-          height: "56px",
+          height: "65px",
           position: "fixed",
           display: "flex",
           justifyContent: "space-between",
@@ -47,11 +49,13 @@ export default function AdminPageLayout({ children }: any) {
           right: 0,
           zIndex: 100,
           backgroundColor: "#fff",
-          lineHeight: "56px",
+          lineHeight: "65px",
         }}
-        className="box-shadow-header">
+        className="box-shadow-header header-wrapper">
         <div></div>
-        <div></div>
+        <div className="w-[25%]">
+          <Input placeholder="search" />
+        </div>
         <Space size={20}>
           <Badge count={100} size="default" offset={[0, 0]}>
             <Avatar
@@ -77,33 +81,34 @@ export default function AdminPageLayout({ children }: any) {
       </Header>
       <Layout
         style={{
-          marginTop: "60px",
+          marginTop: "65px",
         }}>
         <Sider
-          width="222px"
+          width="250px"
           style={{
-            overflowY: "scroll",
+            overflowY: "auto",
             position: "fixed",
             left: 0,
             top: 56,
             bottom: 0,
             width: 222,
             background: "#fff",
+            paddingTop: "5px",
           }}
-          className="sider-bar">
+          className="sider-bar scrollable-wrapper">
           <Menu
-            // onClick={hanldeClickItemSideBar}
             className="nav-menu-items"
             mode="inline"
             defaultOpenKeys={protectedRoutes.map((item: any) => item.key)}
             style={{ height: "100%", borderRight: 0 }}
             items={itemsSideBar}
+            selectedKeys={[currentPath]}
           />
         </Sider>
         <Layout
           className="Layout_content"
           style={{
-            marginLeft: 237,
+            marginLeft: 250,
           }}>
           <Content>
             <div
