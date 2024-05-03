@@ -11,7 +11,7 @@ import { RightOutlined } from "@ant-design/icons";
 export default function UserDasboard() {
   const nav = useNavigate();
   const { convertMoneyVND } = useConvertNumber();
-  const handleClickCourse = (item: any) => {
+  const handleClickCourse = () => {
     nav("/course-detail");
   };
   const dataCourse = [
@@ -19,7 +19,7 @@ export default function UserDasboard() {
       id: nanoid(),
       image:
         "https://scr.vn/wp-content/uploads/2020/10/Anh-meo-cute-dang-yeu-de-thuong.jpg",
-      title: "Leveraging Generative AI for Scholarly Research Writing",
+      title: "The Complete Python Bootcamp From Zero to Hero in Python",
       author: "Quang",
       price: 1000000,
       status: "Best_Seller",
@@ -83,94 +83,96 @@ export default function UserDasboard() {
               Xem thêm <RightOutlined />
             </div>
           </div>
-          <div className="flex gap-6 flex-wrap py-5 px-5">
+          <div className="grid xl:grid-cols-5 lg:grid-cols-4 lg:gap-3 md:grid-cols-3 md:gap-4 md:px-4 md:py-4 sm:grid-cols-2 px-5 py-5 xl:gap-5 gap-5">
             {dataCourse.map((item: any) => {
               return (
-                <Card
-                  key={nanoid()}
-                  onClick={() => handleClickCourse(item)}
-                  style={{ width: "calc((100% - 96px) / 5)" }}
-                  className="Card_Container cursor-pointer"
-                  cover={
-                    <img
-                      className="h-[165px] object-cover"
-                      alt="example"
-                      src={item.image}
-                    />
-                  }>
-                  <div>
-                    <div className="font-bold text-[16px] line-clamp-2 leading-[21px]">
-                      {item.title}
-                    </div>
-                    <div className="text-[13px] py-[1px]">{item.author}</div>
-                    <div className="flex items-center gap-2 pt-[4px] flex-wrap">
-                      <div className="text-[13px] rounded-sm font-bold bg-[#3eceb9] text-[#ffff] px-1">
-                        {item.courseType}
+                <div>
+                  <Card
+                    key={nanoid()}
+                    onClick={() => handleClickCourse()}
+                    className="Card_Container"
+                    cover={
+                      <img
+                        className="h-[165px] object-cover"
+                        alt="example"
+                        src={item.image}
+                      />
+                    }>
+                    <div>
+                      <div className="font-bold text-[16px] line-clamp-2 leading-[20px]">
+                        {item.title}
                       </div>
-                      {item.status ? (
-                        <>
-                          {match(item.status)
-                            .with("New", () => {
-                              return (
-                                <div className="text-[13px] rounded-sm font-bold bg-[#24e75b] px-2">
-                                  Mới
-                                </div>
-                              );
-                            })
-                            .with("Trending&New", () => {
-                              return (
-                                <div className="text-[13px] rounded-sm font-bold bg-[#f3ca8c] px-2">
-                                  Thịnh hành và mới
-                                </div>
-                              );
-                            })
-                            .with("Highest_Rating", () => {
-                              return (
-                                <div className="text-[13px] rounded-sm font-bold bg-[#fcbca0] px-2">
-                                  Xếp hạng cao nhất
-                                </div>
-                              );
-                            })
-                            .otherwise(() => {
-                              return (
-                                <div className="text-[13px] rounded-sm font-bold bg-[#f1f08b] px-2">
-                                  Bán chạy nhất
-                                </div>
-                              );
-                            })}
-                        </>
-                      ) : null}
-                    </div>
-                    <div className="flex items-center gap-3 py-[1px]">
-                      <div>
-                        <StarRatings
-                          starRatedColor="#b46916"
-                          rating={2.403}
-                          starDimension="14px"
-                          starSpacing="1px"
-                        />
+                      <div className="text-[13px] py-[1px]">{item.author}</div>
+                      <div className="flex items-center gap-2 pt-[4px]">
+                        <div className="text-[13px] rounded-sm font-bold bg-[#3eceb9] text-[#ffff] px-1">
+                          {item.courseType}
+                        </div>
+                        {item.status ? (
+                          <>
+                            {match(item.status)
+                              .with("New", () => {
+                                return (
+                                  <div className="text-[13px] line-clamp-1 rounded-sm font-bold bg-[#24e75b] px-2">
+                                    Mới
+                                  </div>
+                                );
+                              })
+                              .with("Trending&New", () => {
+                                return (
+                                  <div className="text-[13px] line-clamp-1 rounded-sm font-bold bg-[#f3ca8c] px-2">
+                                    Thịnh hành và mới
+                                  </div>
+                                );
+                              })
+                              .with("Highest_Rating", () => {
+                                return (
+                                  <div className="text-[13px] line-clamp-1 rounded-sm font-bold bg-[#fcbca0] px-2">
+                                    Xếp hạng cao nhất
+                                  </div>
+                                );
+                              })
+                              .otherwise(() => {
+                                return (
+                                  <div className="text-[13px] rounded-sm font-bold bg-[#f1f08b] px-2">
+                                    Bán chạy nhất
+                                  </div>
+                                );
+                              })}
+                          </>
+                        ) : null}
+                      </div>
+                      <div className="flex items-center gap-3 py-[1px]">
+                        <div>
+                          <StarRatings
+                            starRatedColor="#b46916"
+                            rating={2.403}
+                            starDimension="14px"
+                            starSpacing="1px"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 text-[12px]">
+                        <div>Học viên đăng ký:</div>
+                        <div>800</div>
+                      </div>
+                      <div className="flex items-center gap-2 text-[16px] ">
+                        <div className="font-semibold text-[17px]">
+                          {convertMoneyVND(item.price ?? 0)}
+                        </div>
+                        <div className="line-through text-[12px] truncate">
+                          {convertMoneyVND(item.discount ?? 0)}
+                        </div>
+                        <div className="text-[12px] rounded-sm bg-[#ec8f8f] text-[#ffff] px-1">
+                          -20%
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1 text-[12px]">
-                      <div>Học viên đăng ký:</div>
-                      <div>800</div>
-                    </div>
-                    <div className="flex items-center gap-2 text-[16px] ">
-                      <div className="font-semibold text-[17px]">
-                        {convertMoneyVND(item.price ?? 0)}
-                      </div>
-                      <div className="line-through text-[12px] truncate">
-                        {convertMoneyVND(item.discount ?? 0)}
-                      </div>
-                      <div className="text-[12px] rounded-sm bg-[#ec8f8f] text-[#ffff] px-1">
-                        -20%
-                      </div>
-                    </div>
-                  </div>
-                </Card>
+                  </Card>
+                </div>
               );
             })}
           </div>
+          {/* </div> */}
         </div>
       </div>
     </UserPageLayout>
