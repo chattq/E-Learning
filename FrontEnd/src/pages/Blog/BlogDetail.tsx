@@ -9,11 +9,11 @@ import { EyeOutlined, RightOutlined } from "@ant-design/icons";
 import { useConvertNumber } from "../../packages/hooks/useConvertNumber";
 import UserPageLayout from "../../packages/layouts/user-page-layout/user-page-layout";
 
-export default function BlogList() {
+export default function BlogDetail() {
   const nav = useNavigate();
   const { convertMoneyVND } = useConvertNumber();
   const handleClickCourse = () => {
-    nav("/blog/blog-detail");
+    nav("blog/blog-detail");
   };
   const dataCourse = [
     {
@@ -60,35 +60,76 @@ export default function BlogList() {
   return (
     <UserPageLayout>
       <div className="px-4 py-4">
-        <div
-          className="bg-[#bb0000] rounded-md border-[0.5px] "
-          style={{ borderRadius: "20px" }}
-        >
-          <Row>
-            <Col span={12} className="NameLeft">
-              <h4>Cách làm món bò bít tết ngon hấp dẫn cho bữa tối</h4>
-              <p>
-                Bò bít tết (Beefsteak trong tiếng Anh hoặc bifteck trong tiếng
-                Pháp) được chế biến từ thịt thăn bò. Thịt được cắt ngang thớ,
-                mỏng từ 1-5 cm, loại bỏ gân và làm mềm. Sau đó cho thêm các loại
-                gia vị và nước dùng chuyên dụng và chiên hoặc nướng hai mặt. Món
-                này thể ăn kèm sốt, hành tây, khoai tây chiên, salad,...
-              </p>
-              <Button>Xem thêm</Button>
-            </Col>
-            <Col span={12} className="">
-              <img
-                src={
-                  "https://i.pinimg.com/originals/80/51/c8/8051c8d221cd6bfca1d26e90f914e683.jpg"
-                }
-                alt="Banner"
-                style={{
-                  padding: "30px",
-                  borderRadius: "50px",
-                }}
-              />
-            </Col>
-          </Row>
+        <div className="blog-detail-item">
+          <div
+            className=" rounded-md border-[0.5px] "
+            style={{
+              borderRadius: "20px",
+              backgroundImage:
+                "url(" +
+                "https://i.pinimg.com/originals/24/9e/35/249e35a0defd32321096a0f627bbaee7.jpg" +
+                ")",
+              height: "50vh",
+              backgroundPosition: "center",
+              backgroundSize: "100%",
+            }}
+          ></div>
+          <h1
+            style={{
+              fontSize: "30px",
+              fontWeight: "bold",
+              textAlign: "center",
+              marginTop: "20px",
+            }}
+          >
+            Cách làm bánh chưng ngon nhất thế giới ngày Tết
+          </h1>
+          <div className="blog-detail-item-content">
+            <p>
+              Nấu bánh chưng là một phong tục tập quán, một nét đẹp truyền thống
+              bao đời nay của người dân Việt Nam mỗi dịp Tết đến Xuân về. Cái
+              không khí rộn ràng chuẩn bị gạo nếp, lá dong, lạt mềm… để gói bánh
+              chưng đã tạo nên hồn vị Tết không thể nào quên được của mỗi người
+              con đất Việt. <br />
+              Thấy bánh chưng là thấy Tết! Dù bạn có đi đâu, làm gì, chỉ cần trở
+              về bên gia đình, cùng nhau quây quần gói chiếc bánh chưng hay ngồi
+              canh nồi bánh sôi sùng sục trên bếp lửa đầy than hồng đã thấy
+              không khí Tết ùa về. Mùi hương thơm lừng tỏa ra hòa quyện hương lá
+              dong, gạo nếp cái hoa vàng cùng vị ngọt bùi của đậu xanh, vị ngậy
+              béo của nhân thịt trong chiếc bánh chưng đã tạo nên hương vị Tết
+              không thể lẫn vào đâu được.
+              <br /> Chiếc bánh chưng ngon không chỉ cần đảm bảo giữ được hương
+              vị truyền thống mà còn phải được gói vuông vức, chắc chắn để khi
+              bày lên mâm cỗ Tết, dĩa bánh chưng sẽ là điểm nhấn chính thu hút
+              bất kì thực khách nào. Chỉ cần áp dụng ngay cách làm bánh chưng
+              dưới đây và khéo léo một chút, bạn sẽ tự tin thể hiện cùng các
+              thành viên nhà mình dịp Tết này rồi. Cùng xem ngay nhé!
+            </p>
+            <img
+              src="https://i.pinimg.com/originals/a3/67/7b/a3677bcdcde9e6e3bece14286f569068.jpg"
+              alt=""
+              style={{
+                width: "50%",
+                margin: "0 auto",
+              }}
+            />
+            <p>
+              Nguyên liệu làm Bánh chưng: (Cho 5 cái bánh chưng) <br />
+              Nếp 650 gr <br />
+              Đậu xanh không vỏ 400 gr <br />
+              Thịt ba chỉ heo 300 gr
+              <br />
+              Lá dong (có thể thêm lá riềng hoặc lá chuối tùy ý) để gói bánh.
+            </p>
+            <img
+              src="https://cdn.tgdd.vn/Files/2015/01/31/605299/cach-lam-banh-chung-cho-ngay-tet.jpg"
+              alt=""
+              style={{
+                width: "50%",
+                margin: "0 auto",
+              }}
+            />
+          </div>
         </div>
         <div
           className="bg-[#fff] rounded-md border-[0.5px]"
