@@ -10,6 +10,7 @@ import CourseCreate from "../pages/PageFounder/course-manager/course-create/cour
 import CourseOnline from "../pages/PageUser/Courses/course-online/CourseOnline";
 import CourseRoom from "../pages/PageUser/Courses/CourseRoom";
 import BlogList from "../pages/Blog/BlogList";
+import BlogDetail from "../pages/Blog/BlogDetail";
 
 export const adminRoutes: RouteItem[] = [
   {
@@ -125,12 +126,20 @@ export const adminRoutes: RouteItem[] = [
     permissionCode: "",
     children: [
       {
-        key: "blogall",
-        path: "/blog/list/all",
+        key: "blogAll",
+        path: "/blog",
         subMenuTitle: "Blog",
         mainMenuKey: "bloglist",
         permissionCode: "",
         getPageElement: () => <BlogList />,
+      },
+      {
+        key: "blogDetail",
+        path: "blog/blog-detail",
+        subMenuTitle: "BlogDetail",
+        mainMenuKey: "blog-detail",
+        permissionCode: "",
+        getPageElement: () => <BlogDetail />,
       },
       // {
       //   key: "productNew",
