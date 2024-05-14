@@ -8,7 +8,7 @@ import Ad_Category from "../pages/PageAdmin/Ad_Category/Ad_Category";
 
 import CourseCreate from "../pages/PageFounder/course-manager/course-create/course-create";
 import CourseOnline from "../pages/PageUser/Courses/course-online/CourseOnline";
-import CourseRoom from "../pages/PageUser/Courses/CourseRoom";
+import CourseRoom from "../pages/PageUser/Courses/course-online/CourseRoom";
 
 export const userRoutes: RouteItem[] = [
   {

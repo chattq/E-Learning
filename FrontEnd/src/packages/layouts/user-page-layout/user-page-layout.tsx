@@ -1,4 +1,13 @@
-import { Avatar, Badge, Input, Layout, Menu, MenuProps, Space } from "antd";
+import {
+  Avatar,
+  Badge,
+  Dropdown,
+  Input,
+  Layout,
+  Menu,
+  MenuProps,
+  Space,
+} from "antd";
 import {
   UserOutlined,
   BellFilled,
@@ -9,7 +18,7 @@ import {
 } from "@ant-design/icons";
 import "./user-page-layout.scss";
 import { protectedRoutes } from "../../../app-routers";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 type MenuItem = Required<MenuProps>["items"][number];
 export default function UserPageLayout({ children }: any) {
@@ -67,6 +76,34 @@ export default function UserPageLayout({ children }: any) {
   const handleNavigationSidebarClick = (val: any) => {
     navigate(`/${val.path}`);
   };
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: <Link to={"/login"}>Login</Link>,
+    },
+    {
+      key: "2",
+      label: (
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.aliyun.com">
+          2nd menu item
+        </a>
+      ),
+    },
+    {
+      key: "3",
+      label: (
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.luohanacademy.com">
+          3rd menu item
+        </a>
+      ),
+    },
+  ];
 
   return (
     <Layout>
@@ -83,8 +120,7 @@ export default function UserPageLayout({ children }: any) {
           backgroundColor: "#fff",
           lineHeight: "65px",
         }}
-        className="box-shadow-header header-wrapper"
-      >
+        className="box-shadow-header header-wrapper">
         <div></div>
         <div className="w-[25%]">
           <Input placeholder="search" />
@@ -101,22 +137,31 @@ export default function UserPageLayout({ children }: any) {
               icon={<BellFilled />}
             />
           </Badge>
-          <Avatar
-            size={35}
-            style={{
-              backgroundColor: "#e4e6eb",
-              color: "black",
-              borderRadius: "50%",
+          <Dropdown
+            align={{
+              offset: [-38, 10],
             }}
-            icon={<UserOutlined />}
-          />
+            trigger={["click"]}
+            menu={{ items }}
+            placement="bottomLeft"
+            arrow={{ pointAtCenter: true }}>
+            <Avatar
+              size={35}
+              style={{
+                backgroundColor: "#e4e6eb",
+                color: "black",
+                borderRadius: "50%",
+                cursor: "pointer",
+              }}
+              icon={<UserOutlined />}
+            />
+          </Dropdown>
         </Space>
       </Header>
       <Layout
         style={{
           marginTop: "65px",
-        }}
-      >
+        }}>
         <Sider
           collapsed={true}
           style={{
@@ -128,8 +173,7 @@ export default function UserPageLayout({ children }: any) {
             background: "#fff",
             paddingTop: "5px",
           }}
-          className="scrollable-wrapper sider_bar_user_page border-r-[0.5px]"
-        >
+          className="scrollable-wrapper sider_bar_user_page border-r-[0.5px]">
           <Menu
             className=""
             mode="inline"
@@ -144,14 +188,12 @@ export default function UserPageLayout({ children }: any) {
         className="Layout_content"
         style={{
           marginLeft: "80px",
-        }}
-      >
+        }}>
         <Content>
           <div
             style={{
               width: "100%",
-            }}
-          >
+            }}>
             {children}
           </div>
         </Content>

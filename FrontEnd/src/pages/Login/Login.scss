@@ -1,100 +1,85 @@
-
-.right{
-background-color: #bb0000;
-height: 97vh;
-// margin: 10px;
-top: 10px;
-left: 10px;
-border-radius:20px;
-// bottom: 10px;
-
+.right {
+  background-color: #bb0000;
+  height: 97vh;
+  // margin: 10px;
+  top: 10px;
+  left: 10px;
+  border-radius: 20px;
+  // bottom: 10px;
 }
 
-.formLogin{
-   margin: 0 auto;
-   margin-top: 15vh;
-   text-align: center;
-   padding :0  15vh;
-   h4{
+.formLogin {
+  margin: 0 auto;
+  margin-top: 15vh;
+  text-align: center;
+  padding: 0 15vh;
+  h4 {
     font-size: 24px;
     font-weight: bold;
     color: #bb0000;
-    
-    }
+  }
 }
 
-.formRegister{
-    margin: 0 auto;
-    margin-top: 8vh;
-    text-align: center;
-    padding :0  15vh;
-    h4{
-     font-size: 24px;
-     font-weight: bold;
-     color: #bb0000;
-     
-     }
-}
-
-.groupButton{
-    padding: 10px  ;
-    display: flex;
-    justify-content: space-between;
-    width: 50%;
-    margin: 20px 0;
-    background-color: #bb0000;
-    border-radius: 40px;
-    margin: 30px auto;
-}
-
-.buttonLogin{
-    border: none;
-    width: 50%;
-    border-radius: 40px;
-    color: white;
-    font-weight: 500;
-    margin: 0 3px;
-
-}
-
-.buttonLogin:hover{
-    background-color: white;
-    color: #bb0000 !important;
-}
-
-.ant-input-outlined{
-    padding: 10px 20px;
-    border-radius: 30px;
-    
-}
-
-.remember{
-    display: flex;
-    max-width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    .ant-form-item{
-        margin-bottom: 0;
-    }
-    
-}
-
-.btnLogin{
-    width: 40%;
-    background-color: #bb0000 !important;
-    color: white;
-    padding: 8px;
-    height: 100%;
-    border-radius: 30px;
-    margin-top: 25px;
+.formRegister {
+  margin: 0 auto;
+  margin-top: 8vh;
+  text-align: center;
+  padding: 0 15vh;
+  h4 {
+    font-size: 24px;
     font-weight: bold;
-
+    color: #bb0000;
+  }
 }
 
-.btnLogin:hover{
-    border: solid 1px #bb0000 !important;
-    background-color: white !important;
-    color: #bb0000 !important;
+.groupButton {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin: 20px 0;
+  background-color: #bb0000;
+  border-radius: 40px;
+  margin: 30px auto;
 }
 
+.buttonLogin {
+  border: none;
+  width: 50%;
+  border-radius: 40px;
+  color: white;
+  font-weight: 500;
+  margin: 0 3px;
+}
 
+.buttonLogin:hover {
+  background-color: white;
+  color: #bb0000 !important;
+}
+
+.remember {
+  display: flex;
+  max-width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  .ant-form-item {
+    margin-bottom: 0;
+  }
+}
+
+.btnLogin {
+  width: 40%;
+  background-color: #bb0000 !important;
+  color: white;
+  padding: 8px;
+  height: 100%;
+  border-radius: 30px;
+  margin-top: 25px;
+  font-weight: bold;
+}
+
+.btnLogin:hover {
+  border: solid 1px #bb0000 !important;
+  background-color: white !important;
+  color: #bb0000 !important;
+}

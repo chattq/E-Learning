@@ -17,7 +17,6 @@ export default function AdminPageLayout({ children }: any) {
         key: item.key,
         icon: item.icon,
         label: item.mainMenuTitle,
-        className: "menu-items-nav",
         children: item?.children
           ?.filter((val: any) => val.subMenuTitle !== "")
           .map((child, index) => {
@@ -25,7 +24,6 @@ export default function AdminPageLayout({ children }: any) {
               key: `/${child.path}`,
               label: child.subMenuTitle,
               onClick: () => handleNavigationSidebarClick(child),
-              className: "menu-items-nav",
             };
           }),
       };

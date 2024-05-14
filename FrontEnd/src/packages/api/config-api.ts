@@ -2,6 +2,7 @@ import axios, { AxiosError } from "axios";
 import { useFileApi } from "./API/FileApi";
 import { useAuthAPI } from "./API/auth.api";
 import { useCategoriesApi } from "./API/categories.api";
+import { setAccessTokenToLS } from "../../utils/localStorageHandler";
 
 export const createApiBase = () => {
   const accessToken = localStorage.getItem("token");
@@ -35,7 +36,9 @@ export const createApiBase = () => {
       };
       if (url === "/users/login" || url === "/users/register") {
         if (data.isSuccess) {
-          localStorage.setItem("token", data.data.Access_token);
+          setAccessTokenToLS(data.data.Access_token);
+
+          localStorage.setItem("profile", JSON.stringify(data.data.User));
         }
         return result;
       } else {
