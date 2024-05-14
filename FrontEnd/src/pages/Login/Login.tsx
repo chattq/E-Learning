@@ -3,6 +3,7 @@ import { useConfigAPI } from "../../packages/api/config-api";
 import "./Login.scss";
 
 import { Button, Checkbox, Col, Form, type FormProps, Input, Row } from "antd";
+import { setAccessTokenToLS } from "../../utils/localStorageHandler";
 
 type FieldType = {
   email: string;
@@ -18,7 +19,7 @@ export default function Login() {
   ) => {
     const response = await api.login(values.email, values.password);
     if (response.isSuccess) {
-      navigate("/admin/category");
+      navigate("/");
     }
   };
 
@@ -49,8 +50,7 @@ export default function Login() {
                 backgroundColor: "white",
                 color: "#bb0000 ",
               }}
-              onClick={handleClickLogin}
-            >
+              onClick={handleClickLogin}>
               Đăng nhập
             </Button>
             <Button className="buttonLogin " onClick={handleClickRegister}>
@@ -71,15 +71,13 @@ export default function Login() {
             layout="vertical"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
+            autoComplete="off">
             <Form.Item<FieldType>
               label="Tài Khoản"
               name="email"
               rules={[
                 { required: true, message: "Please input your username!" },
-              ]}
-            >
+              ]}>
               <Input defaultValue={"quang@gmail.com"} />
             </Form.Item>
 
@@ -88,8 +86,7 @@ export default function Login() {
               name="password"
               rules={[
                 { required: true, message: "Please input your password!" },
-              ]}
-            >
+              ]}>
               <Input.Password defaultValue={"123456@tQ"} />
             </Form.Item>
             <div className="remember">
@@ -110,8 +107,7 @@ export default function Login() {
                   color: "#bb0000",
                   fontWeight: "bold",
                   cursor: "pointer",
-                }}
-              >
+                }}>
                 Đăng ký
               </span>
             </div>

@@ -6,8 +6,8 @@ export const useAuthAPI = (apiBase: AxiosInstance) => {
     login: async (
       email: string,
       password: string
-    ): Promise<ApiResponse<UploadedFile>> => {
-      return await apiBase.post<File, ApiResponse<any>>("/users/login", {
+    ): Promise<ApiResponse<any>> => {
+      return await apiBase.post<any, ApiResponse<any>>("/users/login", {
         email: email,
         password: password,
       });

@@ -8,7 +8,7 @@ import Ad_Category from "../pages/PageAdmin/Ad_Category/Ad_Category";
 import CourseManager from "../pages/PageFounder/course-manager/course-manager";
 import CourseCreate from "../pages/PageFounder/course-manager/course-create/course-create";
 import CourseOnline from "../pages/PageUser/Courses/course-online/CourseOnline";
-import CourseRoom from "../pages/PageUser/Courses/CourseRoom";
+import CourseRoom from "../pages/PageUser/Courses/course-online/CourseRoom";
 import BlogList from "../pages/Blog/BlogList";
 import BlogDetail from "../pages/Blog/BlogDetail";
 
@@ -33,7 +33,7 @@ export const adminRoutes: RouteItem[] = [
         key: "product2",
         path: "portal/productOrder/cancel2",
         subMenuTitle: "Thêm bài tập",
-        mainMenuKey: "productOrder",
+        mainMenuKey: "productOrder1",
         permissionCode: "",
         getPageElement: () => <ProductList />,
       },
@@ -41,7 +41,7 @@ export const adminRoutes: RouteItem[] = [
         key: "product3",
         path: "portal/productOrder/cancel1",
         subMenuTitle: "Giao bài tập hàng loạt",
-        mainMenuKey: "productOrder",
+        mainMenuKey: "productOrder2",
         permissionCode: "",
         getPageElement: () => <ProductList />,
       },
@@ -78,14 +78,14 @@ export const adminRoutes: RouteItem[] = [
     path: "",
     mainMenuTitle: "Tài Chính",
     icon: <ShoppingCartOutlined />,
-    mainMenuKey: "product",
+    mainMenuKey: "category",
     permissionCode: "",
     children: [
       {
         key: "category",
         path: "admin/category",
         subMenuTitle: "Category",
-        mainMenuKey: "product",
+        mainMenuKey: "category",
         permissionCode: "",
         getPageElement: () => <Ad_Category />,
       },
@@ -96,14 +96,14 @@ export const adminRoutes: RouteItem[] = [
     path: "",
     mainMenuTitle: "Khóa học online",
     icon: <ShoppingCartOutlined />,
-    mainMenuKey: "product",
+    mainMenuKey: "Course_online",
     permissionCode: "",
     children: [
       {
         key: "course_online",
         path: "admin/Course_online",
         subMenuTitle: "Khóa học online",
-        mainMenuKey: "product",
+        mainMenuKey: "Course_online4",
         permissionCode: "",
         getPageElement: () => <CourseOnline />,
       },
@@ -111,7 +111,7 @@ export const adminRoutes: RouteItem[] = [
         key: "course_Room",
         path: "admin/Course_online/room/:id",
         subMenuTitle: "",
-        mainMenuKey: "product",
+        mainMenuKey: "Course_online3",
         permissionCode: "",
         getPageElement: () => <CourseRoom />,
       },
