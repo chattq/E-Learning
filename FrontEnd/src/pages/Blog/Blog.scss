@@ -1,15 +1,8 @@
 .NameLeft {
   color: white;
-  margin: 0 auto;
-  padding: 8% 40px 0;
-  h4 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 15px;
-  }
-  p {
-    font-size: 14px;
-  }
+  margin-top: 30px;
+  width: 30%;
+  // padding: 20px 0;
 
   .ant-btn-default {
     color: white;
@@ -23,4 +16,9 @@
     background-color: white !important;
     color: #bb0000 !important;
   }
+}
+
+.blog-detail-item {
+  background-color: white;
+  border-radius: 30px;
 }
