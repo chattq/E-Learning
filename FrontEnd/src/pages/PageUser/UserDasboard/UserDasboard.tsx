@@ -7,7 +7,7 @@ import { useConvertNumber } from "../../../packages/hooks/useConvertNumber";
 import { nanoid } from "nanoid";
 import { match } from "ts-pattern";
 import { RightOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import {
   Button,
@@ -23,15 +23,15 @@ import {
   TreeSelect,
 } from "antd";
 import { SizeType } from "antd/es/config-provider/SizeContext";
+import { PopupSettingMedia } from "./use-popup/popup-setting-media";
 
 export default function UserDasboard() {
-  const nav = useNavigate();
+  const popupSettingMediaRef = useRef<any>();
+
   const { convertMoneyVND } = useConvertNumber();
   const handleClickCourse = (item: any) => {
-    console.log(15, item);
     if (item.courseType === "Online") {
-      showModal();
-      // nav(`admin/Course_online/room/${nanoid()}`);
+      popupSettingMediaRef.current.showPopup();
     }
   };
   const dataCourse = [
@@ -91,31 +91,7 @@ export default function UserDasboard() {
       courseType: "Video",
     },
   ];
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
 
-  const showModal = () => {
-    setOpen(true);
-  };
-
-  const handleOk = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false);
-    }, 3000);
-  };
-
-  const handleCancel = () => {
-    setOpen(false);
-  };
-  const [componentSize, setComponentSize] = useState<SizeType | "default">(
-    "default"
-  );
-
-  const onFormLayoutChange = ({ size }: { size: SizeType }) => {
-    setComponentSize(size);
-  };
   return (
     <UserPageLayout>
       <div className="px-4 py-4">
@@ -219,37 +195,7 @@ export default function UserDasboard() {
           {/* </div> */}
         </div>
       </div>
-      <Modal
-        open={open}
-        width={"800px"}
-        title="Title"
-        onOk={handleOk}
-        style={{ top: 30 }}
-        onCancel={handleCancel}
-        footer={[
-          <Button key="submit" loading={loading} onClick={handleOk}>
-            Submit
-          </Button>,
-          <Button key="back" onClick={handleCancel}>
-            Cancel
-          </Button>,
-        ]}>
-        <Form
-          labelCol={{ span: 4 }}
-          wrapperCol={{ span: 14 }}
-          layout="horizontal"
-          initialValues={{ size: componentSize }}
-          onValuesChange={onFormLayoutChange}
-          size={componentSize as SizeType}
-          style={{ maxWidth: 600 }}>
-          <Form.Item label="Bật tiếng" valuePropName="checked">
-            <Switch />
-          </Form.Item>
-          <Form.Item label="Bật camera" valuePropName="checked">
-            <Switch />
-          </Form.Item>
-        </Form>
-      </Modal>
+      <PopupSettingMedia ref={popupSettingMediaRef} />
     </UserPageLayout>
   );
 }

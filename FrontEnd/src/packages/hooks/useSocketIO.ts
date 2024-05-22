@@ -1,3 +1,8 @@
-import { io } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 
-export const socket = io("http://localhost:4000");
+export const useSocket = () => {
+  const socket: Socket = io("http://localhost:4000");
+  return {
+    socket,
+  };
+};
