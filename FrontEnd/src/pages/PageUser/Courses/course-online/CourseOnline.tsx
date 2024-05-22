@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useSocket } from "../../../../packages/contexts/Socket";
+
 import { CardLayout } from "../../../../packages/ui/CardLayout/card-layout";
 import { useNavigate } from "react-router-dom";
 import RoomLayout from "../../../../packages/layouts/room-layout/room-layout";
@@ -16,6 +16,7 @@ import {
 } from "antd";
 import { BellFilled, PhoneOutlined } from "@ant-design/icons";
 import { PopupCall } from "./popup-call/popup-call";
+import { useSocket } from "../../../../packages/hooks/useSocketIO";
 
 export default function CourseOnline() {
   const socket = useSocket();
@@ -28,7 +29,7 @@ export default function CourseOnline() {
     (e: any) => {
       e.preventDefault();
 
-      socket.emit("room:join", { email, room });
+      // socket.emit("room:join", { email, room });
     },
     [email, room, socket]
   );
@@ -41,12 +42,12 @@ export default function CourseOnline() {
     [navigate]
   );
 
-  useEffect(() => {
-    socket.on("room:join", handleJoinRoom);
-    return () => {
-      socket.off("room:join", handleJoinRoom);
-    };
-  }, [socket, handleJoinRoom]);
+  // useEffect(() => {
+  //   socket.on("room:join", handleJoinRoom);
+  //   return () => {
+  //     socket.off("room:join", handleJoinRoom);
+  //   };
+  // }, [socket, handleJoinRoom]);
   const windowSize = useWindowSize();
   const { Header, Content } = Layout;
 

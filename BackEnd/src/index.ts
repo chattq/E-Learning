@@ -53,7 +53,7 @@ const emailToSocketIdMap = new Map()
 const socketidToEmailMap = new Map()
 io.on('connection', (socket) => {
   console.log(`user ${socket.id} connected`)
-  roomHandler(socket)
+  roomHandler(socket, io)
 
   // const user_id = socket.handshake.auth.id
 
