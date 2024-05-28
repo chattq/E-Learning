@@ -22,6 +22,7 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
     rooms.push({ roomId: roomId, peerId: peerId, userId: userId })
 
     getListUsersRoom(roomId)
+
     // thông báo đến tất cả người trong nhóm trừ user vào, là có người mới online
     notificationsNewUserJoin(roomId, peerId, userId)
 
@@ -37,6 +38,7 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
     getListUsersRoom(roomId)
   }
   const notificationsNewUserJoin = (roomId: string, peerId: string, userId: string) => {
+    io.to(roomId).emit('user-joined', { peerId: peerId, userId: userId })
     socket.broadcast.to(roomId).emit('new_user_join', { roomId: roomId, peerId: peerId, userId: userId })
     getListUsersRoom(roomId)
   }
