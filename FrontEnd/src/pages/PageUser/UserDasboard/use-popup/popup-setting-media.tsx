@@ -32,11 +32,6 @@ export const PopupSettingMedia = forwardRef(({}, ref) => {
 
   const handleOk = () => {
     setLoading(true);
-    ws.emit("join-room", {
-      roomId: "20241405COURSEONLINE",
-      peerId: nanoid(),
-      userId: nanoid(),
-    });
     nav(`admin/Course_online/room/20241405COURSEONLINE`);
   };
 

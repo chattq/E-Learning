@@ -24,32 +24,81 @@ import {
 import useRoom from "../../../../packages/hooks/useRoom";
 import { nanoid } from "nanoid";
 import { notification } from "antd";
+import Peer from "peerjs";
+import { usePeerService } from "../../../../packages/services/PeerService";
+export const deleteKeyFromObject = (obj: any, key: any) => {
+  delete obj[key];
+  return obj;
+};
 
 export default function CourseRoom() {
   const { id } = useParams();
 
-  // const { me, stream } = useRoom();
-  const peers = useAtomValue(peersAtom);
-  // const { stream, me } = useContext(RoomContext);
-  // const { me, stream } = useRoom();
   const [listUser, setListUser] = useState([]);
+  const [stream, setStream] = useState<MediaStream>();
+  const [peerId, setPeerId] = useState<string>("");
+
+  const [peers, setPeers] = useState({});
+  const { peer } = usePeerService();
+
+  useEffect(() => {
+    peer.on("open", (id) => {
+      setPeerId(id);
+      ws.emit("join-room", {
+        roomId: "20241405COURSEONLINE",
+        peerId: id,
+        userId: nanoid(),
+      });
+    });
+
+    peer.on("call", (call) => {
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+          setStream(stream);
+          call.answer(stream);
+          call.on("stream", (remoteStream) => {
+            setPeers((prev: any) => ({
+              ...prev,
+              [call.peer]: { stream: remoteStream, peerId: call.peer },
+            }));
+          });
+        });
+    });
+
+    ws.on("user-joined", ({ peerId: peerId, userId: userId }) => {
+      // Tự động gọi khi người dùng kết nối
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+          setStream(stream);
+          const call = peer.call(peerId, stream);
+          call.on("stream", (remoteStream) => {
+            setPeers((prev: any) => ({
+              ...prev,
+              [peerId]: { stream: remoteStream, peerId: peerId },
+            }));
+          });
+        });
+    });
+  }, []);
 
   useEffect(() => {
     ws.on("list_users_rooms_online", (data: any) => {
       setListUser(data);
       console.log("list_users_rooms_online", data);
     });
+
     ws.on("new_user_join", (data: any) => {
       openNotification(data, "join");
+      // console.log("new_user_join", data);
     });
     ws.on("user_leave_room", (data: any) => {
       openNotification(data, "leave");
-      console.log("user_leave_room", data);
     });
+
     return () => {
-      ws.off("list_users_rooms_online", (data: any) => {
-        console.log("list_users_rooms_online", data);
-      });
+      ws.off("list_users_rooms_online", (data: any) => {});
       ws.off("new_user_join", (data: any) => {
         openNotification(data, "join");
       });
@@ -58,7 +107,6 @@ export default function CourseRoom() {
       });
     };
   }, []);
-  // console.log("peers", peers);
 
   const windowSize = useWindowSize();
   const videoRef = useRef<any>(null);
@@ -87,6 +135,8 @@ export default function CourseRoom() {
       description: `User ${data.userId} ${status} room ${data.roomId}`,
     });
   };
+
+  console.log(125, peers);
   // console.log(37, stream);
   return (
     <div>
@@ -98,15 +148,23 @@ export default function CourseRoom() {
             : "Enter Picture-in-Picture"} */}
         </button>
       </div>
-      {Object.values(peers).map((item: any) => {
-        return <VideoPlayer className="h-full w-full" stream={item.stream} />;
-      })}
       <div className="flex layout_room_video">
         <div className="flex-1">
+          {Object.values(deleteKeyFromObject(peers, peerId)).map(
+            (item: any) => {
+              return (
+                <div key={item.peerId}>
+                  <h1>{item.peerId}</h1>
+                  <VideoPlayer className="h-full w-full" stream={item.stream} />
+                </div>
+              );
+            }
+          )}
           {/* <VideoPlayer className="h-full w-full" stream={stream} /> */}
         </div>
         <div className="bg-orange-200 w-[300px]">
           <div className="layout_chat">
+            <h1>My Peer ID: {peerId}</h1>
             {listUser.map((item: any) => {
               return (
                 <div
@@ -117,8 +175,8 @@ export default function CourseRoom() {
               );
             })}
           </div>
-          {/* <VideoPlayer className="h-[150px] w-full" stream={stream} />
-          <Bs0Square /> */}
+
+          <VideoPlayer className="h-[150px] w-full" stream={stream} />
         </div>
       </div>
       {contextHolder}
