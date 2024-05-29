@@ -65,7 +65,12 @@ export default function CourseRoom() {
           call.on("stream", (remoteStream) => {
             setPeers((prev: any) => ({
               ...prev,
-              [call.peer]: { stream: remoteStream, peerId: call.peer },
+              [call.peer]: {
+                stream: remoteStream,
+                peerId: call.peer,
+                isCameraOn: true,
+                isMicroPhoneOn: true,
+              },
             }));
           });
         });
@@ -81,7 +86,12 @@ export default function CourseRoom() {
           call.on("stream", (remoteStream) => {
             setPeers((prev: any) => ({
               ...prev,
-              [peerId]: { stream: remoteStream, peerId: peerId },
+              [peerId]: {
+                stream: remoteStream,
+                peerId: peerId,
+                isCameraOn: true,
+                isMicroPhoneOn: true,
+              },
             }));
           });
         });
@@ -148,6 +158,7 @@ export default function CourseRoom() {
       const updatePeer = cloneDeep(peers);
       // tìm peerID cần update trạng thái camera
       if (updatePeer[data.peerId]) {
+        updatePeer[data.peerId].isCameraOn = data.isCameraOn;
         // nếu tìm thấy thì cập nhật trạng thái camera cho peers đó
         const videoTrack = updatePeer[data.peerId].stream.getVideoTracks()[0];
         videoTrack.enabled = data.isCameraOn;
@@ -163,6 +174,7 @@ export default function CourseRoom() {
       // tìm peerID cần update trạng thái audio
       if (updatePeer[data.peerId]) {
         // nếu tìm thấy thì cập nhật trạng thái audio cho peers đó
+        updatePeer[data.peerId].isMicroPhoneOn = data.isMicroPhoneOn;
         const audioTrack = updatePeer[data.peerId].stream.getAudioTracks()[0];
         audioTrack.enabled = data.isMicroPhoneOn;
         // set lại giá trị peers để cập nhật trạng thái đúng nhất
@@ -185,8 +197,6 @@ export default function CourseRoom() {
     };
   }, [stream, peers]);
 
-  console.log(125, peers);
-
   const toggleCamera = () => {
     if (stream) {
       stream.getVideoTracks()[0].enabled = !isCameraOn;
@@ -195,6 +205,15 @@ export default function CourseRoom() {
         userID: userID,
         peerId: peerId,
         isCameraOn: !isCameraOn,
+      });
+
+      // cập nhật lại trạng thái của peer (các user)
+      setPeers((prevPeers: any) => {
+        const updatedPeers = cloneDeep(prevPeers);
+        if (updatedPeers[peerId]) {
+          updatedPeers[peerId].isCameraOn = !isCameraOn;
+        }
+        return updatedPeers;
       });
     }
   };
@@ -208,6 +227,13 @@ export default function CourseRoom() {
         peerId: peerId,
         isMicroPhoneOn: !isMicroPhoneOn,
       });
+      setPeers((prevPeers: any) => {
+        const updatedPeers = cloneDeep(prevPeers);
+        if (updatedPeers[peerId]) {
+          updatedPeers[peerId].isMicroPhoneOn = !isMicroPhoneOn;
+        }
+        return updatedPeers;
+      });
     }
   };
 
@@ -215,7 +241,7 @@ export default function CourseRoom() {
   const turnOffAllCameras = () => {
     ws.emit("turn-off-all-cameras");
   };
-
+  console.log(125, peers);
   return (
     <div>
       <div className="h-[50px] bg-slate-500">
@@ -239,6 +265,7 @@ export default function CourseRoom() {
         <div className="flex-1">
           {Object.values(deleteKeyFromObject(peers, peerId)).map(
             (item: any) => {
+              if (!item.isCameraOn) return null;
               return (
                 <div key={item.peerId}>
                   <h1>{item.peerId}</h1>
