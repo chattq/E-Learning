@@ -148,7 +148,6 @@ export default function CourseRoom() {
         // nếu tìm thấy thì cập nhật trạng thái camera cho peers đó
         const videoTrack = updatePeer[data.peerId].stream.getVideoTracks()[0];
         videoTrack.enabled = data.isCameraOn;
-
         // set lại giá trị peers để cập nhật trạng thái đúng nhất
         setPeers(updatePeer);
       }
@@ -169,17 +168,19 @@ export default function CourseRoom() {
     });
 
     // tắt tất cả camera của users
-    ws.on("update-microphone-status", () => {
+    ws.on("turn-off-camera", () => {
       if (stream) {
         const videoTrack = stream.getVideoTracks()[0];
         videoTrack.enabled = false;
         setIsCameraOn(false);
       }
     });
+
     return () => {
       ws.off("toggle-camera");
-      ws.off("toggle-camera");
       ws.off("turn-off-camera");
+      ws.off("update-microphone-status");
+      ws.off("update-camera-status");
     };
   }, [stream, peers]);
 
