@@ -16,6 +16,7 @@ import { useSocket } from "../../../../packages/hooks/useSocketIO";
 import { RoomContext } from "../../../../packages/contexts/RoomContext";
 
 import { ws } from "../../../../socketIO";
+import { cloneDeep } from "lodash";
 import { Bs0Square } from "react-icons/bs";
 import {
   peerStreamsAtom,
@@ -33,21 +34,25 @@ export const deleteKeyFromObject = (obj: any, key: any) => {
 
 export default function CourseRoom() {
   const { id } = useParams();
-
+  const [isCameraOn, setIsCameraOn] = useState(true);
+  const [isMicroPhoneOn, setIsMicrophoneOn] = useState(true);
   const [listUser, setListUser] = useState([]);
   const [stream, setStream] = useState<MediaStream>();
   const [peerId, setPeerId] = useState<string>("");
 
-  const [peers, setPeers] = useState({});
-  const { peer } = usePeerService();
+  const [peers, setPeers] = useState<any>({});
+  // const { peer } = usePeerService();
+  const userID = nanoid();
 
   useEffect(() => {
+    const peer = new Peer(nanoid());
     peer.on("open", (id) => {
       setPeerId(id);
+      console.log(50, id);
       ws.emit("join-room", {
         roomId: "20241405COURSEONLINE",
         peerId: id,
-        userId: nanoid(),
+        userId: userID,
       });
     });
 
@@ -86,7 +91,7 @@ export default function CourseRoom() {
   useEffect(() => {
     ws.on("list_users_rooms_online", (data: any) => {
       setListUser(data);
-      console.log("list_users_rooms_online", data);
+      // console.log("list_users_rooms_online", data);
     });
 
     ws.on("new_user_join", (data: any) => {
@@ -105,6 +110,7 @@ export default function CourseRoom() {
       ws.on("user_leave_room", (data: any) => {
         openNotification(data, "leave");
       });
+      ws.off("toggle-camera");
     };
   }, []);
 
@@ -135,9 +141,81 @@ export default function CourseRoom() {
       description: `User ${data.userId} ${status} room ${data.roomId}`,
     });
   };
+  useEffect(() => {
+    // mình cập nhật trạng thái camera của chính mình và mọi người có thể thấy là mình đã cập nhật trạng thái camera
+    ws.on("update-camera-status", (data: any) => {
+      // clone peers để không ảnh hưởng đến peers chính
+      const updatePeer = cloneDeep(peers);
+      // tìm peerID cần update trạng thái camera
+      if (updatePeer[data.peerId]) {
+        // nếu tìm thấy thì cập nhật trạng thái camera cho peers đó
+        const videoTrack = updatePeer[data.peerId].stream.getVideoTracks()[0];
+        videoTrack.enabled = data.isCameraOn;
+
+        // set lại giá trị peers để cập nhật trạng thái đúng nhất
+        setPeers(updatePeer);
+      }
+    });
+    // mình cập nhật trạng thái audio của chính mình và mọi người có thể thấy là mình đã cập nhật trạng thái audio
+    ws.on("update-microphone-status", (data: any) => {
+      // clone peers để không ảnh hưởng đến peers chính
+      const updatePeer = cloneDeep(peers);
+      // tìm peerID cần update trạng thái audio
+      if (updatePeer[data.peerId]) {
+        // nếu tìm thấy thì cập nhật trạng thái audio cho peers đó
+        const audioTrack = updatePeer[data.peerId].stream.getAudioTracks()[0];
+        audioTrack.enabled = data.isMicroPhoneOn;
+        // set lại giá trị peers để cập nhật trạng thái đúng nhất
+        setPeers(updatePeer);
+      }
+    });
+
+    // tắt tất cả camera của users
+    ws.on("update-microphone-status", () => {
+      if (stream) {
+        const videoTrack = stream.getVideoTracks()[0];
+        videoTrack.enabled = false;
+        setIsCameraOn(false);
+      }
+    });
+    return () => {
+      ws.off("toggle-camera");
+      ws.off("toggle-camera");
+      ws.off("turn-off-camera");
+    };
+  }, [stream, peers]);
 
   console.log(125, peers);
-  // console.log(37, stream);
+
+  const toggleCamera = () => {
+    if (stream) {
+      stream.getVideoTracks()[0].enabled = !isCameraOn;
+      setIsCameraOn(!isCameraOn);
+      ws.emit("toggle-camera", {
+        userID: userID,
+        peerId: peerId,
+        isCameraOn: !isCameraOn,
+      });
+    }
+  };
+
+  const toggleMicrophone = () => {
+    if (stream) {
+      stream.getAudioTracks()[0].enabled = !isMicroPhoneOn;
+      setIsMicrophoneOn(!isMicroPhoneOn);
+      ws.emit("toggle-microphone", {
+        userID: userID,
+        peerId: peerId,
+        isMicroPhoneOn: !isMicroPhoneOn,
+      });
+    }
+  };
+
+  // tắt tất cả camera của user trong nhóm (chỉ người nào có quyền thì mới được dùng)
+  const turnOffAllCameras = () => {
+    ws.emit("turn-off-all-cameras");
+  };
+
   return (
     <div>
       <div className="h-[50px] bg-slate-500">
@@ -147,6 +225,15 @@ export default function CourseRoom() {
             ? "Exit Picture-in-Picture"
             : "Enter Picture-in-Picture"} */}
         </button>
+        <div>
+          <button onClick={toggleCamera} className="bg-neutral-700">
+            {isCameraOn ? "Turn Off Camera" : "Turn On Camera"}
+          </button>
+          <button onClick={toggleMicrophone}>
+            {isMicroPhoneOn ? "Turn Off Microphone" : "Turn On Microphone"}
+          </button>
+          <button onClick={turnOffAllCameras}>turnOffAllCameras</button>
+        </div>
       </div>
       <div className="flex layout_room_video">
         <div className="flex-1">
@@ -160,7 +247,6 @@ export default function CourseRoom() {
               );
             }
           )}
-          {/* <VideoPlayer className="h-full w-full" stream={stream} /> */}
         </div>
         <div className="bg-orange-200 w-[300px]">
           <div className="layout_chat">
