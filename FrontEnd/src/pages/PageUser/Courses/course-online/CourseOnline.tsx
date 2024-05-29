@@ -16,10 +16,8 @@ import {
 } from "antd";
 import { BellFilled, PhoneOutlined } from "@ant-design/icons";
 import { PopupCall } from "./popup-call/popup-call";
-import { useSocket } from "../../../../packages/hooks/useSocketIO";
 
 export default function CourseOnline() {
-  const socket = useSocket();
   const [email, setEmail] = useState("");
   const nav = useNavigate();
   const [room, setRoom] = useState("");
@@ -31,7 +29,7 @@ export default function CourseOnline() {
 
       // socket.emit("room:join", { email, room });
     },
-    [email, room, socket]
+    [email, room]
   );
 
   const handleJoinRoom = useCallback(

@@ -1,32 +1,16 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useWindowSize } from "../../../../packages/hooks/useWindowSize";
 import "./CourseRoom.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import VideoPlayer from "../../../../packages/components/VideoPlayer/VideoPlayer";
-import { useAtom, useAtomValue } from "jotai";
-import { streamAtom } from "../../UserDasboard/store";
-import { getProfileFromLS } from "../../../../utils/localStorageHandler";
-import { useSocket } from "../../../../packages/hooks/useSocketIO";
-import { RoomContext } from "../../../../packages/contexts/RoomContext";
-
 import { ws } from "../../../../socketIO";
 import { cloneDeep } from "lodash";
 import { Bs0Square } from "react-icons/bs";
-import {
-  peerStreamsAtom,
-  peersAtom,
-} from "../../../../packages/store/peer-store";
-import useRoom from "../../../../packages/hooks/useRoom";
+
 import { nanoid } from "nanoid";
-import { notification } from "antd";
+import { Spin, notification } from "antd";
 import Peer from "peerjs";
-import { usePeerService } from "../../../../packages/services/PeerService";
+
 export const deleteKeyFromObject = (obj: any, key: any) => {
   delete obj[key];
   return obj;
@@ -34,6 +18,7 @@ export const deleteKeyFromObject = (obj: any, key: any) => {
 
 export default function CourseRoom() {
   const { id } = useParams();
+  const [spinning, setSpinning] = React.useState<boolean>(false);
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isMicroPhoneOn, setIsMicrophoneOn] = useState(true);
   const [listUser, setListUser] = useState([]);
@@ -41,14 +26,14 @@ export default function CourseRoom() {
   const [peerId, setPeerId] = useState<string>("");
 
   const [peers, setPeers] = useState<any>({});
-  // const { peer } = usePeerService();
+
   const userID = nanoid();
 
   useEffect(() => {
     const peer = new Peer(nanoid());
     peer.on("open", (id) => {
+      // setSpinning(true);
       setPeerId(id);
-      console.log(50, id);
       ws.emit("join-room", {
         roomId: "20241405COURSEONLINE",
         peerId: id,
@@ -61,6 +46,7 @@ export default function CourseRoom() {
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
           setStream(stream);
+          // setSpinning(false);
           call.answer(stream);
           call.on("stream", (remoteStream) => {
             setPeers((prev: any) => ({
@@ -81,7 +67,7 @@ export default function CourseRoom() {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
-          setStream(stream);
+          // setSpinning(false);
           const call = peer.call(peerId, stream);
           call.on("stream", (remoteStream) => {
             setPeers((prev: any) => ({
@@ -244,6 +230,7 @@ export default function CourseRoom() {
   console.log(125, peers);
   return (
     <div>
+      <Spin spinning={spinning} fullscreen />
       <div className="h-[50px] bg-slate-500">
         <button onClick={handleTogglePictureInPicture}>
           Exit
