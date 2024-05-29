@@ -9,6 +9,14 @@ interface IRoomParams {
 interface IJoinRoomParams extends IRoomParams {
   userId: string
 }
+interface IToggleCameraParams {
+  userID: string
+  peerId: string
+  isCameraOn: boolean
+}
+interface IMicroPhoneParams extends IToggleCameraParams {
+  isMicroPhoneOn: boolean
+}
 
 const rooms: any[] = []
 
@@ -25,6 +33,21 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
 
     // thông báo đến tất cả người trong nhóm trừ user vào, là có người mới online
     notificationsNewUserJoin(roomId, peerId, userId)
+
+    // Lắng nghe sự kiện toggle-camera từ client và phát lại cho tất cả các client khác trong phòng
+    socket.on('toggle-camera', (data: IToggleCameraParams) => {
+      socket.broadcast.to(roomId).emit('update-camera-status', data)
+    })
+
+    // Lắng nghe sự kiện toggle-microphone từ client và phát lại cho tất cả các client khác trong phòng
+    socket.on('toggle-microphone', (data: IMicroPhoneParams) => {
+      socket.broadcast.to(roomId).emit('update-microphone-status', data)
+    })
+
+    // tắt tất cả camera trong nhóm trừ mình ra (nâng cấp sau, chỉ user tạo khóa học mới có full quyền)
+    socket.on('turn-off-all-cameras', () => {
+      socket.broadcast.to(roomId).emit('turn-off-camera')
+    })
 
     socket.on('disconnect', () => {
       console.log('user left', { roomId, peerId, userId })
@@ -43,7 +66,6 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
     getListUsersRoom(roomId)
   }
   const getListUsersRoom = (roomId: string) => {
-    console.log(44, rooms)
     io.to(roomId).emit(
       'list_users_rooms_online',
       rooms.filter((user) => user.roomId === roomId)
