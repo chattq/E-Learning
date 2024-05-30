@@ -19,6 +19,9 @@ export const deleteKeyFromObject = (obj: any, key: any) => {
 export default function CourseRoom() {
   const { id } = useParams();
   const [spinning, setSpinning] = React.useState<boolean>(false);
+  const windowSize = useWindowSize();
+  const videoRef = useRef<any>(null);
+  const nav = useNavigate();
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isMicroPhoneOn, setIsMicrophoneOn] = useState(true);
   const [listUser, setListUser] = useState([]);
@@ -32,7 +35,6 @@ export default function CourseRoom() {
   useEffect(() => {
     const peer = new Peer(nanoid());
     peer.on("open", (id) => {
-      // setSpinning(true);
       setPeerId(id);
       ws.emit("join-room", {
         roomId: "20241405COURSEONLINE",
@@ -41,12 +43,11 @@ export default function CourseRoom() {
       });
     });
 
-    peer.on("call", (call) => {
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
-        .then((stream) => {
-          setStream(stream);
-          // setSpinning(false);
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        setStream(stream);
+        peer.on("call", (call) => {
           call.answer(stream);
           call.on("stream", (remoteStream) => {
             setPeers((prev: any) => ({
@@ -60,31 +61,24 @@ export default function CourseRoom() {
             }));
           });
         });
-    });
 
-    ws.on("user-joined", ({ peerId: peerId, userId: userId }) => {
-      // Tự động gọi khi người dùng kết nối
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
-        .then((stream) => {
-          // setSpinning(false);
+        // khi người dùng vào thì call luôn đến peerID
+        ws.on("user-joined", ({ peerId, userId }) => {
           const call = peer.call(peerId, stream);
           call.on("stream", (remoteStream) => {
             setPeers((prev: any) => ({
               ...prev,
               [peerId]: {
                 stream: remoteStream,
-                peerId: peerId,
+                peerId,
                 isCameraOn: true,
                 isMicroPhoneOn: true,
               },
             }));
           });
         });
-    });
-  }, []);
+      });
 
-  useEffect(() => {
     ws.on("list_users_rooms_online", (data: any) => {
       setListUser(data);
       // console.log("list_users_rooms_online", data);
@@ -97,8 +91,9 @@ export default function CourseRoom() {
     ws.on("user_leave_room", (data: any) => {
       openNotification(data, "leave");
     });
-
     return () => {
+      ws.off("user-joined");
+      ws.off("join-room");
       ws.off("list_users_rooms_online", (data: any) => {});
       ws.off("new_user_join", (data: any) => {
         openNotification(data, "join");
@@ -106,13 +101,9 @@ export default function CourseRoom() {
       ws.on("user_leave_room", (data: any) => {
         openNotification(data, "leave");
       });
-      ws.off("toggle-camera");
+      peer.destroy();
     };
   }, []);
-
-  const windowSize = useWindowSize();
-  const videoRef = useRef<any>(null);
-  const nav = useNavigate();
 
   const handleTogglePictureInPicture = () => {
     // if (document.pictureInPictureElement) {
@@ -144,11 +135,9 @@ export default function CourseRoom() {
       const updatePeer = cloneDeep(peers);
       // tìm peerID cần update trạng thái camera
       if (updatePeer[data.peerId]) {
+        console.log(139, peerId);
+        // console.log(141, stream);
         updatePeer[data.peerId].isCameraOn = data.isCameraOn;
-        // nếu tìm thấy thì cập nhật trạng thái camera cho peers đó
-        const videoTrack = updatePeer[data.peerId].stream.getVideoTracks()[0];
-        videoTrack.enabled = data.isCameraOn;
-        // set lại giá trị peers để cập nhật trạng thái đúng nhất
         setPeers(updatePeer);
       }
     });
@@ -170,14 +159,12 @@ export default function CourseRoom() {
     // tắt tất cả camera của users
     ws.on("turn-off-camera", () => {
       if (stream) {
-        const videoTrack = stream.getVideoTracks()[0];
-        videoTrack.enabled = false;
+        stream.getTracks().forEach((track) => track.stop());
         setIsCameraOn(false);
       }
     });
 
     return () => {
-      ws.off("toggle-camera");
       ws.off("turn-off-camera");
       ws.off("update-microphone-status");
       ws.off("update-camera-status");
@@ -186,21 +173,27 @@ export default function CourseRoom() {
 
   const toggleCamera = () => {
     if (stream) {
-      stream.getVideoTracks()[0].enabled = !isCameraOn;
+      if (isCameraOn) {
+        stream.getTracks().forEach((track) => track.stop());
+      } else {
+        // logic để bật lại camera tạo ra 1 stream mới
+        navigator.mediaDevices
+          .getUserMedia({ video: true })
+          .then((newStream) => {
+            const newTrack = newStream.getVideoTracks()[0];
+            stream.addTrack(newTrack);
+            ws.emit("toggle-camera", {
+              userID: userID,
+              peerId: peerId,
+              isCameraOn: true,
+            });
+          });
+      }
       setIsCameraOn(!isCameraOn);
       ws.emit("toggle-camera", {
         userID: userID,
         peerId: peerId,
         isCameraOn: !isCameraOn,
-      });
-
-      // cập nhật lại trạng thái của peer (các user)
-      setPeers((prevPeers: any) => {
-        const updatedPeers = cloneDeep(prevPeers);
-        if (updatedPeers[peerId]) {
-          updatedPeers[peerId].isCameraOn = !isCameraOn;
-        }
-        return updatedPeers;
       });
     }
   };
@@ -213,13 +206,6 @@ export default function CourseRoom() {
         userID: userID,
         peerId: peerId,
         isMicroPhoneOn: !isMicroPhoneOn,
-      });
-      setPeers((prevPeers: any) => {
-        const updatedPeers = cloneDeep(prevPeers);
-        if (updatedPeers[peerId]) {
-          updatedPeers[peerId].isMicroPhoneOn = !isMicroPhoneOn;
-        }
-        return updatedPeers;
       });
     }
   };
@@ -251,17 +237,15 @@ export default function CourseRoom() {
       </div>
       <div className="flex layout_room_video">
         <div className="flex-1">
-          {Object.values(deleteKeyFromObject(peers, peerId)).map(
-            (item: any) => {
-              if (!item.isCameraOn) return null;
-              return (
-                <div key={item.peerId}>
-                  <h1>{item.peerId}</h1>
-                  <VideoPlayer className="h-full w-full" stream={item.stream} />
-                </div>
-              );
-            }
-          )}
+          {Object.values(peers).map((item: any) => {
+            if (!item.isCameraOn) return null;
+            return (
+              <div key={item.peerId}>
+                <h1>{item.peerId}</h1>
+                <VideoPlayer className="h-full w-full" stream={item.stream} />
+              </div>
+            );
+          })}
         </div>
         <div className="bg-orange-200 w-[300px]">
           <div className="layout_chat">
@@ -271,12 +255,11 @@ export default function CourseRoom() {
                 <div
                   className="flex items-center justify-between"
                   style={{ width: "100%" }}>
-                  <div className="text-[12px]">{item.userId}</div>
+                  <div className="text-[12px]">{item.peerId}</div>
                 </div>
               );
             })}
           </div>
-
           <VideoPlayer className="h-[150px] w-full" stream={stream} />
         </div>
       </div>
