@@ -10,7 +10,7 @@ import BlogDetail from "../pages/Blog/BlogDetail";
 
 export const siderbarRouters: RouteItem[] = [
   {
-    key: "users_post",
+    key: "",
     path: "/",
     mainMenuTitle: "Trang chủ",
     permissionCode: "",
