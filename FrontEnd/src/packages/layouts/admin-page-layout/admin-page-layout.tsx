@@ -4,6 +4,7 @@ import "./admin-page-layout.scss";
 import { protectedRoutes } from "../../../app-routers";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import HeaderLayout from "../../ui/header-layout/HeaderLayout";
 
 type MenuItem = Required<MenuProps>["items"][number];
 export default function AdminPageLayout({ children }: any) {
@@ -51,31 +52,7 @@ export default function AdminPageLayout({ children }: any) {
         }}
         className="box-shadow-header header-wrapper">
         <div></div>
-        <div className="w-[25%]">
-          <Input placeholder="search" />
-        </div>
-        <Space size={20}>
-          <Badge count={100} size="default" offset={[0, 0]}>
-            <Avatar
-              style={{
-                backgroundColor: "#e4e6eb",
-                color: "black",
-                borderRadius: "50%",
-              }}
-              size={35}
-              icon={<BellFilled />}
-            />
-          </Badge>
-          <Avatar
-            size={35}
-            style={{
-              backgroundColor: "#e4e6eb",
-              color: "black",
-              borderRadius: "50%",
-            }}
-            icon={<UserOutlined />}
-          />
-        </Space>
+        <HeaderLayout />
       </Header>
       <Layout
         style={{
