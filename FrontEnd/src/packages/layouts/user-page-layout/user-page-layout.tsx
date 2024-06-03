@@ -29,7 +29,7 @@ export default function UserPageLayout({ children }: any) {
 
   const itemsSideBar: MenuItem[] = siderbarRouters.map((item, index: any) => {
     return {
-      key: item.key,
+      key: `/${item.key}`,
       icon: item.icon,
       label: item.mainMenuTitle,
       className: "menu-items-nav h-[50px]",
@@ -80,7 +80,9 @@ export default function UserPageLayout({ children }: any) {
           <Menu
             className=""
             mode="inline"
-            defaultOpenKeys={protectedRoutes.map((item: any) => item.key)}
+            defaultOpenKeys={siderbarRouters.map((item: any) => {
+              return `/${item.key}`;
+            })}
             style={{ height: "100%", borderRight: 0 }}
             items={itemsSideBar}
             selectedKeys={[currentPath]}
