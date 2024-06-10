@@ -1,24 +1,6 @@
-import {
-  Avatar,
-  Badge,
-  Dropdown,
-  Input,
-  Layout,
-  Menu,
-  MenuProps,
-  Space,
-} from "antd";
-import {
-  UserOutlined,
-  BellFilled,
-  SnippetsOutlined,
-  SolutionOutlined,
-  ScheduleOutlined,
-  HomeOutlined,
-} from "@ant-design/icons";
+import { Layout, Menu, MenuProps } from "antd";
 import "./user-page-layout.scss";
-import { protectedRoutes } from "../../../app-routers";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { siderbarRouters } from "../../../routes/siderbar-routers";
 import HeaderLayout from "../../ui/header-layout/HeaderLayout";
 

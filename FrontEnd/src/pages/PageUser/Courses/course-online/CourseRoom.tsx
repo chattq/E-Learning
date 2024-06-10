@@ -210,13 +210,14 @@ export default function CourseRoom() {
 
   const toggleMicrophone = () => {
     if (stream) {
-      stream.getAudioTracks()[0].enabled = !isMicroPhoneOn;
-      setIsMicrophoneOn(!isMicroPhoneOn);
-      ws.emit("toggle-microphone", {
-        userID: userID,
-        peerId: peerId,
-        isMicroPhoneOn: !isMicroPhoneOn,
-      });
+      const tracks = stream.getAudioTracks();
+      tracks[0].stop();
+      // setIsMicrophoneOn(!isMicroPhoneOn);
+      // ws.emit("toggle-microphone", {
+      //   userID: userID,
+      //   peerId: peerId,
+      //   isMicroPhoneOn: !isMicroPhoneOn,
+      // });
     }
   };
 
