@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import categoryModel from '~/models/requests/adCategories/categories.models'
-import { CategoryModel } from '~/models/requests/adCategories/categories.requests'
+import categoryModel from '~/Models2/requests/adCategories/categories.models'
+import { CategoryModel } from '~/Models2/requests/adCategories/categories.requests'
 
 class CategoryController {
   async categoryCreate(req: Request, res: Response) {

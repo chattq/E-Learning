@@ -1,7 +1,8 @@
 import { config } from 'dotenv'
+import userModel from '~/Models2/requests/users/users.models'
+import { RegisterReqBody } from '~/Models2/requests/users/users.requests'
 import { TokenType } from '~/constants/enums'
-import userModel from '~/models/requests/users/users.models'
-import { RegisterReqBody } from '~/models/requests/users/users.requests'
+
 import { signToken } from '~/utils/jwt'
 import { useGetTime } from '~/utils/useGetTime'
 
