@@ -1,7 +1,6 @@
 import { Sequelize } from 'sequelize-typescript'
 import * as path from 'path'
 import * as fs from 'fs'
-import User from '~/models/user.models'
 
 require('dotenv').config()
 
