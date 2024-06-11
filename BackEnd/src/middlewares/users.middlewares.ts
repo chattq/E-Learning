@@ -77,16 +77,16 @@ export const registerValidator = validate(
         },
         in: ['body'],
         isEmail: true,
-        trim: true,
-        custom: {
-          options: async (value: string) => {
-            const isExist = (await userService.getUserByEmail(value)) as any
-            if (isExist?.length > 0) {
-              throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_ALREADY_EXIST, status: 400 })
-            }
-            return true
-          }
-        }
+        trim: true
+        // custom: {
+        //   options: async (value: string) => {
+        //     const isExist = (await userService.getUserByEmail(value)) as any
+        //     if (isExist?.length > 0) {
+        //       throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_ALREADY_EXIST, status: 400 })
+        //     }
+        //     return true
+        //   }
+        // }
       },
       password: {
         notEmpty: true,

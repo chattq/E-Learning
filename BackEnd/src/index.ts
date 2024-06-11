@@ -58,7 +58,7 @@ httpServer.listen(port, async () => {
   try {
     await connectDbSequelize.authenticate()
     console.log(`Kết nối database thành công`)
-    await connectDbSequelize.sync({ alter: true })
+    await connectDbSequelize.sync({ force: false, alter: true })
     //alter: true: Cập nhật cấu trúc bảng để phù hợp với mô hình mà không phá hủy dữ liệu hiện tại.
     //Điều này an toàn hơn so với force.
     console.log(`Example app listening on port ${port}`)
