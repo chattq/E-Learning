@@ -129,7 +129,7 @@ export const adminRoutes: RouteItem[] = [
         key: "blogAll",
         path: "/blog",
         subMenuTitle: "Blog",
-        mainMenuKey: "bloglist",
+        mainMenuKey: "bloglista",
         permissionCode: "",
         getPageElement: () => <BlogList />,
       },
