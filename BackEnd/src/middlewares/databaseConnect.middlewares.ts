@@ -1,44 +1,24 @@
 import { Request, Response, NextFunction } from 'express'
-import { PoolConnection } from 'mariaDB'
-import { db } from '~/config/database.config'
+import { connectDbSequelize } from '~/config/connection-database'
 
-export const checkMariaDBConnection = async (req: Request, res: Response, next: NextFunction) => {
-  let connect: PoolConnection | undefined
+export const checkConnectionDB = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    connect = await db.getConnection()
-    ;(req as any).dbConnection = connect // Lưu kết nối vào req để sử dụng trong các middleware và route khác
-    connect.release()
+    await connectDbSequelize.authenticate()
+    console.log('Connection has been established successfully.')
+    await connectDbSequelize.sync({ alter: true })
+    console.log('All models were synchronized successfully.')
     next()
-  } catch (err) {
+  } catch (error) {
     // Nếu không thể kết nối, trả về lỗi
-    Object.getOwnPropertyNames(err).forEach((key) => {
-      Object.defineProperty(err, key, { enumerable: true })
+    Object.getOwnPropertyNames(error).forEach((key) => {
+      Object.defineProperty(error, key, { enumerable: true })
     })
     return res.status(500).json({
       Success: false,
       Data: {
         message: 'Error connecting to database',
-        detail: err
+        detail: error
       }
     })
-  } finally {
-    if (connect) connect.end() // Trả lại kết nối vào pool
   }
-  // db.getConnection((err, connection) => {
-  // if (err) {
-  //   Object.getOwnPropertyNames(err).forEach((key) => {
-  //     Object.defineProperty(err, key, { enumerable: true })
-  //   })
-  //   return res.status(500).json({
-  //     Success: false,
-  //     Data: {
-  //       message: 'Error connecting to database',
-  //       detail: err
-  //     }
-  //   })
-  // }
-  // // Kết nối thành công, giải phóng kết nối và chuyển tiếp yêu cầu đến middleware tiếp theo
-  // connection.release()
-  // next()
-  // })
 }

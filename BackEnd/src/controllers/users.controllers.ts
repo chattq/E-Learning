@@ -5,8 +5,10 @@ import { ParamsDictionary } from 'express-serve-static-core'
 import { pick } from 'lodash'
 
 import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
-import { RegisterReqBody, userModelTypes } from '~/models/requests/users/users.requests'
+
 import { ResultsReturnedUser } from '~/utils/results-api'
+import { RegisterReqBody, userModelTypes } from '~/Models2/requests/users/users.requests'
+import User from '~/models/user.models'
 
 class UserController {
   async registerController(req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) {

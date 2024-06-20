@@ -39,6 +39,10 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
       socket.broadcast.to(roomId).emit('update-camera-status', data)
     })
 
+    socket.on('new-stream', ({ peerId, stream }) => {
+      socket.to(roomId).emit('new-stream', { peerId, stream })
+    })
+
     // Lắng nghe sự kiện toggle-microphone từ client và phát lại cho tất cả các client khác trong phòng
     socket.on('toggle-microphone', (data: IMicroPhoneParams) => {
       socket.broadcast.to(roomId).emit('update-microphone-status', data)

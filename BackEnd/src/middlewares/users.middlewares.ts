@@ -3,10 +3,11 @@ import { Request } from 'express'
 import { checkSchema } from 'express-validator'
 import { JsonWebTokenError } from 'jsonwebtoken'
 import { capitalize } from 'lodash'
+import { ErrorWithStatus } from '~/Models2/Errors'
+import userModel from '~/Models2/requests/users/users.models'
 import { httpStatus } from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
-import { ErrorWithStatus } from '~/models/Errors'
-import userModel from '~/models/requests/users/users.models'
+
 import userService from '~/services/users.services'
 import { verifyToken } from '~/utils/jwt'
 import { validate } from '~/utils/validation'
@@ -76,16 +77,16 @@ export const registerValidator = validate(
         },
         in: ['body'],
         isEmail: true,
-        trim: true,
-        custom: {
-          options: async (value: string) => {
-            const isExist = (await userService.getUserByEmail(value)) as any
-            if (isExist?.length > 0) {
-              throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_ALREADY_EXIST, status: 400 })
-            }
-            return true
-          }
-        }
+        trim: true
+        // custom: {
+        //   options: async (value: string) => {
+        //     const isExist = (await userService.getUserByEmail(value)) as any
+        //     if (isExist?.length > 0) {
+        //       throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_ALREADY_EXIST, status: 400 })
+        //     }
+        //     return true
+        //   }
+        // }
       },
       password: {
         notEmpty: true,

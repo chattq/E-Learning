@@ -1,11 +1,17 @@
 import { config } from 'dotenv'
+import userModel from '~/Models2/requests/users/users.models'
+import { RegisterReqBody } from '~/Models2/requests/users/users.requests'
 import { TokenType } from '~/constants/enums'
-import userModel from '~/models/requests/users/users.models'
-import { RegisterReqBody } from '~/models/requests/users/users.requests'
+import Refresh_token from '~/models/refreshToken.models'
+import User from '~/models/user.models'
+import { hasPassword } from '~/utils/crypto'
+
 import { signToken } from '~/utils/jwt'
 import { useGetTime } from '~/utils/useGetTime'
+const { getTimeMoment } = useGetTime()
 
 config()
+
 class UserService {
   private signAccessToken(user_id: string) {
     return signToken({
@@ -36,13 +42,24 @@ class UserService {
     return Promise.all([this.signAccessToken(user_id), this.signRefreshToken(user_id)])
   }
   async registerUser(payload: RegisterReqBody) {
-    const { email } = payload
-    await userModel.createUser(payload)
-    const [Access_token, Refresh_token] = await this.signAccessAndRefreshToken(payload.email)
-    await userModel.saveRefreshToken(email, Refresh_token)
+    const { email, name, password } = payload
+    const dataCreateUser = {
+      user_id: email.toUpperCase(),
+      user_name: name,
+      user_email: email.toUpperCase(),
+      user_password: hasPassword(password),
+      user_create_at: getTimeMoment()
+    }
+    await User.create(dataCreateUser)
+    const [Access_token, Refresh_tokens] = await this.signAccessAndRefreshToken(email)
+    await Refresh_token.create({
+      user_id: email,
+      token: Refresh_tokens,
+      create_at: getTimeMoment()
+    })
     return {
       Access_token,
-      Refresh_token
+      Refresh_tokens
     }
   }
   async getUserByEmail(email: string) {
@@ -51,7 +68,7 @@ class UserService {
   }
   async login(user_id: string) {
     const [Access_token, Refresh_token] = await this.signAccessAndRefreshToken(user_id)
-    await userModel.updateRefreshToken(user_id, Refresh_token)
+    await userModel.updateRefreshToken(user_id.toUpperCase(), Refresh_token)
     return {
       Access_token,
       Refresh_token

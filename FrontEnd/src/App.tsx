@@ -6,12 +6,14 @@ import Login from "./pages/Login/Login";
 import { nanoid } from "nanoid";
 import UserDasboard from "./pages/PageUser/UserDasboard/UserDasboard";
 import Register from "./pages/Login/Register";
+import Test from "./pages/Test/Test";
 
 function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/test" element={<Test />} />
       <Route path="/" element={<UserDasboard />} />
       {protectedRoutes.map((route) => {
         return (
