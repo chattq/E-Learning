@@ -2,8 +2,8 @@ import { config } from 'dotenv'
 import userModel from '~/Models2/requests/users/users.models'
 import { RegisterReqBody } from '~/Models2/requests/users/users.requests'
 import { TokenType } from '~/constants/enums'
-import Refresh_token from '~/models/refreshToken.models'
-import User from '~/models/user.models'
+import refresh_token from '~/models/refreshToken.models'
+import user from '~/models/user.models'
 import { hasPassword } from '~/utils/crypto'
 
 import { signToken } from '~/utils/jwt'
@@ -50,9 +50,9 @@ class UserService {
       user_password: hasPassword(password),
       user_create_at: getTimeMoment()
     }
-    await User.create(dataCreateUser)
+    await user.create(dataCreateUser)
     const [Access_token, Refresh_tokens] = await this.signAccessAndRefreshToken(email)
-    await Refresh_token.create({
+    await refresh_token.create({
       user_id: email,
       token: Refresh_tokens,
       create_at: getTimeMoment()
@@ -62,13 +62,16 @@ class UserService {
       Refresh_tokens
     }
   }
-  async getUserByEmail(email: string) {
-    const result = await userModel.findUserByEmail(email)
-    return result // Return the result if successful
-  }
   async login(user_id: string) {
     const [Access_token, Refresh_token] = await this.signAccessAndRefreshToken(user_id)
-    await userModel.updateRefreshToken(user_id.toUpperCase(), Refresh_token)
+    await refresh_token.update(
+      { token: Refresh_token },
+      {
+        where: {
+          user_id: user_id.toUpperCase()
+        }
+      }
+    )
     return {
       Access_token,
       Refresh_token

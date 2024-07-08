@@ -17,6 +17,7 @@ function App() {
       <Route path="/" element={<UserDasboard />} />
 
       {protectedRoutes.map((route) => {
+        console.log(20, route);
         return (
           <Route
             key={nanoid()}
