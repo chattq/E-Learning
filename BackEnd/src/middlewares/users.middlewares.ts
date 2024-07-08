@@ -5,10 +5,13 @@ import { JsonWebTokenError } from 'jsonwebtoken'
 import { capitalize } from 'lodash'
 import { ErrorWithStatus } from '~/Models2/Errors'
 import userModel from '~/Models2/requests/users/users.models'
+
 import { httpStatus } from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
-
+import user from '~/models/user.models'
+import User from '~/models/user.models'
 import userService from '~/services/users.services'
+import { hasPassword } from '~/utils/crypto'
 import { verifyToken } from '~/utils/jwt'
 import { validate } from '~/utils/validation'
 config()
@@ -26,7 +29,13 @@ export const loginValidator = validate(
         custom: {
           options: async (value: string, { req }) => {
             const { email, password } = req.body
-            const isExist = (await userModel.getUserByEmailAndPassword(email, password)) as any
+            const isExist = await User.findAll({
+              where: {
+                user_email: email,
+                user_password: hasPassword(password)
+              }
+            })
+
             if (isExist?.length === 0) {
               throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_AND_PASSWORD_REQUIRED, status: 400 })
             }
@@ -77,16 +86,20 @@ export const registerValidator = validate(
         },
         in: ['body'],
         isEmail: true,
-        trim: true
-        // custom: {
-        //   options: async (value: string) => {
-        //     const isExist = (await userService.getUserByEmail(value)) as any
-        //     if (isExist?.length > 0) {
-        //       throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_ALREADY_EXIST, status: 400 })
-        //     }
-        //     return true
-        //   }
-        // }
+        trim: true,
+        custom: {
+          options: async (value: string) => {
+            const isExist = await user.findOne({
+              where: {
+                user_email: value
+              }
+            })
+            if (isExist !== null) {
+              throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_ALREADY_EXIST, status: 400 })
+            }
+            return true
+          }
+        }
       },
       password: {
         notEmpty: true,

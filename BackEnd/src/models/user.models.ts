@@ -1,9 +1,9 @@
 import { Table, Column, Model, DataType, HasOne, HasMany } from 'sequelize-typescript'
-import Refresh_token from './refreshToken.models'
-import Course from './course.models'
+import refresh_token from './refreshToken.models'
+import course from './course.models'
 
 @Table
-class User extends Model {
+class user extends Model {
   @Column({
     type: DataType.STRING(100),
     primaryKey: true
@@ -85,11 +85,11 @@ class User extends Model {
   user_time_zone!: string
 
   // thực hiện mối quan hệ
-  @HasOne(() => Refresh_token)
-  declare refresh_tokens: Refresh_token
+  @HasOne(() => refresh_token)
+  declare refresh_tokens: refresh_token
   //Từ khóa declare được sử dụng trong TypeScript để thông báo cho trình biên dịch biết rằng thuộc tính này sẽ được cung cấp bởi Sequelize và không được khởi tạo rõ ràng trong constructor.
-  @HasMany(() => Course)
-  courses!: Course[]
+  @HasMany(() => course)
+  courses!: course[]
 }
 
-export default User
+export default user

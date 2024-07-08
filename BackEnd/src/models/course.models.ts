@@ -1,10 +1,10 @@
 import { Table, Column, Model, DataType, HasOne, ForeignKey, BelongsTo, BelongsToMany } from 'sequelize-typescript'
 import User from './user.models'
-import Category from './category.models'
-import Course_category from './categoryCourse.models'
+import category from './category.models'
+import course_category from './categoryCourse.models'
 
 @Table
-class Course extends Model {
+class course extends Model {
   @Column({
     type: DataType.STRING(100),
     primaryKey: true
@@ -73,8 +73,8 @@ class Course extends Model {
   })
   course_update_at!: string
 
-  @BelongsToMany(() => Category, () => Course_category)
-  declare categories: Category[]
+  @BelongsToMany(() => category, () => course_category)
+  declare categories: category[]
 }
 
-export default Course
+export default course

@@ -1,8 +1,8 @@
 import { Table, Column, Model, DataType, HasOne, ForeignKey, BelongsTo } from 'sequelize-typescript'
-import User from './user.models'
+import user from './user.models'
 
 @Table
-class Refresh_token extends Model {
+class refresh_token extends Model {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
@@ -21,14 +21,14 @@ class Refresh_token extends Model {
   create_at!: string
 
   // khóa ngoại
-  @ForeignKey(() => User)
+  @ForeignKey(() => user)
   @Column({
     type: DataType.STRING(100)
   })
   user_id!: string
   // mối liên hệ với bảng
-  @BelongsTo(() => User, { foreignKey: 'user_id' })
-  users!: User // tham chiếu đến bảng
+  @BelongsTo(() => user, { foreignKey: 'user_id' })
+  users!: user // tham chiếu đến bảng
 }
 
-export default Refresh_token
+export default refresh_token

@@ -27,11 +27,14 @@ import { PopupSettingMedia } from "./use-popup/popup-setting-media";
 
 export default function UserDasboard() {
   const popupSettingMediaRef = useRef<any>();
+  const nav = useNavigate();
 
   const { convertMoneyVND } = useConvertNumber();
   const handleClickCourse = (item: any) => {
     if (item.courseType === "Online") {
       popupSettingMediaRef.current.showPopup();
+    } else {
+      nav(`/course/detail/${item.id}`);
     }
   };
   const dataCourse = [

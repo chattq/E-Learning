@@ -8,7 +8,8 @@ import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
 
 import { ResultsReturnedUser } from '~/utils/results-api'
 import { RegisterReqBody, userModelTypes } from '~/Models2/requests/users/users.requests'
-import User from '~/models/user.models'
+
+import user from '~/models/user.models'
 
 class UserController {
   async registerController(req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) {
@@ -29,18 +30,21 @@ class UserController {
   async loginController(req: Request, res: Response) {
     const { email, password } = req.body
     const result = await userService.login(email)
-    const inforUser = (await userService.getUserByEmail(email)) as userModelTypes[]
-
+    const inforUser = await user.findOne({
+      where: {
+        user_email: email
+      }
+    })
     return res.json(
       new ResultsReturnedUser({
         isSuccess: true,
         message: 'Login successful',
         data: {
-          User: {
-            id: inforUser[0].user_id,
-            email: inforUser[0].user_email,
-            name: inforUser[0].user_name,
-            avatar: inforUser[0].user_avatar
+          InforUser: {
+            id: inforUser?.dataValues.user_id,
+            email: inforUser?.dataValues.user_email,
+            name: inforUser?.dataValues.user_name,
+            avatar: inforUser?.dataValues.user_avatar
           },
           ...result
         }

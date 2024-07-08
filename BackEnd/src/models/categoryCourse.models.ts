@@ -1,11 +1,10 @@
 import { Table, Column, Model, DataType, HasOne, ForeignKey } from 'sequelize-typescript'
 import Course from './course.models'
-import Category from './category.models'
+import category from './category.models'
 
 @Table
-class Course_category extends Model {
-  
-  @ForeignKey(() => Category)
+class course_category extends Model {
+  @ForeignKey(() => category)
   @Column({
     type: DataType.STRING(100),
     allowNull: false
@@ -19,4 +18,4 @@ class Course_category extends Model {
   course_id!: string
 }
 
-export default Course_category
+export default course_category
