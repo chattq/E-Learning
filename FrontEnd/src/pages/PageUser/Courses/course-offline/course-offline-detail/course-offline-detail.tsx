@@ -1,49 +1,33 @@
 import UserPageLayout from "../../../../../packages/layouts/user-page-layout/user-page-layout";
-import { Button, Tabs, TabsProps } from "antd";
+import { Button } from "antd";
 import { BiFilm, BiSolidUser } from "react-icons/bi";
 import { FaInfinity, FaUsers } from "react-icons/fa6";
 import "./couse-offline-detail.scss";
+import { useRef } from "react";
+import { match } from "ts-pattern";
 
 export default function CourseOfflineDetail() {
-  const items: TabsProps["items"] = [
-    {
-      key: "1",
-      label: "Mục tiêu khóa học",
-    },
-    {
-      key: "2",
-      label: "Thông tin khóa học",
-    },
-    {
-      key: "3",
-      label: "Chương trình học",
-    },
-    {
-      key: "4",
-      label: "Đánh giá",
-    },
-  ];
-  const onChange = (key: string) => {
-    console.log(key);
-  };
-
   return (
     <UserPageLayout>
       <div>
-        <div className="bg-[#212121d2] h-[358px]"></div>
+        <div className="bg-[#212121d2] h-[358px]">
+          <img
+            src="https://media.baodautu.vn/Images/ngoctuan/2020/09/18/An_Suong-_6.jpg"
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
 
         <div className="sticky top-[65px]">
-          <Tabs
-            defaultActiveKey="1"
-            items={items}
-            onChange={onChange}
-            className="sticky top-[64px] z-40 tab-couses"
-          />
-          <div className="w-[80%] m-auto">
+          <div className="w-[80%] m-auto pt-9">
             <div className="flex gap-[20px]">
               <div className="flex-1">
-                <div className="p-[24px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff]">
-                  <div>Bạn sẽ nhận được gì sau khi học khóa học</div>
+                <div
+                  id="course-objectives"
+                  className="px-[24px] pb-[24px] pt-[15px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff] boxShadow-couses">
+                  <div className="font-semibold text-[1.55rem] mb-[10px] text-[#1a1a1a]">
+                    Bạn sẽ đạt được gì sau khi học khóa học?
+                  </div>
                   <ul>
                     <li>
                       Có nền tảng ngữ pháp trung cấp, tương đương B1 ~ IELTS 4.0
@@ -60,9 +44,12 @@ export default function CourseOfflineDetail() {
                     </li>
                   </ul>
                 </div>
-                <div>
-                  <div>Thông tin khóa học</div>
-                  <div className="p-[24px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff]">
+
+                <div id="course-information" className="mt-[40px]">
+                  <div className="font-semibold text-[1.55rem] text-[#1a1a1a] mb-[1rem]">
+                    Thông tin khóa học
+                  </div>
+                  <div className="p-[24px] mb-[16px] rounded-[6px] boxShadow-couses bg-[#fff]">
                     <div>
                       Cầm lá thư trên tay... Anh khóc!... Đó là những giọt nước
                       mắt thật sự. Không phải là vì lòng tự tôn như trước nữa,
@@ -118,11 +105,11 @@ export default function CourseOfflineDetail() {
                   </div>
                 </div>
               </div>
-              <div className="w-[360px]"></div>
+              <div className="w-[380px]"></div>
             </div>
           </div>
         </div>
-        <div className="fixed top-[90px] h-[600px] couser-sidebar w-[360px] right-[9.5%] bg-[#ffff] z-30">
+        <div className="fixed top-[90px] h-[600px] couser-sidebar w-[380px] right-[9.5%] bg-[#ffff] z-30">
           <div className="overflow-auto rounded-t-[0.65rem] h-[230px] w-full">
             <img
               src="https://haycafe.vn/wp-content/uploads/2021/12/Hinh-anh-hinh-nen-ga-trong-vuon-minh-gay.jpg"
@@ -131,9 +118,27 @@ export default function CourseOfflineDetail() {
             />
           </div>
           <div className="px-4">
-            <div>
-              <div className="text-[30px]">40000</div>
-              <div className="text-[30px]">40000</div>
+            <div className="flex gap-2 items-center py-3">
+              <div className="text-[1.85rem] font-bold text-[#3cb46e] truncate flex-1">
+                5.990.000đ
+              </div>
+              <div className="flex flex-col gap-1">
+                <div className="text-[0.85rem] font-medium text-[#677788] flex items-center gap-1">
+                  <div>Giá gốc:</div>
+                  <div className="line-through truncate flex-1">1.099.000đ</div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="text-[0.85rem] text-[#ec8f8f] font-normal flex gap-1 items-center">
+                    <div className="">Tiết kiệm:</div>
+                    <div className="truncate flex-1">1.000.000đ</div>
+                  </div>
+                  <div>
+                    <span className="text-[12px] rounded-sm bg-[#ec8f8f] text-[#ffff] px-1 py-[2px]">
+                      -20%
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="flex flex-col gap-3">
               <Button className="bg-[#71869d hover:bg-[#82a5b0] button-couse-add-cart w-full text-[#b1b1b1] font-bold h-[40px] border-[1px] border-[#71869d] ">
