@@ -31,13 +31,7 @@ export default function CartHeader() {
                     />
                     <div>
                       <div className="line-clamp-2 leading-[18px] font-bold text-[15px]">
-                        "Here, some iterates over dataCheck and checks if any
-                        element exists in data. If at least one element is
-                        found, some returns true, and the ! operator negates it
-                        to false, indicating that one of the elements was found.
-                        If none of the elements are found, some returns false,
-                        and ! negates it to true, indicating none of the
-                        elements were found."
+                        Để tạo nền gần trong suốt
                       </div>
                       <div className="leading-[18px]">
                         <div className="text-nowrap text-[13px] ">
