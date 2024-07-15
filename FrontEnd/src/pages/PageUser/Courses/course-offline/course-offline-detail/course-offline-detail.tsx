@@ -5,14 +5,36 @@ import { FaInfinity, FaUsers } from "react-icons/fa6";
 import "./couse-offline-detail.scss";
 import { useRef } from "react";
 import { match } from "ts-pattern";
+import { useNavigate } from "react-router-dom";
+import { useSetAtom } from "jotai";
+import { cartAtom } from "../../../../../packages/store/cart.store";
+import { nanoid } from "nanoid";
 
 export default function CourseOfflineDetail() {
+  const nav = useNavigate();
+  const setDataAddCart = useSetAtom(cartAtom);
+
+  const handlePayment = () => {
+    nav("/payment");
+  };
+  const handleAddCart = () => {
+    setDataAddCart((prev: any) => [
+      ...prev,
+      {
+        id: nanoid(),
+        name: "React JS: Từ đầu đến nghiệp vụ",
+        image: "https://iviet.vn/wp-content/uploads/2021/10/ElearningBooks.jpg",
+        price: 100000,
+        quantity: 1,
+      },
+    ]);
+  };
   return (
     <UserPageLayout>
       <div>
         <div className="bg-[#212121d2] h-[358px]">
           <img
-            src="https://media.baodautu.vn/Images/ngoctuan/2020/09/18/An_Suong-_6.jpg"
+            src="https://iviet.vn/wp-content/uploads/2021/10/ElearningBooks.jpg"
             alt=""
             className="w-full h-full object-cover"
           />
@@ -112,13 +134,13 @@ export default function CourseOfflineDetail() {
         <div className="fixed top-[90px] h-[600px] couser-sidebar w-[380px] right-[9.5%] bg-[#ffff] z-30">
           <div className="overflow-auto rounded-t-[0.65rem] h-[230px] w-full">
             <img
-              src="https://haycafe.vn/wp-content/uploads/2021/12/Hinh-anh-hinh-nen-ga-trong-vuon-minh-gay.jpg"
+              src="https://service.keyframe.vn/uploads/filecloud/2018/April/25/72-559201524659628-1524659628.jpg"
               alt=""
               className="h-full w-full"
             />
           </div>
           <div className="px-4">
-            <div className="flex gap-2 items-center py-3">
+            <div className="flex gap-2 items-center py-4">
               <div className="text-[1.85rem] font-bold text-[#3cb46e] truncate flex-1">
                 5.990.000đ
               </div>
@@ -140,11 +162,15 @@ export default function CourseOfflineDetail() {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-3">
-              <Button className="bg-[#71869d hover:bg-[#82a5b0] button-couse-add-cart w-full text-[#b1b1b1] font-bold h-[40px] border-[1px] border-[#71869d] ">
+            <div className="flex flex-col gap-3 mt-3">
+              <Button
+                onClick={handleAddCart}
+                className="bg-[#71869d hover:bg-[#82a5b0] button-couse-add-cart w-full text-[#b1b1b1] font-bold h-[40px] border-[1px] border-[#71869d] ">
                 Thêm vào giỏ hàng
               </Button>
-              <Button className="bg-[#9a2424] w-full text-[#fff] font-bold h-[40px]">
+              <Button
+                className="bg-[#9a2424] w-full text-[#fff] font-bold h-[40px]"
+                onClick={handlePayment}>
                 Mua ngay
               </Button>
             </div>
