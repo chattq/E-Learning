@@ -1,5 +1,6 @@
 import { adminRoutes } from "./routes/admin-routes";
 import { courseRoutes } from "./routes/course-routes";
+import { productRoutes } from "./routes/product-routes";
 import { siderbarRouters } from "./routes/siderbar-routers";
 import { userRoutes } from "./routes/user-routes";
 import { RouteItem } from "./types";
@@ -9,4 +10,5 @@ export const protectedRoutes: RouteItem[] = [
   ...userRoutes,
   ...siderbarRouters,
   ...courseRoutes,
+  ...productRoutes,
 ];

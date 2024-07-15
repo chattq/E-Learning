@@ -1,9 +1,11 @@
 import { BellFilled, UserOutlined } from "@ant-design/icons";
 import { Avatar, Badge, Dropdown, Input, MenuProps, Space } from "antd";
-import React, { memo } from "react";
-import { Link } from "react-router-dom";
+import { memo } from "react";
+import { Link, useLocation } from "react-router-dom";
+import CartHeader from "../CartHeader/CartHeader";
 
 export default memo(function HeaderLayout() {
+  const { pathname } = useLocation();
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -32,12 +34,16 @@ export default memo(function HeaderLayout() {
       ),
     },
   ];
+
   return (
     <>
-      <div className="w-[25%]">
-        <Input placeholder="search" />
+      <div className="w-[26%] ml-5">
+        <Input placeholder="Search..." />
       </div>
       <Space size={20}>
+        {!["payment", "cart"].some((item) =>
+          pathname.split("/").includes(item)
+        ) && <CartHeader />}
         <Badge count={100} size="default" offset={[0, 0]}>
           <Avatar
             style={{
