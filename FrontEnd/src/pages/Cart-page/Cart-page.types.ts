@@ -7,6 +7,7 @@ export interface ICourseCart {
   CourseDiscount: number;
   CourseQty: number;
   CourseImage: string;
+  isSelected: boolean;
 }
 
 export interface ICartPage {
@@ -14,5 +15,7 @@ export interface ICartPage {
   ImageShop: string;
   NameShop: string;
   CourseCart: ICourseCart[];
+  isSelectedAll: boolean;
+  FlagProductChoose: string;
   VoucherShop: [];
 }
