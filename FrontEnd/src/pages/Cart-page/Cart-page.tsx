@@ -6,7 +6,7 @@ import { BsTicketPerforated } from "react-icons/bs";
 import { IoIosArrowForward } from "react-icons/io";
 import { TbMessage } from "react-icons/tb";
 import { nanoid } from "nanoid";
-import { ICartPage, IProductCart } from "./Cart-page.types";
+import { ICartPage, ICourseCart } from "./Cart-page.types";
 
 export default function CartPage() {
   const dataCart: ICartPage[] = [
@@ -15,27 +15,27 @@ export default function CartPage() {
       ImageShop:
         "https://focusasiatravel.vn/wp-content/uploads/2021/04/trantuanviet-bavi-hanoi-1617326198.jpg",
       NameShop: "Hoàng Dược Sư",
-      ProductCart: [
+      CourseCart: [
         {
-          idProduct: nanoid(),
-          title: "Cơ sở dữ liệu đại cương",
-          price: 100000,
-          numberLectures: 150, // số bài giảng
-          level: "Tất cả các trình độ",
-          discount: 2000,
-          quantity: 1,
-          image:
+          IdCourse: nanoid(),
+          CourseName: "Cơ sở dữ liệu đại cương",
+          CoursePrice: 100000,
+          CourseLectures: 150, // số bài giảng
+          CourseLevel: "Tất cả các trình độ",
+          CourseDiscount: 2000,
+          CourseQty: 1,
+          CourseImage:
             "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-ngay-moi-hanh-phuc-sieu-cute-inkythuatso-09-13-35-50.jpg",
         },
         {
-          idProduct: nanoid(),
-          title: "Tiếng việt lớp 1",
-          price: 150000,
-          numberLectures: 150, // số bài giảng
-          level: "Lớp 1",
-          discount: 20500,
-          quantity: 1,
-          image:
+          IdCourse: nanoid(),
+          CourseName: "Nhập môn các phương pháp tối ưu",
+          CoursePrice: 100000,
+          CourseLectures: 150, // số bài giảng
+          CourseLevel: "Tất cả các trình độ",
+          CourseDiscount: 2000,
+          CourseQty: 1,
+          CourseImage:
             "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-ngay-moi-hanh-phuc-sieu-cute-inkythuatso-09-13-35-50.jpg",
         },
       ],
@@ -57,7 +57,7 @@ export default function CartPage() {
             {dataCart?.map((item: ICartPage) => {
               return (
                 <div
-                  className="px-4 pt-3 pb-3 bg-white rounded-md boxShadow-couses"
+                  className="px-4 py-3 bg-white rounded-md boxShadow-couses"
                   key={item.idShop}>
                   <div className="flex items-center justify-between pb-3 border-b-[1px]">
                     <div className="flex items-center gap-5">
@@ -78,41 +78,43 @@ export default function CartPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-7 py-5">
-                    {item.ProductCart.map((product: IProductCart) => {
+                  <div className="flex flex-col gap-5 py-5">
+                    {item.CourseCart.map((product: ICourseCart) => {
                       return (
                         <div
                           className="flex justify-around gap-7"
-                          key={product.idProduct}>
+                          key={product.IdCourse}>
                           <div className="flex items-center gap-5">
                             <Checkbox />
                             <div className="flex gap-3">
                               <div className="w-[80px] h-[80px] object-cover ">
                                 <img
-                                  src={product.image}
+                                  src={product.CourseImage}
                                   alt=""
                                   className="w-full h-full object-cover rounded-md"
                                 />
                               </div>
                               <div className="flex-1">
                                 <div className="font-bold line-clamp-2 leading-[20px] text-[16px]">
-                                  {product.title}
+                                  {product.CourseName}
                                 </div>
                                 <div className="mt-1">
                                   <div className="text-[12px] text-[#6a6f73] leading-[18px] font-normal">
-                                    {product.numberLectures} bài giảng
+                                    {product.CourseLectures} bài giảng
                                   </div>
                                   <div className="text-[12px] text-[#6a6f73] leading-[18px] font-normal">
-                                    {product.level}
+                                    {product.CourseLevel}
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div className="text-end flex-1 pr-3">
-                            <div className="font-bold"> {product.price}</div>
+                            <div className="font-bold">
+                              {product.CoursePrice}
+                            </div>
                             <div className="text-[12px] text-[#b7bbbf] font-normal line-through">
-                              {product.discount}
+                              {product.CourseDiscount}
                             </div>
                           </div>
                           <div className="flex gap-7 translate-y-2">
