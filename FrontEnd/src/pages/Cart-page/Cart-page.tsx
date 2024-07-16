@@ -7,14 +7,18 @@ import { IoIosArrowForward } from "react-icons/io";
 import { TbMessage } from "react-icons/tb";
 import { nanoid } from "nanoid";
 import { ICartPage, ICourseCart } from "./Cart-page.types";
+import { useState } from "react";
+import { flatMap, sumBy } from "lodash";
 
 export default function CartPage() {
-  const dataCart: ICartPage[] = [
+  const initialCart: ICartPage[] = [
     {
       idShop: nanoid(),
       ImageShop:
         "https://focusasiatravel.vn/wp-content/uploads/2021/04/trantuanviet-bavi-hanoi-1617326198.jpg",
       NameShop: "Hoàng Dược Sư",
+      isSelectedAll: false,
+      FlagProductChoose: "0",
       CourseCart: [
         {
           IdCourse: nanoid(),
@@ -24,6 +28,30 @@ export default function CartPage() {
           CourseLevel: "Tất cả các trình độ",
           CourseDiscount: 2000,
           CourseQty: 1,
+          isSelected: false,
+          CourseImage:
+            "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-ngay-moi-hanh-phuc-sieu-cute-inkythuatso-09-13-35-50.jpg",
+        },
+      ],
+      VoucherShop: [],
+    },
+    {
+      idShop: nanoid(),
+      ImageShop:
+        "https://focusasiatravel.vn/wp-content/uploads/2021/04/trantuanviet-bavi-hanoi-1617326198.jpg",
+      NameShop: "Hoàng Dược Sư",
+      isSelectedAll: false,
+      FlagProductChoose: "0",
+      CourseCart: [
+        {
+          IdCourse: nanoid(),
+          CourseName: "Cơ sở dữ liệu đại cương",
+          CoursePrice: 100000,
+          CourseLectures: 150, // số bài giảng
+          CourseLevel: "Tất cả các trình độ",
+          CourseDiscount: 2000,
+          CourseQty: 1,
+          isSelected: false,
           CourseImage:
             "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-ngay-moi-hanh-phuc-sieu-cute-inkythuatso-09-13-35-50.jpg",
         },
@@ -35,6 +63,7 @@ export default function CartPage() {
           CourseLevel: "Tất cả các trình độ",
           CourseDiscount: 2000,
           CourseQty: 1,
+          isSelected: false,
           CourseImage:
             "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-ngay-moi-hanh-phuc-sieu-cute-inkythuatso-09-13-35-50.jpg",
         },
@@ -42,6 +71,88 @@ export default function CartPage() {
       VoucherShop: [],
     },
   ];
+
+  const [dataCart, setCart] = useState<ICartPage[]>(initialCart);
+  const [previousShopId, setPreviousShopId] = useState<string | null>(null);
+
+  const handleClickProduct = (product: ICourseCart, e: any, idShop: string) => {
+    const valueCheckProduct = e.target.checked;
+
+    setCart((prevCart) =>
+      prevCart.map((shop) => {
+        if (shop.idShop === idShop) {
+          const updatedCourseCart = shop.CourseCart.map((course) =>
+            course.IdCourse === product.IdCourse
+              ? { ...course, isSelected: valueCheckProduct }
+              : course
+          ); // check xem  course.IdCourse === product.IdCourse thì isSelected: valueCheckProduct
+
+          const isAnyProductSelected = updatedCourseCart.some(
+            (course) => course.isSelected
+          ); // check xem nếu mà có course.isSelected= true thì trả về true
+
+          return {
+            ...shop,
+            CourseCart: updatedCourseCart,
+            isSelectedAll: updatedCourseCart.every(
+              (course) => course.isSelected
+            ),
+            FlagProductChoose: isAnyProductSelected ? "1" : "0",
+          };
+        }
+
+        if (shop.idShop === previousShopId) {
+          return {
+            ...shop,
+            isSelectedAll: false,
+            CourseCart: shop.CourseCart.map((course) => ({
+              ...course,
+              isSelected: false,
+            })),
+            FlagProductChoose: "0",
+          };
+        }
+
+        return shop;
+      })
+    );
+
+    setPreviousShopId(idShop);
+  };
+  const handleSelectedAll = (productAll: ICartPage, e: any) => {
+    const valueCheckAll = e.target.checked;
+    setCart((prevCart) =>
+      prevCart.map((shop) => {
+        if (shop.idShop === productAll.idShop) {
+          return {
+            ...shop,
+            isSelectedAll: valueCheckAll,
+            FlagProductChoose: valueCheckAll ? "1" : "0",
+            CourseCart: shop.CourseCart.map((course) => ({
+              ...course,
+              isSelected: valueCheckAll,
+            })),
+          };
+        }
+
+        if (shop.idShop === previousShopId) {
+          return {
+            ...shop,
+            isSelectedAll: false,
+            CourseCart: shop.CourseCart.map((course) => ({
+              ...course,
+              isSelected: false,
+            })),
+          };
+        }
+
+        return shop;
+      })
+    );
+
+    setPreviousShopId(productAll.idShop);
+  };
+  console.log(114, dataCart);
   return (
     <AdminPageLayoutNoSideBar>
       <div className="w-[76%] m-auto">
@@ -51,7 +162,7 @@ export default function CartPage() {
           </div>
           <Button className="translate-y-[6px] font-semibold">Sửa</Button>
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
           {/* phần danh sách sản phẩm trong giỏ hàng */}
           <div className="w-[65%] flex flex-col gap-4 mb-4">
             {dataCart?.map((item: ICartPage) => {
@@ -61,7 +172,10 @@ export default function CartPage() {
                   key={item.idShop}>
                   <div className="flex items-center justify-between pb-3 border-b-[1px]">
                     <div className="flex items-center gap-5">
-                      <Checkbox />
+                      <Checkbox
+                        checked={item.isSelectedAll}
+                        onClick={(e) => handleSelectedAll(item, e)}
+                      />
                       <div className="flex items-center gap-3 cursor-pointer">
                         <img
                           src={item.ImageShop}
@@ -85,7 +199,12 @@ export default function CartPage() {
                           className="flex justify-around gap-7"
                           key={product.IdCourse}>
                           <div className="flex items-center gap-5">
-                            <Checkbox />
+                            <Checkbox
+                              checked={product.isSelected}
+                              onClick={(e) =>
+                                handleClickProduct(product, e, item.idShop)
+                              }
+                            />
                             <div className="flex gap-3">
                               <div className="w-[80px] h-[80px] object-cover ">
                                 <img
@@ -163,16 +282,64 @@ export default function CartPage() {
                   Chọn/nhập mã
                 </div>
               </div>
-              <div className="flex justify-between px-4 pt-4 pb-3">
-                <div>Tạm tính (2 sản phẩm):</div>
-                <div className="translate-y-[-2px]">
-                  <div className="text-end font-bold text-[18px]">
-                    49.880.000đ
+              <div className="flex justify-between leading-[20px] px-4 pt-4 pb-3">
+                <div>
+                  {`Tạm tính ${
+                    dataCart.filter(
+                      (prod: ICartPage) => prod.FlagProductChoose === "1"
+                    ).length > 0
+                      ? "(" +
+                        flatMap(
+                          dataCart.filter(
+                            (prod: ICartPage) => prod.FlagProductChoose === "1"
+                          ),
+                          "CourseCart"
+                        ).filter(
+                          (prod: ICourseCart) => prod.isSelected === true
+                        ).length +
+                        " sản phẩm):"
+                      : ""
+                  }`}
+                </div>
+                <div className="">
+                  <div className="text-end font-bold text-[20px] text-[#ee2624]">
+                    {sumBy(
+                      flatMap(
+                        dataCart.filter(
+                          (prod: ICartPage) => prod.FlagProductChoose === "1"
+                        ),
+                        "CourseCart"
+                      ).filter((prod: ICourseCart) => prod.isSelected === true),
+                      "CoursePrice"
+                    )}
                   </div>
-                  <div className="flex gap-2 text-end">
-                    <div>49.880.000đ</div>
-                    <div>-0,3%</div>
-                  </div>
+                  {sumBy(
+                    flatMap(
+                      dataCart.filter(
+                        (prod: ICartPage) => prod.FlagProductChoose === "1"
+                      ),
+                      "CourseCart"
+                    ).filter((prod: ICourseCart) => prod.isSelected === true),
+                    "CourseDiscount"
+                  ) > 0 ? (
+                    <div className="flex gap-2 text-end">
+                      <div>
+                        {sumBy(
+                          flatMap(
+                            dataCart.filter(
+                              (prod: ICartPage) =>
+                                prod.FlagProductChoose === "1"
+                            ),
+                            "CourseCart"
+                          ).filter(
+                            (prod: ICourseCart) => prod.isSelected === true
+                          ),
+                          "CourseDiscount"
+                        )}
+                      </div>
+                      <div>-0,3%</div>
+                    </div>
+                  ) : null}
                 </div>
               </div>
               <div className="px-4 pb-4">
