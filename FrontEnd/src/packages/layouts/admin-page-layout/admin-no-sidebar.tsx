@@ -2,6 +2,7 @@ import { Layout } from "antd";
 
 import "./admin-page-layout.scss";
 import HeaderLayout from "../../ui/header-layout/HeaderLayout";
+import LogoLayout from "./Logo-layout";
 
 export default function AdminPageLayoutNoSideBar({ children }: any) {
   const { Header, Content } = Layout;
@@ -22,7 +23,9 @@ export default function AdminPageLayoutNoSideBar({ children }: any) {
           lineHeight: "65px",
         }}
         className="box-shadow-header header-wrapper">
-        <div></div>
+        <div>
+          <LogoLayout />
+        </div>
         <HeaderLayout />
       </Header>
       <Layout

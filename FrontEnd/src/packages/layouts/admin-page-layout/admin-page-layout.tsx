@@ -5,6 +5,7 @@ import { protectedRoutes } from "../../../app-routers";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import HeaderLayout from "../../ui/header-layout/HeaderLayout";
+import LogoLayout from "./Logo-layout";
 
 type MenuItem = Required<MenuProps>["items"][number];
 export default function AdminPageLayout({ children }: any) {
@@ -51,7 +52,7 @@ export default function AdminPageLayout({ children }: any) {
           lineHeight: "65px",
         }}
         className="box-shadow-header header-wrapper">
-        <div></div>
+        <LogoLayout />
         <HeaderLayout />
       </Header>
       <Layout
