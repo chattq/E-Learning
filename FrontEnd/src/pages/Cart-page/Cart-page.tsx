@@ -278,7 +278,11 @@ export default function CartPage() {
                       <BsTicketPerforated size={24} />
                       <div className="flex items-center gap-3">
                         <div className="font-medium text-[#0f1e29]">
-                          Mã giảm giá của Shop
+                          {`Mã giảm giá của Shop ${
+                            item.VoucherShop.length > 0
+                              ? `(${item.VoucherShop.length})`
+                              : ""
+                          }`}
                         </div>
                         <IoIosArrowForward size={20} />
                       </div>
