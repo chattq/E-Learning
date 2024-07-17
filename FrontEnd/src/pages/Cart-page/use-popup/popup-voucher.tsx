@@ -1,6 +1,7 @@
-import { Button, Input, Modal, Space } from "antd";
+import { Button, Input, Modal, Radio, Space } from "antd";
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { useWindowSize } from "../../../packages/hooks/useWindowSize";
+import "./popup-voucher.scss";
 
 export const PopupVoucher = forwardRef(({}, ref: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,24 +27,84 @@ export const PopupVoucher = forwardRef(({}, ref: any) => {
   return (
     <Modal
       title={
-        <span style={{ fontSize: "18px", fontWeight: "bold" }}>
-          Mã ưu đãi Shop
-        </span>
+        <div className="px-[20px] pt-[15px]">
+          <span style={{ fontSize: "18px", fontWeight: "bold" }}>
+            Mã giảm giá của Shop
+          </span>
+          <div className="flex gap-4 items-center pt-4 pb-3">
+            <Input
+              className="w-full h-[40px]"
+              allowClear
+              placeholder="Nhập mã ưu đãi"
+            />
+            <Button className="h-[40px]">Dùng mã</Button>
+          </div>
+        </div>
       }
       open={isModalOpen}
       onOk={handleOk}
-      width={432}
+      width={400}
       style={{ top: 50, bottom: 25 }}
-      onCancel={handleCancel}>
-      <div className="w-full h-[520px]">
-        <div className="flex gap-3 items-center">
-          <Input
-            className="w-full h-[40px]"
-            allowClear
-            placeholder="Nhập mã ưu đãi"
-          />
-          <Button className="h-[40px]">Dùng mã</Button>
+      styles={{
+        content: {
+          padding: 0,
+        },
+      }}
+      footer={
+        <div className="px-[20px] py-[15px] border-t-[1px]">
+          <div className="flex items-center justify-between">
+            <div className="translate-y-[-3px]">
+              <div className="text-[#0f1e29] text-[14px] font-normal text-left">
+                Tiết kiệm
+              </div>
+              <div className="text-[#0f1e29] text-[16px] font-bold leading-4 text-left">
+                20.000đ
+              </div>
+            </div>
+            <div>
+              <Button className="h-[40px] w-[150px] bg-red-600 text-white font-bold">
+                Áp dụng
+              </Button>
+            </div>
+          </div>
         </div>
+      }
+      onCancel={handleCancel}>
+      <div
+        className="w-full px-[20px] py-4 border-t-[2px]"
+        style={{
+          height: windowSize.height - 300,
+          overflowY: "auto",
+        }}>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-2">
+            <Radio></Radio>
+            <div className="px-3 py-2 w-[100%] border-[1px] card-voucher rounded-[8px]">
+              <div>
+                <span className="line-clamp-2 text-[#d5600c] text-[16px] font-bold">
+                  Giảm 10% tối đa 100K đơn từ 1K
+                </span>
+              </div>
+              <div>
+                <span className="text-[11px] font-normal">HSD</span>
+                <span className="text-[12px] ml-2 font-bold">
+                  23:59 31/7/2024
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <div>
+          <div className="m-auto">
+            <img
+              src="https://media3.scdn.vn/img4/2020/06_17/LK8KrvP2CDM2y1EIWExc.png"
+              alt=""
+            />
+          </div>
+          <div className="text-center">
+            <h3>Chưa có mã giảm giá của Shop</h3>
+          </div>
+        </div> */}
       </div>
     </Modal>
   );
