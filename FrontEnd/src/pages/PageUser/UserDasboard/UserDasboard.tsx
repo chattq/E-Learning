@@ -24,6 +24,8 @@ import {
 } from "antd";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { PopupSettingMedia } from "./use-popup/popup-setting-media";
+import { Banner } from "./styleUserDasboard/styleUserDasboard";
+import banneritem from "../../../assets/img/banneritem.png";
 
 export default function UserDasboard() {
   const popupSettingMediaRef = useRef<any>();
@@ -97,6 +99,15 @@ export default function UserDasboard() {
 
   return (
     <UserPageLayout>
+      <Banner className="grid grid-cols-2 gap-2">
+        <div className="banner__content ">
+          Học lập trình không khó cùng Rosie
+        </div>
+        <img
+          style={{ width: "50vh", marginLeft: "100px", marginTop: "60px" }}
+          src={banneritem}
+        />
+      </Banner>
       <div className="px-4 py-4">
         <div className="bg-[#fff] rounded-md border-[0.5px]">
           <div className="flex justify-between items-center py-2 border-b-[0.5px] px-5">
@@ -120,7 +131,8 @@ export default function UserDasboard() {
                         alt="example"
                         src={item.image}
                       />
-                    }>
+                    }
+                  >
                     <div>
                       <div className="font-bold text-[16px] line-clamp-2 leading-[20px]">
                         {item.title}

@@ -65,7 +65,11 @@ export default function BlogList() {
           style={{ borderRadius: "20px" }}
         >
           <Row>
-            <Col span={12} className="NameLeft">
+            <Col
+              span={12}
+              className="NameLeft"
+              style={{ width: "30%", padding: "60px 40px" }}
+            >
               <h4>Cách làm món bò bít tết ngon hấp dẫn cho bữa tối</h4>
               <p>
                 Bò bít tết (Beefsteak trong tiếng Anh hoặc bifteck trong tiếng
