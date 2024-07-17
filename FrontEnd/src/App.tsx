@@ -13,7 +13,6 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/test" element={<Test />} />
       <Route path="/" element={<UserDasboard />} />
       {protectedRoutes.map((route) => {
         return (
