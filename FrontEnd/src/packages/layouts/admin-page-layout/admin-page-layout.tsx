@@ -1,15 +1,12 @@
-import { Avatar, Badge, Input, Layout, Menu, MenuProps, Space } from "antd";
-import { UserOutlined, BellFilled } from "@ant-design/icons";
+import { Layout, Menu, MenuProps } from "antd";
 import "./admin-page-layout.scss";
 import { protectedRoutes } from "../../../app-routers";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import HeaderLayout from "../../ui/header-layout/HeaderLayout";
-import LogoLayout from "./Logo-layout";
+import HeaderPage from "./HeaderPage";
 
 type MenuItem = Required<MenuProps>["items"][number];
 export default function AdminPageLayout({ children }: any) {
-  const { Header, Content, Sider } = Layout;
+  const { Content, Sider } = Layout;
   const { pathname: currentPath } = useLocation();
 
   const itemsSideBar: MenuItem[] = protectedRoutes
@@ -38,23 +35,7 @@ export default function AdminPageLayout({ children }: any) {
 
   return (
     <Layout>
-      <Header
-        style={{
-          height: "65px",
-          position: "fixed",
-          display: "flex",
-          justifyContent: "space-between",
-          left: 0,
-          top: 0,
-          right: 0,
-          zIndex: 100,
-          backgroundColor: "#fff",
-          lineHeight: "65px",
-        }}
-        className="box-shadow-header header-wrapper">
-        <LogoLayout />
-        <HeaderLayout />
-      </Header>
+      <HeaderPage />
       <Layout
         style={{
           marginTop: "65px",

@@ -7,8 +7,9 @@ import { IoIosArrowForward } from "react-icons/io";
 import { TbMessage } from "react-icons/tb";
 import { nanoid } from "nanoid";
 import { ICartPage, ICourseCart } from "./Cart-page.types";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { flatMap, sumBy } from "lodash";
+import { PopupVoucher } from "./use-popup/popup-voucher";
 
 export default function CartPage() {
   const initialCart: ICartPage[] = [
@@ -23,7 +24,7 @@ export default function CartPage() {
         {
           IdCourse: nanoid(),
           CourseName: "Cơ sở dữ liệu đại cương",
-          CoursePrice: 100000,
+          CoursePrice: 190000,
           CourseLectures: 150, // số bài giảng
           CourseLevel: "Tất cả các trình độ",
           CourseDiscount: 2000,
@@ -46,10 +47,10 @@ export default function CartPage() {
         {
           IdCourse: nanoid(),
           CourseName: "Cơ sở dữ liệu đại cương",
-          CoursePrice: 100000,
+          CoursePrice: 180000,
           CourseLectures: 150, // số bài giảng
           CourseLevel: "Tất cả các trình độ",
-          CourseDiscount: 2000,
+          CourseDiscount: 20700,
           CourseQty: 1,
           isSelected: false,
           CourseImage:
@@ -74,6 +75,7 @@ export default function CartPage() {
 
   const [dataCart, setCart] = useState<ICartPage[]>(initialCart);
   const [previousShopId, setPreviousShopId] = useState<string | null>(null);
+  const popupVoucherRef = useRef<any>(null);
 
   const handleClickProduct = (product: ICourseCart, e: any, idShop: string) => {
     const valueCheckProduct = e.target.checked;
@@ -252,7 +254,9 @@ export default function CartPage() {
                     })}
                   </div>
                   <div className="pt-3 border-t-[1px]">
-                    <div className="flex items-center gap-3 ">
+                    <div
+                      className="flex items-center gap-3 cursor-pointer hover:underline"
+                      onClick={() => popupVoucherRef.current.showModal()}>
                       <BsTicketPerforated size={24} />
                       <div className="flex items-center gap-3">
                         <div className="font-medium text-[#0f1e29]">
@@ -351,6 +355,7 @@ export default function CartPage() {
           </div>
         </div>
       </div>
+      <PopupVoucher ref={popupVoucherRef} />
     </AdminPageLayoutNoSideBar>
   );
 }
