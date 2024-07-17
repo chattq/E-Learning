@@ -1,30 +1,13 @@
 import { Layout } from "antd";
-
 import "./admin-page-layout.scss";
-import HeaderLayout from "../../ui/header-layout/HeaderLayout";
+import HeaderPage from "./HeaderPage";
 
 export default function AdminPageLayoutNoSideBar({ children }: any) {
-  const { Header, Content } = Layout;
+  const { Content } = Layout;
 
   return (
     <Layout>
-      <Header
-        style={{
-          height: "65px",
-          position: "fixed",
-          display: "flex",
-          justifyContent: "space-between",
-          left: 0,
-          top: 0,
-          right: 0,
-          zIndex: 100,
-          backgroundColor: "#fff",
-          lineHeight: "65px",
-        }}
-        className="box-shadow-header header-wrapper">
-        <div></div>
-        <HeaderLayout />
-      </Header>
+      <HeaderPage />
       <Layout
         style={{
           marginTop: "65px",
