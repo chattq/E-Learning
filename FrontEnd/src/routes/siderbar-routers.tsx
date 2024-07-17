@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import { RouteItem } from "../types";
 import BlogDetail from "../pages/Blog/BlogDetail";
+import ProfileUser from "../pages/PageUser/ProfileUser/ProfileUser";
 
 export const siderbarRouters: RouteItem[] = [
   {
@@ -17,11 +18,12 @@ export const siderbarRouters: RouteItem[] = [
     icon: <HomeOutlined size={20} />,
   },
   {
-    key: "users_post1",
-    path: "/posts",
+    key: "profile",
+    path: "/profile",
     mainMenuTitle: "Trang cá nhân",
     permissionCode: "",
     icon: <UserOutlined size={20} />,
+    getPageElement: () => <ProfileUser />,
   },
   {
     key: "blog",
