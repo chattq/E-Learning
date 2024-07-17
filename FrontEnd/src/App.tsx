@@ -1,7 +1,6 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import { protectedRoutes } from "./app-routers";
-import DashBoardLayout from "./pages/DashBoardLayout/DashBoardLayout";
 import Login from "./pages/Login/Login";
 import { nanoid } from "nanoid";
 import UserDasboard from "./pages/PageUser/UserDasboard/UserDasboard";
