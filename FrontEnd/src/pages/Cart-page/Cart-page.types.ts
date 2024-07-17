@@ -9,6 +9,16 @@ export interface ICourseCart {
   CourseImage: string;
   isSelected: boolean;
 }
+export interface IVoucherShop {
+  IdVoucher: string;
+  VoucherCode: string;
+  VoucherName: string;
+  VoucherDiscount: number;
+  VoucherStartDate: string;
+  VoucherEndDate: string;
+  VoucherRate: number;
+  VoucherMax: number;
+}
 
 export interface ICartPage {
   idShop: string;
@@ -17,5 +27,5 @@ export interface ICartPage {
   CourseCart: ICourseCart[];
   isSelectedAll: boolean;
   FlagProductChoose: string;
-  VoucherShop: [];
+  VoucherShop: IVoucherShop[];
 }

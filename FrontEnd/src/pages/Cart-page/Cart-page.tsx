@@ -6,12 +6,14 @@ import { BsTicketPerforated } from "react-icons/bs";
 import { IoIosArrowForward } from "react-icons/io";
 import { TbMessage } from "react-icons/tb";
 import { nanoid } from "nanoid";
-import { ICartPage, ICourseCart } from "./Cart-page.types";
+import { ICartPage, ICourseCart, IVoucherShop } from "./Cart-page.types";
 import { useRef, useState } from "react";
 import { flatMap, sumBy } from "lodash";
 import { PopupVoucher } from "./use-popup/popup-voucher";
+import { useGetTime } from "../../packages/hooks/useGetTime";
 
 export default function CartPage() {
+  const { convertISO8601Full } = useGetTime();
   const initialCart: ICartPage[] = [
     {
       idShop: nanoid(),
@@ -69,7 +71,18 @@ export default function CartPage() {
             "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-ngay-moi-hanh-phuc-sieu-cute-inkythuatso-09-13-35-50.jpg",
         },
       ],
-      VoucherShop: [],
+      VoucherShop: [
+        {
+          IdVoucher: nanoid(),
+          VoucherCode: "VOUCHER100",
+          VoucherName: "Giảm tối đa 20% tối đa 90000",
+          VoucherDiscount: 0,
+          VoucherStartDate: convertISO8601Full(new Date()),
+          VoucherEndDate: convertISO8601Full(new Date()),
+          VoucherRate: 20,
+          VoucherMax: 90000,
+        },
+      ],
     },
   ];
 
@@ -153,6 +166,11 @@ export default function CartPage() {
     );
 
     setPreviousShopId(productAll.idShop);
+  };
+
+  const handleClickVoucher = (voucher: IVoucherShop[]) => {
+    popupVoucherRef.current?.showModal(voucher);
+    console.log(173, voucher);
   };
   console.log(114, dataCart);
   return (
@@ -256,7 +274,7 @@ export default function CartPage() {
                   <div className="pt-3 border-t-[1px]">
                     <div
                       className="flex items-center gap-3 cursor-pointer hover:underline"
-                      onClick={() => popupVoucherRef.current.showModal()}>
+                      onClick={() => handleClickVoucher(item.VoucherShop)}>
                       <BsTicketPerforated size={24} />
                       <div className="flex items-center gap-3">
                         <div className="font-medium text-[#0f1e29]">
@@ -354,8 +372,8 @@ export default function CartPage() {
             </div>
           </div>
         </div>
+        <PopupVoucher ref={popupVoucherRef} />
       </div>
-      <PopupVoucher ref={popupVoucherRef} />
     </AdminPageLayoutNoSideBar>
   );
 }
