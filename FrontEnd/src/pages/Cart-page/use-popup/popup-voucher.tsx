@@ -36,9 +36,13 @@ export const PopupVoucher = forwardRef(({}, ref: any) => {
       style={{ top: 50, bottom: 25 }}
       onCancel={handleCancel}>
       <div className="w-full h-[520px]">
-        <div className="flex gap-4 items-center">
-          <Input className="w-full" placeholder="Nhập mã ưu đãi" />
-          <Button>Dùng mã</Button>
+        <div className="flex gap-3 items-center">
+          <Input
+            className="w-full h-[40px]"
+            allowClear
+            placeholder="Nhập mã ưu đãi"
+          />
+          <Button className="h-[40px]">Dùng mã</Button>
         </div>
       </div>
     </Modal>
