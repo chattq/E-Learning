@@ -8,6 +8,7 @@ import {
 import { RouteItem } from "../types";
 import BlogDetail from "../pages/Blog/BlogDetail";
 import ProfileUser from "../pages/PageUser/ProfileUser/ProfileUser";
+import { MyCourses } from "../pages/PageUser/MyCourses/MyCourses";
 
 export const siderbarRouters: RouteItem[] = [
   {
@@ -35,10 +36,11 @@ export const siderbarRouters: RouteItem[] = [
   },
   {
     key: "users_post3",
-    path: "/posts",
+    path: "/my-course",
     mainMenuTitle: "Khóa học của tôi",
     permissionCode: "",
     icon: <SolutionOutlined size={20} />,
+    getPageElement: () => <MyCourses />,
   },
   {
     key: "users_post4",
