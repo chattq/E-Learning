@@ -1,6 +1,7 @@
 import { RouteItem } from "../types";
 import CourseOfflineDetail from "../pages/PageUser/Courses/course-offline/course-offline-detail/course-offline-detail";
 import Payment from "../pages/PageUser/Payment/Payment";
+import CartPage from "../pages/Cart-page/Cart-page";
 
 export const courseRoutes: RouteItem[] = [
   {
@@ -18,5 +19,13 @@ export const courseRoutes: RouteItem[] = [
     mainMenuKey: "course",
     permissionCode: "",
     getPageElement: () => <Payment />,
+  },
+  {
+    key: "cart",
+    path: "/cart",
+    mainMenuTitle: "",
+    mainMenuKey: "cart",
+    permissionCode: "",
+    getPageElement: () => <CartPage />,
   },
 ];
