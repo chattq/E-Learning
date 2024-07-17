@@ -17,7 +17,10 @@ function App() {
       <Route path="/" element={<UserDasboard />} />
       {protectedRoutes.map((route) => {
         return (
-          <Route key={nanoid()}>
+          <Route
+            key={nanoid()}
+            path={`${route.path}`}
+            element={route.getPageElement?.()}>
             {route.children &&
               route.children.length > 0 &&
               route.children.map((child) => {
