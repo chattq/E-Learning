@@ -52,7 +52,7 @@ export default function ProfileUser() {
     <UserPageLayout>
       <>
         <div className="flex justify-center">
-          {dataProfile.map((item) => {
+          {dataProfile?.map((item) => {
             return (
               <>
                 <div key={nanoid()} className="w-full relative">

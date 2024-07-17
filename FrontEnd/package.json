@@ -29,6 +29,7 @@
     "react-star-ratings": "^2.3.0",
     "sass": "^1.71.1",
     "socket.io-client": "^4.7.5",
+    "styled-components": "^6.1.11",
     "ts-pattern": "^5.1.1"
   },
   "devDependencies": {
