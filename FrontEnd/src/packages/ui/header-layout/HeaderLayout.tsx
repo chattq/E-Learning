@@ -1,9 +1,19 @@
 import { BellFilled, UserOutlined } from "@ant-design/icons";
-import { Avatar, Badge, Dropdown, Input, MenuProps, Space } from "antd";
-import React, { memo } from "react";
-import { Link } from "react-router-dom";
+import {
+  AutoComplete,
+  Avatar,
+  Badge,
+  Dropdown,
+  Input,
+  MenuProps,
+  Space,
+} from "antd";
+import { memo } from "react";
+import { Link, useLocation } from "react-router-dom";
+import CartHeader from "../CartHeader/CartHeader";
 
 export default memo(function HeaderLayout() {
+  const { pathname } = useLocation();
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -32,12 +42,71 @@ export default memo(function HeaderLayout() {
       ),
     },
   ];
+
+  const renderTitle = (title: string) => (
+    <span>
+      {title}
+      <a
+        style={{ float: "right" }}
+        href="https://www.google.com/search?q=antd"
+        target="_blank"
+        rel="noopener noreferrer">
+        more
+      </a>
+    </span>
+  );
+
+  const renderItem = (title: string, count: number) => ({
+    value: title,
+    label: (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}>
+        {title}
+        <span>
+          <UserOutlined /> {count}
+        </span>
+      </div>
+    ),
+  });
+
+  const options = [
+    {
+      label: renderTitle("Libraries"),
+      options: [
+        renderItem("AntDesign", 10000),
+        renderItem("AntDesign UI", 10600),
+      ],
+    },
+    {
+      label: renderTitle("Solutions"),
+      options: [
+        renderItem("AntDesign UI FAQ", 60100),
+        renderItem("AntDesign FAQ", 30010),
+      ],
+    },
+    {
+      label: renderTitle("Articles"),
+      options: [renderItem("AntDesign design language", 100000)],
+    },
+  ];
   return (
     <>
-      <div className="w-[25%]">
-        <Input placeholder="search" />
+      <div className="w-[28%] ml-5">
+        <AutoComplete
+          popupClassName="certain-category-search-dropdown"
+          style={{ width: "100%" }}
+          options={options}
+          size="large">
+          <Input size="large" placeholder="Search..." />
+        </AutoComplete>
       </div>
       <Space size={20}>
+        {!["payment", "cart"].some((item) =>
+          pathname.split("/").includes(item)
+        ) && <CartHeader />}
         <Badge count={100} size="default" offset={[0, 0]}>
           <Avatar
             style={{

@@ -3,6 +3,7 @@ import "./user-page-layout.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import { siderbarRouters } from "../../../routes/siderbar-routers";
 import HeaderLayout from "../../ui/header-layout/HeaderLayout";
+import LogoLayout from "../admin-page-layout/Logo-layout";
 
 type MenuItem = Required<MenuProps>["items"][number];
 export default function UserPageLayout({ children }: any) {
@@ -40,7 +41,7 @@ export default function UserPageLayout({ children }: any) {
           lineHeight: "65px",
         }}
         className="box-shadow-header header-wrapper">
-        <div></div>
+        <LogoLayout />
         <HeaderLayout />
       </Header>
       <Layout
