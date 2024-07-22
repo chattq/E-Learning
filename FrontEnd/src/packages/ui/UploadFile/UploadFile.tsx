@@ -2,6 +2,7 @@ import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
+import "./UploadFile.scss";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
