@@ -19,6 +19,7 @@ export const InforBaseCourse = forwardRef(() => {
   const formItemLayout = {
     labelCol: { span: 3 },
     wrapperCol: { span: 18 },
+    colon: false, //  là dấu :
   };
   interface DataNodeType {
     value: string;
@@ -71,12 +72,13 @@ export const InforBaseCourse = forwardRef(() => {
     <Form
       name="validate_other"
       {...formItemLayout}
+      labelWrap
       onFinish={onFinish}
-      style={{ width: "100%" }}>
+      style={{ width: "100%", paddingTop: 20 }}>
       <Form.Item
         name="ImageCourse"
-        className="labelCustom"
         label="Ảnh khóa học"
+        className="labelCustom"
         rules={[{ required: true, message: "Không được để trống ô" }]}>
         <Space size={30} align="center">
           <UploadFileCustom />
