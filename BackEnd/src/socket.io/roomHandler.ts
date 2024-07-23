@@ -18,6 +18,13 @@ interface IMicroPhoneParams extends IToggleCameraParams {
   isMicroPhoneOn: boolean
 }
 
+interface IChatMessage {
+  roomId: string
+  userId: string
+  message: string
+  timestamp: number
+}
+
 const rooms: any[] = []
 
 export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>) => {
@@ -36,11 +43,8 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
 
     // Lắng nghe sự kiện toggle-camera từ client và phát lại cho tất cả các client khác trong phòng
     socket.on('toggle-camera', (data: IToggleCameraParams) => {
+      console.log(46, data)
       socket.broadcast.to(roomId).emit('update-camera-status', data)
-    })
-
-    socket.on('new-stream', ({ peerId, stream }) => {
-      socket.to(roomId).emit('new-stream', { peerId, stream })
     })
 
     // Lắng nghe sự kiện toggle-microphone từ client và phát lại cho tất cả các client khác trong phòng
@@ -51,6 +55,11 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
     // tắt tất cả camera trong nhóm trừ mình ra (nâng cấp sau, chỉ user tạo khóa học mới có full quyền)
     socket.on('turn-off-all-cameras', () => {
       socket.broadcast.to(roomId).emit('turn-off-camera')
+    })
+
+    // Lắng nghe sự kiện gửi message từ client
+    socket.on('send-message', (data: IChatMessage) => {
+      io.to(roomId).emit('receive-message', data)
     })
 
     socket.on('disconnect', () => {
