@@ -9,7 +9,7 @@ export default function VideoPlayer({ stream, className }: any) {
     <video
       className={className}
       data-testid="peer-video"
-      style={{ width: "100%" }}
+      style={{ width: "100%", transform: "scaleX(-1)" }}
       ref={videoRef}
       autoPlay
       muted={true}

@@ -6,7 +6,7 @@ export default function ListUserRoom({ peers, peerId }: any) {
   return (
     <div>
       {Object.values(deleteKeyFromObject(peers, peerId)).map((item: any) => {
-        if (!item.isCameraOn) return null;
+        if (!item.isCameraOn) return <></>;
         return (
           <div key={item.peerId}>
             <h1>{item.peerId}</h1>
