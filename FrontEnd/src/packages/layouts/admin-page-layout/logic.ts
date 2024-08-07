@@ -1,8 +1,12 @@
 export const flattenChildren = (data: any) => {
-  return data?.reduce((acc: any, item: any) => {
-    if (item.children) {
-      acc.push(...item.children);
-    }
-    return acc;
-  }, []);
+  return data.flatMap((item: any) => [
+    {
+      key: item.key,
+      path: item.path,
+      mainMenuTitle: item.mainMenuTitle,
+      mainMenuKey: item.mainMenuKey,
+      permissionCode: item.permissionCode,
+    },
+    ...(item.children || []),
+  ]);
 };
