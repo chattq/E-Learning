@@ -53,7 +53,7 @@ class UserService {
     await user.create(dataCreateUser)
     const [Access_token, Refresh_tokens] = await this.signAccessAndRefreshToken(email)
     await refresh_token.create({
-      user_id: email,
+      user_id: email.toUpperCase(),
       token: Refresh_tokens,
       create_at: getTimeMoment()
     })
@@ -63,7 +63,7 @@ class UserService {
     }
   }
   async login(user_id: string) {
-    const [Access_token, Refresh_token] = await this.signAccessAndRefreshToken(user_id)
+    const [Access_token, Refresh_token] = await this.signAccessAndRefreshToken(user_id.toUpperCase())
     await refresh_token.update(
       { token: Refresh_token },
       {

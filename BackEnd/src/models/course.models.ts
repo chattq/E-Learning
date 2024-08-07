@@ -51,7 +51,7 @@ class course extends Model {
   })
   course_active!: string
   @Column({
-    type: DataType.TINYINT,
+    type: DataType.SMALLINT,
     allowNull: false,
     defaultValue: 1
   })
