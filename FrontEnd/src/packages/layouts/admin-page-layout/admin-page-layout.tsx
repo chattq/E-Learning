@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import HeaderPage from "./HeaderPage";
 import { adminRoutes } from "../../../routes/admin-routes";
 import { useEffect, useRef } from "react";
+import { flattenChildren } from "./logic";
 
 type MenuItem = Required<MenuProps>["items"][number];
 export default function AdminPageLayout({ children }: any) {
@@ -46,6 +47,7 @@ export default function AdminPageLayout({ children }: any) {
       selectedMenuItem.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [currentPath]);
+
   return (
     <Layout>
       <HeaderPage />
@@ -64,14 +66,18 @@ export default function AdminPageLayout({ children }: any) {
               ref={menuRef}
               className="nav-menu-items"
               mode="inline"
-              defaultOpenKeys={adminRoutes.map((item: any) => item.key)}
+              defaultOpenKeys={adminRoutes.map((item: any) => item.key)} // để mở side-bar
               style={{
                 borderRight: 0,
                 height: "100%",
                 width: 250,
               }}
               items={itemsSideBar}
-              selectedKeys={[currentPath.split("/")[2]]}
+              selectedKeys={currentPath.split("/").filter((item) =>
+                flattenChildren(adminRoutes)
+                  .map((dataRoute: any) => dataRoute.key)
+                  .includes(item)
+              )}
             />
           </Sider>
         </div>
