@@ -151,7 +151,7 @@ export const adminRoutes: RouteItem[] = [
     children: [
       {
         key: "vouchers",
-        path: "marketing/vouchers/list",
+        path: "admin/marketing/vouchers/list",
         subMenuTitle: "Mã Giảm Giá",
         mainMenuKey: "vouchers",
         permissionCode: "",
@@ -159,7 +159,7 @@ export const adminRoutes: RouteItem[] = [
       },
       {
         key: "discount",
-        path: "marketing/discount/list",
+        path: "admin/marketing/discount/list",
         subMenuTitle: "Khuyến mãi Của Shop",
         mainMenuKey: "discount",
         permissionCode: "",
@@ -167,7 +167,7 @@ export const adminRoutes: RouteItem[] = [
       },
       {
         key: "shop-flash-sale",
-        path: "marketing/shop-flash-sale",
+        path: "admin/marketing/shop-flash-sale",
         subMenuTitle: "Flash Sale Của Shop",
         mainMenuKey: "shop-flash-sale",
         permissionCode: "",
