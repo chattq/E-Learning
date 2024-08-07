@@ -32,7 +32,7 @@ class UserController {
     const result = await userService.login(email)
     const inforUser = await user.findOne({
       where: {
-        user_email: email
+        user_email: email.toUpperCase()
       }
     })
     return res.json(

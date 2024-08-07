@@ -3,6 +3,7 @@ import { useFileApi } from "./API/FileApi";
 import { useAuthAPI } from "./API/auth.api";
 import { useCategoriesApi } from "./API/categories.api";
 import { setAccessTokenToLS } from "../../utils/localStorageHandler";
+import { notification } from "antd";
 
 export const createApiBase = () => {
   const accessToken = localStorage.getItem("token");
@@ -49,7 +50,11 @@ export const createApiBase = () => {
       if (error?.response?.status === 401) {
         location.href = "/login";
       } else {
-        alert(error.message);
+        // alert(error.message);
+        notification.error({
+          message: "Error",
+          description: error.message,
+        });
 
         return null;
       }

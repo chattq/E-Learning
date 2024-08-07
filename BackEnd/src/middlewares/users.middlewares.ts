@@ -31,7 +31,7 @@ export const loginValidator = validate(
             const { email, password } = req.body
             const isExist = await User.findAll({
               where: {
-                user_email: email,
+                user_email: email.toUpperCase(),
                 user_password: hasPassword(password)
               }
             })

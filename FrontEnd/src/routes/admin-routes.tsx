@@ -11,8 +11,23 @@ import CourseOnline from "../pages/PageUser/Courses/course-online/CourseOnline";
 import CourseRoom from "../pages/PageUser/Courses/course-online/CourseRoom";
 import BlogList from "../pages/Blog/BlogList";
 import BlogDetail from "../pages/Blog/BlogDetail";
+import AcountBank from "../pages/PageAdmin/AcountBank/AcountBank";
+import { CiMoneyCheck1 } from "react-icons/ci";
+import AdminDasboard from "../pages/PageAdmin/AdminDasboard/AdminDasboard";
+import { FiTag } from "react-icons/fi";
+import Mst_Voucher from "../pages/PageAdmin/Mst_Voucher/Mst_Voucher";
+import Mst_Discount from "../pages/PageAdmin/Mst_Discount/Mst_Discount";
+import Mst_FlashSale from "../pages/PageAdmin/Mst_FlashSale/Mst_FlashSale";
 
 export const adminRoutes: RouteItem[] = [
+  {
+    key: "AdminDasboard",
+    path: "admin",
+    mainMenuTitle: "",
+    mainMenuKey: "AdminDasboard",
+    permissionCode: "",
+    getPageElement: () => <AdminDasboard />,
+  },
   {
     key: "productOrder",
     path: "",
@@ -48,26 +63,26 @@ export const adminRoutes: RouteItem[] = [
     ],
   },
   {
-    key: "product",
+    key: "CourseManager",
     path: "",
     mainMenuTitle: "Quản lý khóa học",
     icon: <ShoppingCartOutlined />,
-    mainMenuKey: "product",
+    mainMenuKey: "CourseManager",
     permissionCode: "",
     children: [
       {
-        key: "productAll",
-        path: "portal/product/list/all",
+        key: "CourseManager",
+        path: "admin/CourseManager",
         subMenuTitle: "Tất cả khóa học",
-        mainMenuKey: "product",
+        mainMenuKey: "CourseManager",
         permissionCode: "",
         getPageElement: () => <ProductList />,
       },
       {
-        key: "CourseManager",
-        path: "portal/course/new",
+        key: "CourseCreate",
+        path: "admin/CourseCreate",
         subMenuTitle: "Tạo khóa học",
-        mainMenuKey: "CourseManager",
+        mainMenuKey: "CourseCreate",
         permissionCode: "",
         getPageElement: () => <CourseCreate />,
       },
@@ -75,8 +90,8 @@ export const adminRoutes: RouteItem[] = [
   },
   {
     key: "Admin_category",
-    path: "",
-    mainMenuTitle: "Tài Chính",
+    path: "admin/category",
+    mainMenuTitle: "Quản lý danh mục",
     icon: <ShoppingCartOutlined />,
     mainMenuKey: "category",
     permissionCode: "",
@@ -88,32 +103,6 @@ export const adminRoutes: RouteItem[] = [
         mainMenuKey: "category",
         permissionCode: "",
         getPageElement: () => <Ad_Category />,
-      },
-    ],
-  },
-  {
-    key: "courses",
-    path: "",
-    mainMenuTitle: "Khóa học online",
-    icon: <ShoppingCartOutlined />,
-    mainMenuKey: "Course_online",
-    permissionCode: "",
-    children: [
-      {
-        key: "course_online",
-        path: "admin/Course_online",
-        subMenuTitle: "Khóa học online",
-        mainMenuKey: "Course_online4",
-        permissionCode: "",
-        getPageElement: () => <CourseOnline />,
-      },
-      {
-        key: "course_Room",
-        path: "admin/Course_online/room/:id",
-        subMenuTitle: "",
-        mainMenuKey: "Course_online3",
-        permissionCode: "",
-        getPageElement: () => <CourseRoom />,
       },
     ],
   },
@@ -141,72 +130,49 @@ export const adminRoutes: RouteItem[] = [
         permissionCode: "",
         getPageElement: () => <BlogDetail />,
       },
-      // {
-      //   key: "productNew",
-      //   path: "portal/product/new",
-      //   subMenuTitle: "Khuyến Mãi",
-      //   mainMenuKey: "product",
-      //   permissionCode: "",
-      //   getPageElement: () => <ProductAdd />,
-      // },
-      // {
-      //   key: "productNew",
-      //   path: "portal/product/new",
-      //   subMenuTitle: "Flash Sale",
-      //   mainMenuKey: "product",
-      //   permissionCode: "",
-      //   getPageElement: () => <ProductAdd />,
-      // },
-      // {
-      //   key: "productNew",
-      //   path: "portal/product/new",
-      //   subMenuTitle: "Mã Giảm Giá",
-      //   mainMenuKey: "product",
-      //   permissionCode: "",
-      //   getPageElement: () => <ProductAdd />,
-      // },
     ],
   },
-  // {
-  //   key: "categoryALL",
-  //   path: "",
-  //   mainMenuTitle: "Tài Chính",
-  //   icon: <ShoppingCartOutlined />,
-  //   mainMenuKey: "product",
-  //   permissionCode: "",
-  //   children: [
-  //     {
-  //       key: "productAll",
-  //       path: "portal/product/list/all",
-  //       subMenuTitle: "Doanh Thu",
-  //       mainMenuKey: "product",
-  //       permissionCode: "",
-  //       getPageElement: () => <ProductList />,
-  //     },
-  //     {
-  //       key: "productNew",
-  //       path: "portal/product/new",
-  //       subMenuTitle: "Số dư Tài Khoản",
-  //       mainMenuKey: "product",
-  //       permissionCode: "",
-  //       getPageElement: () => <ProductAdd />,
-  //     },
-  //     {
-  //       key: "productNew",
-  //       path: "portal/product/new",
-  //       subMenuTitle: "Tài Khoản Ngân Hàng",
-  //       mainMenuKey: "product",
-  //       permissionCode: "",
-  //       getPageElement: () => <ProductAdd />,
-  //     },
-  //     {
-  //       key: "category",
-  //       path: "admin/category",
-  //       subMenuTitle: "Category",
-  //       mainMenuKey: "product",
-  //       permissionCode: "",
-  //       getPageElement: () => <Ad_Category />,
-  //     },
-  //   ],
-  // },
+  {
+    key: "accountBank",
+    path: "admin/accountBank",
+    mainMenuTitle: "Tài Chính",
+    icon: <CiMoneyCheck1 size={20} />,
+    mainMenuKey: "accountBank",
+    permissionCode: "",
+    getPageElement: () => <AcountBank />,
+  },
+  {
+    key: "marketingManager",
+    path: "",
+    mainMenuTitle: "Kênh Marketing",
+    icon: <FiTag />,
+    mainMenuKey: "marketingManager",
+    permissionCode: "",
+    children: [
+      {
+        key: "vouchers",
+        path: "admin/marketing/vouchers/list",
+        subMenuTitle: "Mã Giảm Giá",
+        mainMenuKey: "vouchers",
+        permissionCode: "",
+        getPageElement: () => <Mst_Voucher />,
+      },
+      {
+        key: "discount",
+        path: "admin/marketing/discount/list",
+        subMenuTitle: "Khuyến mãi Của Shop",
+        mainMenuKey: "discount",
+        permissionCode: "",
+        getPageElement: () => <Mst_Discount />,
+      },
+      {
+        key: "shop-flash-sale",
+        path: "admin/marketing/shop-flash-sale",
+        subMenuTitle: "Flash Sale Của Shop",
+        mainMenuKey: "shop-flash-sale",
+        permissionCode: "",
+        getPageElement: () => <Mst_FlashSale />,
+      },
+    ],
+  },
 ];
