@@ -20,6 +20,7 @@ import { MdOutlinePeopleAlt } from "react-icons/md";
 import ListPeopleRoom from "./components/ListPeopleRoom/list-people-room";
 import { match } from "ts-pattern";
 import LayoutSideBar from "./components/LayoutSideBar";
+import { PiRecordFill } from "react-icons/pi";
 
 export const deleteKeyFromObject = (obj: any, key: any) => {
   delete obj[key];
@@ -95,6 +96,15 @@ export default function CourseRoom() {
     ws.on("user_leave_room", (data: any) => {
       openNotification(data, "leave");
     });
+
+    // // Thêm sự kiện beforeunload để hiển thị thông báo khi người dùng rời trang
+    // const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+    //   event.preventDefault();
+    //   event.returnValue = ""; // Hiển thị thông báo mặc định
+    // };
+
+    // window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
       ws.off("user-joined");
       ws.off("join-room");
@@ -106,6 +116,8 @@ export default function CourseRoom() {
         openNotification(data, "leave");
       });
       peer.destroy();
+      // Xóa sự kiện beforeunload khi component unmount
+      // window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 
@@ -319,6 +331,14 @@ export default function CourseRoom() {
         </button>
         <div className="flex items-center gap-7">
           <div className="flex gap-7 border-r-[2px] pr-7">
+            <div
+              className="cursor-pointer flex flex-col"
+              onClick={() => handleSelectedDisableSidebar("disableChat")}>
+              <div className="m-auto">
+                <PiRecordFill size={20} />
+              </div>
+              <div className="text-[12px]">Record</div>
+            </div>
             {seletedOption === "chat" ? (
               <div
                 className="cursor-pointer flex flex-col"
@@ -388,7 +408,7 @@ export default function CourseRoom() {
             <div className="text-[12px]">Share</div>
           </div>
           <div>
-            <Button className="bg-[#ffff] bg-[#df2727]">
+            <Button className="bg-[#df2727]">
               <div className="flex gap-2 items-center ">
                 <div>
                   <BiSolidPhoneOff color="#fff" size={20} />

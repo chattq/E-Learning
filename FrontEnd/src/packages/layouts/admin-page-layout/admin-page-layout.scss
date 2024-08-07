@@ -1,6 +1,9 @@
 .ant-layout-header {
   padding: 0 30px 0 30px;
 }
+.nav-menu-items .ant-menu-submenu-title {
+  margin-left: 6px !important;
+}
 // .box-shadow-header {
 //   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1);
 // }
@@ -8,8 +11,8 @@
   border-bottom: 1px solid #d7d7d7 !important;
 }
 .sider-bar {
-  width: 240px !important;
-  max-width: 240px !important;
+  width: 260px !important;
+  max-width: 260px !important;
   border-right: 1px solid #d7d7d7 !important;
 }
 .scrollable-wrapper::-webkit-scrollbar {
@@ -18,13 +21,13 @@
 
 /* Nếu bạn muốn tùy chỉnh hơn */
 .scrollable-wrapper::-webkit-scrollbar-track {
-  background: transparent; /* Màu nền của track */
+  background: #fff; /* Màu của thumb */
 }
 
 .scrollable-wrapper::-webkit-scrollbar-thumb {
-  background: transparent; /* Màu của thumb */
+  background: #fff; /* Màu của thumb */
 }
-.scrollable-wrapper:hover {
+.scrollable-wrapper {
   overflow-y: auto;
 }
 
@@ -34,11 +37,11 @@
 }
 
 /* Hiển thị thanh cuộn khi hover */
-.scrollable-wrapper:hover::-webkit-scrollbar {
+.scrollable-wrapper::-webkit-scrollbar {
   width: 7px; /* Độ rộng của thanh cuộn */
 }
 
 /* Màu của thanh cuộn khi hover */
-.scrollable-wrapper:hover::-webkit-scrollbar-thumb {
-  background-color: #d4d3d3;
+.scrollable-wrapper::-webkit-scrollbar-thumb {
+  background-color: #ededed;
 }
