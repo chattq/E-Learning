@@ -6,7 +6,15 @@ import { BiLogoShopify } from "react-icons/bi";
 export default function Mst_Voucher() {
   return (
     <AdminPageLayout>
-      <Row gutter={16} style={{ margin: "20px" }}>
+      <Row
+        gutter={16}
+        style={{
+          margin: "20px",
+          backgroundColor: "white",
+          padding: "20px",
+          borderRadius: "10px",
+        }}
+      >
         <Col span={8}>
           <Card bordered={false}>
             <div className="flex">
