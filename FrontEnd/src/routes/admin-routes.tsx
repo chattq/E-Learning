@@ -18,6 +18,7 @@ import { FiTag } from "react-icons/fi";
 import Mst_Voucher from "../pages/PageAdmin/Mst_Voucher/Mst_Voucher";
 import Mst_Discount from "../pages/PageAdmin/Mst_Discount/Mst_Discount";
 import Mst_FlashSale from "../pages/PageAdmin/Mst_FlashSale/Mst_FlashSale";
+import Discount_Create from "../pages/PageAdmin/Mst_Discount/create/Discount_Create";
 
 export const adminRoutes: RouteItem[] = [
   {
@@ -164,6 +165,14 @@ export const adminRoutes: RouteItem[] = [
         mainMenuKey: "discount",
         permissionCode: "",
         getPageElement: () => <Mst_Discount />,
+      },
+      {
+        key: "discount",
+        path: "admin/marketing/discount/create",
+        subMenuTitle: "",
+        mainMenuKey: "discount",
+        permissionCode: "",
+        getPageElement: () => <Discount_Create />,
       },
       {
         key: "shop-flash-sale",

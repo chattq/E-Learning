@@ -7,16 +7,18 @@ import "./Mst_Discount.scss";
 import TabAll from "./components/TabAll";
 import ShopProgram from "./components/ShopProgram";
 import ComboSale from "./components/ComboSale";
+import { useNavigate } from "react-router-dom";
 
 export default function Mst_Discount() {
   const onChange = (key: string) => {
     console.log(key);
   };
+  const nav = useNavigate();
 
   const items: TabsProps["items"] = [
     {
       key: "1",
-      label: "Tất Cả",
+      label: "Tất cả",
       children: <TabAll />,
     },
     {
@@ -48,7 +50,9 @@ export default function Mst_Discount() {
                 sản phẩm
               </div>
               <div className="flex justify-end">
-                <Button>Tạo</Button>
+                <Button onClick={() => nav("/admin/marketing/discount/create")}>
+                  Tạo
+                </Button>
               </div>
             </div>
             <div className="border-[1px] pl-3 pr-4 pt-3 pb-4 w-[360px] rounded-md">
