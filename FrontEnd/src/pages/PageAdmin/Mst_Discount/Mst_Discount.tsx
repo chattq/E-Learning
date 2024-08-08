@@ -2,9 +2,34 @@ import React from "react";
 import AdminPageLayout from "../../../packages/layouts/admin-page-layout/admin-page-layout";
 import { BiLogoShopify } from "react-icons/bi";
 import { FaGift } from "react-icons/fa6";
-import { Button } from "antd";
+import { Button, Tabs, TabsProps } from "antd";
+import "./Mst_Discount.scss";
+import TabAll from "./components/TabAll";
+import ShopProgram from "./components/ShopProgram";
+import ComboSale from "./components/ComboSale";
 
 export default function Mst_Discount() {
+  const onChange = (key: string) => {
+    console.log(key);
+  };
+
+  const items: TabsProps["items"] = [
+    {
+      key: "1",
+      label: "Tất Cả",
+      children: <TabAll />,
+    },
+    {
+      key: "2",
+      label: "Chương trình của shop",
+      children: <ShopProgram />,
+    },
+    {
+      key: "3",
+      label: "Combo khuyến mãi",
+      children: <ComboSale />,
+    },
+  ];
   return (
     <AdminPageLayout>
       <div className="px-4 py-4">
@@ -41,6 +66,14 @@ export default function Mst_Discount() {
               </div>
             </div>
           </div>
+        </div>
+        <div className="bg-[#fff] mt-4 rounded-md px-5 pt-4 pb-6 border-[1px]">
+          <Tabs
+            defaultActiveKey="1"
+            items={items}
+            onChange={onChange}
+            className="Mst_Discount_Tabs"
+          />
         </div>
       </div>
     </AdminPageLayout>
