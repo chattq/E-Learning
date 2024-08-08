@@ -2,9 +2,36 @@ import React from "react";
 import AdminPageLayout from "../../../packages/layouts/admin-page-layout/admin-page-layout";
 import { BiLogoShopify } from "react-icons/bi";
 import { FaGift } from "react-icons/fa6";
-import { Button } from "antd";
+import { Button, Tabs, TabsProps } from "antd";
+import "./Mst_Discount.scss";
+import TabAll from "./components/TabAll";
+import ShopProgram from "./components/ShopProgram";
+import ComboSale from "./components/ComboSale";
+import { useNavigate } from "react-router-dom";
 
 export default function Mst_Discount() {
+  const onChange = (key: string) => {
+    console.log(key);
+  };
+  const nav = useNavigate();
+
+  const items: TabsProps["items"] = [
+    {
+      key: "1",
+      label: "Tất cả",
+      children: <TabAll />,
+    },
+    {
+      key: "2",
+      label: "Chương trình của shop",
+      children: <ShopProgram />,
+    },
+    {
+      key: "3",
+      label: "Combo khuyến mãi",
+      children: <ComboSale />,
+    },
+  ];
   return (
     <AdminPageLayout>
       <div className="px-4 py-4">
@@ -23,7 +50,9 @@ export default function Mst_Discount() {
                 sản phẩm
               </div>
               <div className="flex justify-end">
-                <Button>Tạo</Button>
+                <Button onClick={() => nav("/admin/marketing/discount/create")}>
+                  Tạo
+                </Button>
               </div>
             </div>
             <div className="border-[1px] pl-3 pr-4 pt-3 pb-4 w-[360px] rounded-md">
@@ -41,6 +70,14 @@ export default function Mst_Discount() {
               </div>
             </div>
           </div>
+        </div>
+        <div className="bg-[#fff] mt-4 rounded-md px-5 pt-4 pb-6 border-[1px]">
+          <Tabs
+            defaultActiveKey="1"
+            items={items}
+            onChange={onChange}
+            className="Mst_Discount_Tabs"
+          />
         </div>
       </div>
     </AdminPageLayout>
