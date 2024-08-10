@@ -1,0 +1,60 @@
+import { Table, Column, Model, DataType, BelongsTo, ForeignKey } from 'sequelize-typescript'
+import User from './user.models' // Giả sử bạn có model User đã định nghĩa trước
+
+@Table
+class blog extends Model {
+  @Column({
+    type: DataType.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  })
+  blog_id!: number
+
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false
+  })
+  title!: string
+
+  @Column({
+    type: DataType.TEXT,
+    allowNull: false
+  })
+  content!: string
+
+  @Column({
+    type: DataType.STRING(255)
+  })
+  image_url!: string
+
+  @Column({
+    type: DataType.STRING(50),
+    defaultValue: 'active'
+  })
+  status!: string
+
+  @Column({
+    type: DataType.DATE,
+    defaultValue: DataType.NOW
+  })
+  created_at!: Date
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: true
+  })
+  updated_at!: Date
+
+  // Thiết lập mối quan hệ với bảng User
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.STRING(100),
+    allowNull: false
+  })
+  user_id!: string
+
+  @BelongsTo(() => User)
+  user!: User
+}
+
+export default blog
