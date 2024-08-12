@@ -1,5 +1,5 @@
 import { Table, Column, Model, DataType, BelongsTo, ForeignKey } from 'sequelize-typescript'
-import User from './user.models' // Giả sử bạn có model User đã định nghĩa trước
+import user from './user.models' // Giả sử bạn có model User đã định nghĩa trước
 
 @Table
 class blog extends Model {
@@ -46,15 +46,15 @@ class blog extends Model {
   updated_at!: Date
 
   // Thiết lập mối quan hệ với bảng User
-  @ForeignKey(() => User)
+  @ForeignKey(() => user)
   @Column({
     type: DataType.STRING(100),
     allowNull: false
   })
   user_id!: string
 
-  @BelongsTo(() => User)
-  user!: User
+  @BelongsTo(() => user)
+  user!: user
 }
 
 export default blog
