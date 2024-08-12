@@ -45,16 +45,16 @@ class blog extends Model {
   })
   updated_at!: Date
 
-  // Thiết lập mối quan hệ với bảng User
-  @ForeignKey(() => user)
-  @Column({
-    type: DataType.STRING(100),
-    allowNull: false
-  })
-  user_id!: string
+  // // Thiết lập mối quan hệ với bảng User
+  // @ForeignKey(() => user)
+  // @Column({
+  //   type: DataType.STRING(100),
+  //   allowNull: false
+  // })
+  // user_id!: string
 
-  @BelongsTo(() => user)
-  user!: user
+  // @BelongsTo(() => user)
+  // user!: user
 }
 
 export default blog

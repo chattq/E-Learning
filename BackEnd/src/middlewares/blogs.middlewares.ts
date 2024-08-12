@@ -29,24 +29,6 @@ export const addNewBlogValidator = validate(
         trim: true,
         escape: true
       },
-      user_id: {
-        notEmpty: {
-          errorMessage: BLOGS_MESSAGES.USER_ID_IS_REQUIRED
-        },
-        in: ['body'],
-        custom: {
-          options: async (value: string) => {
-            const isUserExist = await Blog.findByPk(value)
-            if (!isUserExist) {
-              throw new ErrorWithStatus({
-                message: BLOGS_MESSAGES.USER_DOES_NOT_EXIST,
-                status: 400
-              })
-            }
-            return true
-          }
-        }
-      },
       status: {
         in: ['body'],
         optional: true,
