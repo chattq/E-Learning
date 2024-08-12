@@ -1,6 +1,5 @@
 import { checkSchema } from 'express-validator'
 import { validate } from '~/utils/validation'
-import { ErrorWithStatus } from '~/Models2/Errors'
 import { BLOGS_MESSAGES } from '~/constants/messages-handle/blogs.messages'
 import Blog from '~/models/blogs.models'
 
