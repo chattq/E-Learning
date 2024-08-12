@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import formidable from 'formidable'
 import path from 'path'
-
+const cloudinary = require('cloudinary').v2
 import { MEDIAS_MESSAGES } from '~/constants/messages-handle/media.messages'
 import mediasService from '~/services/media.services'
 

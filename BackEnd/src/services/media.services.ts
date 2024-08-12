@@ -1,29 +1,25 @@
 import { Request } from 'express'
-import { File } from 'formidable'
 
 import { getNameFormFullName, handleFileUpload } from '~/utils/file'
-import fs from 'fs'
-import { useGetTime } from '~/utils/useGetTime'
+
+interface IFile {
+  created_at?: string
+  originalFilename?: string
+  format?: string
+  url?: string
+  bytes?: number
+}
 
 class MediasService {
   async handleUploadSingleImage(req: Request) {
-    const { getTimeNow } = useGetTime()
-
-    const file = (await handleFileUpload(req)) as File
-    const newName = getNameFormFullName(file.newFilename)
-
-    // const newPath = path.resolve(UPLOAD_DIR, `${newName}.jpg`)
-
-    // sharp.cache(false)
-    // await sharp(file.filepath).jpeg().toFile(newPath)
-    // fs.unlinkSync(file.filepath)
+    const file = (await handleFileUpload(req)) as IFile
 
     return {
-      TimeUpload: getTimeNow(),
-      FileSize: file.size,
+      TimeUpload: file.created_at,
+      FileSize: file.bytes,
       FileName: file.originalFilename,
-      FileType: file.mimetype,
-      FileUrl: `http://localhost:4000/uploads/${newName}`
+      FileType: file.format,
+      FileUrl: file.url
     }
   }
 }

@@ -2,6 +2,13 @@ import { Request } from 'express'
 import formidable from 'formidable'
 import fs from 'fs'
 import { UPLOAD_TEMP_DIR } from '~/constants/dir'
+import { v2 as cloudinary } from 'cloudinary'
+
+cloudinary.config({
+  cloud_name: 'dkqyptupf',
+  api_key: '923633263214567',
+  api_secret: '40OayrQ4yqNIhxXtmKTJ47yulNo'
+})
 
 export const initFolder = () => {
   if (!fs.existsSync(UPLOAD_TEMP_DIR)) {
@@ -13,7 +20,7 @@ export const initFolder = () => {
 
 export const handleFileUpload = async (req: Request) => {
   const form = formidable({
-    uploadDir: UPLOAD_TEMP_DIR,
+    // uploadDir: UPLOAD_TEMP_DIR,
     maxFiles: 1,
     keepExtensions: true,
     // maxFileSize: 300 * 1024 //300kb
@@ -28,7 +35,20 @@ export const handleFileUpload = async (req: Request) => {
       if (err) {
         return reject(err)
       }
-      resolve(files.file[0])
+      const response = await cloudinary.uploader
+        .upload(files.file[0].filepath, {
+          folder: 'ELeaning',
+          use_filename: true,
+          unique_filename: false,
+          resource_type: 'auto'
+        })
+        .catch((error) => {
+          reject(error)
+        })
+      resolve({
+        ...response,
+        originalFilename: files.file[0].originalFilename
+      })
     })
   })
 }
