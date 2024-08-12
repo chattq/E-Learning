@@ -59,7 +59,7 @@ io.on('connection', (socket) => {
 httpServer.listen(port, async () => {
   try {
     await connectDbSequelize.authenticate()
-    console.log(`Kết nối database thành công`)
+    // console.log(`Kết nối database thành công`)
     await connectDbSequelize.sync({ force: false, alter: true })
     //alter: true: Cập nhật cấu trúc bảng để phù hợp với mô hình mà không phá hủy dữ liệu hiện tại.
     //Điều này an toàn hơn so với force.
