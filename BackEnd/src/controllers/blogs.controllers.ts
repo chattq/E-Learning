@@ -33,6 +33,7 @@ class BlogController {
 
   //Thêm blog mới
   async addNewBlog(req: Request, res: Response) {
+    console.log('res', res)
     return res.json({
       message: 'Add new blog'
     })
