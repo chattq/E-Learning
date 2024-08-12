@@ -26,6 +26,7 @@ import { SizeType } from "antd/es/config-provider/SizeContext";
 import { PopupSettingMedia } from "./use-popup/popup-setting-media";
 import { Banner } from "./styleUserDasboard/styleUserDasboard";
 import banneritem from "../../../assets/img/banneritem.png";
+import Meta from "antd/es/card/Meta";
 
 export default function UserDasboard() {
   const popupSettingMediaRef = useRef<any>();
@@ -101,7 +102,14 @@ export default function UserDasboard() {
     <UserPageLayout>
       <Banner className="grid grid-cols-2 gap-2">
         <div className="banner__content ">
-          Học lập trình không khó cùng Rosie
+          <p className="title_banner_content">
+            Học lập trình không khó cùng Rosie
+          </p>
+          <p>
+            Học lập trình từ cơ bản đến nâng cao. Rosie sẽ dạy bạn chi tiết nhất
+            có thể !
+          </p>
+          <Button className="btn_banner_content">Học miễn phí ngay</Button>
         </div>
         <img
           style={{ width: "50vh", marginLeft: "100px", marginTop: "60px" }}
@@ -210,6 +218,124 @@ export default function UserDasboard() {
           {/* </div> */}
         </div>
       </div>
+      <div className="our_success">
+        <h4>Thành tựu của chúng tôi</h4>
+        <p>
+          Chúng tôi tự hào có nhiều học viên đăng ký học và tin tưởng chúng tôi{" "}
+        </p>
+        <div className="list-success">
+          <div>
+            75K+
+            <p>Học viên</p>
+          </div>
+          <div>
+            95% <p>có việc làm sau khi tốt nghiệp khóa học</p>{" "}
+          </div>
+          <div>
+            372 <p>Giáo viên nhiều kinh nghiệm</p>
+          </div>
+          <div>
+            16 <p>năm kinh nghiệm</p>
+          </div>
+        </div>
+      </div>
+      <div className="overview_us">
+        <h4>Tổng quan về chúng tôi</h4>
+        <p>
+          Trong thời đại công nghệ số phát triển mạnh mẽ, nhu cầu học tập trực
+          tuyến ngày càng trở nên phổ biến và thiết yếu. Đáp ứng nhu cầu đó,
+          trang web [Tên Trang Web] đã ra đời, mang đến cho người dùng một nền
+          tảng học tập toàn diện, tiện lợi và chất lượng cao. <br />
+          <br />
+          [Tên Trang Web] là nơi hội tụ của các khóa học đa dạng, từ kiến thức
+          cơ bản đến chuyên sâu, phù hợp với mọi độ tuổi và trình độ. Trang web
+          không chỉ cung cấp các khóa học về lĩnh vực công nghệ, khoa học, mà
+          còn mở rộng ra các lĩnh vực như nghệ thuật, ngôn ngữ, kỹ năng mềm, và
+          nhiều hơn nữa. Người học có thể lựa chọn học theo lộ trình riêng, với
+          thời gian linh hoạt và nội dung phong phú.
+          <br />
+          <br /> Một trong những điểm nổi bật của [Tên Trang Web] là đội ngũ
+          giảng viên uy tín, giàu kinh nghiệm, luôn sẵn sàng chia sẻ kiến thức
+          và giải đáp thắc mắc cho học viên. Mỗi khóa học được thiết kế với sự
+          kết hợp giữa lý thuyết và thực hành, giúp học viên không chỉ nắm vững
+          kiến thức mà còn ứng dụng hiệu quả vào thực tế.
+          <br />
+          <br />
+          Giao diện của trang web thân thiện, dễ sử dụng, hỗ trợ đa nền tảng
+          giúp người dùng có thể học tập mọi lúc, mọi nơi, chỉ với một thiết bị
+          kết nối internet. Bên cạnh đó, [Tên Trang Web] cũng thường xuyên cập
+          nhật nội dung mới, phù hợp với xu hướng và nhu cầu của người học.{" "}
+          <br />
+          <br />
+          [Tên Trang Web] không chỉ là nơi để học tập mà còn là một cộng đồng
+          học tập sôi động, nơi học viên có thể kết nối, trao đổi kinh nghiệm,
+          và hỗ trợ lẫn nhau trong quá trình học. Hệ thống đánh giá và cấp chứng
+          chỉ uy tín của trang web cũng là một trong những điểm thu hút đông đảo
+          người học tham gia. <br />
+          <br />
+          Với sứ mệnh mang đến kiến thức cho mọi người, [Tên Trang Web] tự hào
+          là đối tác đáng tin cậy trên hành trình học tập và phát triển của bạn.
+          Hãy tham gia ngay hôm nay để khám phá và nâng cao kiến thức, kỹ năng
+          của mình với [Tên Trang Web].
+        </p>
+      </div>
+
+      <div className="our_teacher">
+        <Card
+          hoverable
+          style={{ width: 240 }}
+          cover={
+            <img
+              alt="example"
+              src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
+            />
+          }
+        >
+          <h5>Nguyễn Mạnh Thắng</h5>
+          <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
+        </Card>
+        <Card
+          hoverable
+          style={{ width: 240 }}
+          cover={
+            <img
+              alt="example"
+              src="https://scontent.fhan17-1.fna.fbcdn.net/v/t39.30808-6/387740769_1499388880818194_2603289197375807643_n.jpg?stp=cp6_dst-jpg&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGSyrYBzab4PuRCGAs1hVNxyJblqReWaEbIluWpF5ZoRqYdNw5P1regTg3oSfQQ8iua9sannVo9mjXl5LNBNvuT&_nc_ohc=NB6bdoWR0F8Q7kNvgGxP9Wp&_nc_ht=scontent.fhan17-1.fna&oh=00_AYBty7ElCBOC5OpZ1nOgY9EnuWWSdAcTi1sSLzW-JC0UZA&oe=66BB7721"
+            />
+          }
+        >
+          <h5>Nguyễn Mạnh Thắng</h5>
+          <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
+        </Card>
+        <Card
+          hoverable
+          style={{ width: 240 }}
+          cover={
+            <img
+              alt="example"
+              src="https://scontent.fhan17-1.fna.fbcdn.net/v/t39.30808-6/421630596_1559173214839760_3040284945487077783_n.jpg?stp=cp6_dst-jpg&_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFT8Jn6yHm-FP30QIpRnJY3udMrvhlBPuC50yu-GUE-4AgHXRIglkojpmh9_fl6StnuNR7ROnhpiDZsy294-pke&_nc_ohc=gR9eJ888rpwQ7kNvgEEqJZo&_nc_ht=scontent.fhan17-1.fna&oh=00_AYDijDb_fAmUKAdzycw3yLUrG6a_tloft0r03gilffyCCw&oe=66BBAD3E"
+            />
+          }
+        >
+          <h5>Nguyễn Mạnh Thắng</h5>
+          <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
+        </Card>
+        <Card
+          hoverable
+          style={{ width: 240 }}
+          cover={
+            <img
+              alt="example"
+              src="https://scontent.fhan17-1.fna.fbcdn.net/v/t39.30808-6/306275292_1254565505300534_2583396120449981797_n.jpg?stp=cp6_dst-jpg&_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEAFJb-5SrPYrJb-bRoyX0Q7sbhm96uI0PuxuGb3q4jQ3rXUGtfcMKp8UdyjRYV-ij2QkXw3jPLC3sjBtuTV0p_&_nc_ohc=zlAlD4S-pzsQ7kNvgGypKSX&_nc_ht=scontent.fhan17-1.fna&oh=00_AYDZuCMDEYQQHu5wR2Bz5F8xLSzOkzhFgDdObrj1W-Mi7Q&oe=66BB7EAB"
+            />
+          }
+        >
+          <h5>Nguyễn Mạnh Thắng</h5>
+          <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
+        </Card>
+      </div>
+
+      <div className="overview-us"></div>
       <PopupSettingMedia ref={popupSettingMediaRef} />
     </UserPageLayout>
   );

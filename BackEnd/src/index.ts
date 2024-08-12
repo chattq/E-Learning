@@ -12,6 +12,7 @@ import cors from 'cors'
 import { roomHandler } from './socket.io/roomHandler'
 import { connectDbSequelize } from './config/connection-database'
 import User from './models/user.models'
+import blogsRouter from './routes/blogs.routes'
 
 require('dotenv').config()
 
@@ -36,6 +37,7 @@ app.use(checkConnectionDB)
 app.use('/users', usersRouter)
 app.use('/medias', mediasRouter)
 app.use('/AdCategories', categoriesRouter)
+app.use('/blog', blogsRouter)
 app.use('/uploads', express.static(UPLOAD_DIR)) // trỏ đến link chứa file
 
 app.use(defaultErrorHandler)
