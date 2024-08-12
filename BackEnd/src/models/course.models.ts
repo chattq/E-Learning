@@ -1,7 +1,7 @@
 import { Table, Column, Model, DataType, HasOne, ForeignKey, BelongsTo, BelongsToMany } from 'sequelize-typescript'
-import User from './user.models'
 import category from './category.models'
 import course_category from './categoryCourse.models'
+import user from './user.models'
 
 @Table
 class course extends Model {
@@ -11,13 +11,13 @@ class course extends Model {
   })
   course_id!: string
 
-  @ForeignKey(() => User)
+  @ForeignKey(() => user)
   @Column({
     type: DataType.STRING(100)
   })
   user_id!: string
-  @BelongsTo(() => User, { foreignKey: 'user_id' })
-  users!: User // declare user: Users: Khai báo thuộc tính users sẽ chứa đối tượng User liên quan.
+  @BelongsTo(() => user, { foreignKey: 'user_id' })
+  users!: user // declare user: Users: Khai báo thuộc tính users sẽ chứa đối tượng User liên quan.
 
   @Column({
     type: DataType.DECIMAL(18, 2)
