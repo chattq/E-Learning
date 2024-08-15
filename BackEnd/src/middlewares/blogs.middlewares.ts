@@ -47,3 +47,30 @@ export const addNewBlogValidator = validate(
     ['body']
   )
 )
+
+export const deleteBlogValidator = validate(
+  checkSchema(
+    {
+      id: {
+        in: ['body'], // Expecting 'id' to be in request params
+        notEmpty: {
+          errorMessage: BLOGS_MESSAGES.ID_IS_REQUIRED
+        },
+        isInt: {
+          errorMessage: BLOGS_MESSAGES.ID_MUST_BE_AN_INTEGER,
+          options: { min: 1 }
+        },
+        custom: {
+          options: async (value: number) => {
+            const blog = await Blog.findOne({ where: { blog_id: value } })
+            if (!blog) {
+              throw new Error(BLOGS_MESSAGES.BLOG_NOT_FOUND)
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['params']
+  )
+)

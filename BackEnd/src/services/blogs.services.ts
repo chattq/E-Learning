@@ -13,21 +13,29 @@ const { getTimeMoment } = useGetTime()
 
 config()
 
-interface BlogCreateReqBody {
-  title?: string
-  content: string
-}
-
-class BlogsService {
-  async createBlogService(payload: BlogCreateReqBody) {
+class BlogService {
+  async BlogAddNew(payload: any) {
     const { title, content } = payload
-    const dataCreateUser = {
-      title: title,
-      content: content
+    const dataCreateBlog = {
+      blog_title: title,
+      blog_content: content
     }
-    await blog.create(dataCreateUser)
-    return
+    await blog.create(dataCreateBlog)
+    return { message: 'success' }
+  }
+
+  // Xóa blog theo ID
+  async BlogDelete(blogId: number) {
+    console.log('blogId', blogId)
+    const blogToDelete = await blog.findOne({ where: { blog_id: blogId } })
+
+    if (!blogToDelete) {
+      return { message: 'Blog not found', success: false }
+    }
+
+    await blogToDelete.destroy()
+    return { message: 'Blog deleted successfully', success: true }
   }
 }
-const blogService = new BlogsService()
+const blogService = new BlogService()
 export default blogService

@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import blogController from '~/controllers/blogs.controllers'
-import { addNewBlogValidator } from '~/middlewares/blogs.middlewares'
+import { addNewBlogValidator, deleteBlogValidator } from '~/middlewares/blogs.middlewares'
 import { accessTokenValidator } from '~/middlewares/users.middlewares'
 
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -8,7 +8,8 @@ import { wrapRequestHandler } from '~/utils/handlers'
 const blogsRouter = Router()
 
 blogsRouter.get('/getall', wrapRequestHandler(blogController.getAllBlogs))
-blogsRouter.post('/create', accessTokenValidator, addNewBlogValidator, wrapRequestHandler(blogController.addNewBlog))
+blogsRouter.post('/create', addNewBlogValidator, wrapRequestHandler(blogController.addNewBlog))
+blogsRouter.delete('/delete', deleteBlogValidator, wrapRequestHandler(blogController.deleteBlog))
 
 // usersRouter.post(
 //   '/logout',
