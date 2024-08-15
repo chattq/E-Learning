@@ -7,6 +7,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+
     "strict": true /* Enable all strict type-checking options. */,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "baseUrl": ".", // Đường dẫn base cho các import
@@ -18,7 +19,7 @@
   "ts-node": {
     "require": ["tsconfig-paths/register"]
   },
-  "files": ["src/type.d.ts"], // Các file dùng để defined global type cho dự án
+  "files": ["src/type.d.ts", "src/vietqr.d.ts"], // Các file dùng để defined global type cho dự án
   "include": ["src/**/*"], // Đường dẫn include cho các file cần build
   "dependencies": {
     "@types/cors": "^2.8.12"

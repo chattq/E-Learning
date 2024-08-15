@@ -5,6 +5,9 @@
 }
 body {
   background-color: #f6f6f6;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 ::-webkit-scrollbar {
   width: 10px;

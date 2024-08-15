@@ -1,18 +1,13 @@
 import express from 'express'
-import usersRouter from './routes/users.routes'
 import { defaultErrorHandler } from './middlewares/error.middlewares'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import { checkConnectionDB } from './middlewares/databaseConnect.middlewares'
-import mediasRouter from './routes/medias.routes'
 import { initFolder } from './utils/file'
-import { UPLOAD_DIR } from './constants/dir'
-import categoriesRouter from './routes/categories.routes'
 import cors from 'cors'
 import { roomHandler } from './socket.io/roomHandler'
 import { connectDbSequelize } from './config/connection-database'
-import User from './models/user.models'
-import blogsRouter from './routes/blogs.routes'
+import router from './use_router'
 
 require('dotenv').config()
 
@@ -34,11 +29,7 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(checkConnectionDB)
 
-app.use('/users', usersRouter)
-app.use('/medias', mediasRouter)
-app.use('/AdCategories', categoriesRouter)
-app.use('/blogs', blogsRouter)
-app.use('/uploads', express.static(UPLOAD_DIR)) // trỏ đến link chứa file
+app.use('/', router)
 
 app.use(defaultErrorHandler)
 
@@ -61,6 +52,7 @@ httpServer.listen(port, async () => {
     await connectDbSequelize.authenticate()
     // console.log(`Kết nối database thành công`)
     await connectDbSequelize.sync({ force: false, alter: true })
+    //alter: true điều này làm giảm hiệu xuất do phải thay đổi các cấu trúc của bảng, nếu chạy thật thì alter: false
     //alter: true: Cập nhật cấu trúc bảng để phù hợp với mô hình mà không phá hủy dữ liệu hiện tại.
     //Điều này an toàn hơn so với force.
     console.log(`Example app listening on port ${port}`)

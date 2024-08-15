@@ -53,7 +53,7 @@ export default function AdminPageLayout({ children }: any) {
       <HeaderPage />
       <Layout
         style={{
-          marginTop: "65px",
+          paddingTop: "65px",
         }}>
         <div className="fixed top-[60px] bg-[#ffff] left-0 bottom-0 scrollable-wrapper sider-bar">
           <Sider
@@ -90,6 +90,7 @@ export default function AdminPageLayout({ children }: any) {
             <div
               style={{
                 width: "100%",
+                height: "100%",
               }}>
               {children}
             </div>
