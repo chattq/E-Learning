@@ -1,3 +1,4 @@
+
 import express, { Request, Response, NextFunction } from 'express'
 
 import userService from '~/services/users.services'
@@ -10,6 +11,7 @@ import { ResultsReturned } from '~/utils/results-api'
 import { RegisterReqBody, userModelTypes } from '~/Models2/requests/users/users.requests'
 import Blog from '~/models/blogs.models'
 import blogService from '~/services/blogs.services'
+import { ResultsReturnedUser } from '~/utils/results-api'
 
 class BlogController {
   // Lấy tất cả các bài blog
@@ -32,14 +34,31 @@ class BlogController {
     }
   }
 
-  //Thêm blog mới
+  // Thêm blog mới
   async addNewBlog(req: Request, res: Response) {
-    const user_id = req.decoded_authorization?.user_id
-    console.log(38, user_id)
-    const result = await blogService.createBlogService(req.body)
-    return res.json({
-      message: 'Add new blog'
-    })
+    const result = await blogService.BlogAddNew(req.body)
+    return res.json(
+      new ResultsReturnedUser({
+        isSuccess: true,
+        message: 'Blog create successful',
+        data: { result }
+      })
+    )
+  }
+
+  // Xóa blog
+  async deleteBlog(req: Request, res: Response) {
+    console.log('req', req)
+    const { id } = req.params
+    const result = await blogService.BlogDelete(req.body)
+
+    return res.json(
+      new ResultsReturnedUser({
+        isSuccess: true,
+        message: result.message,
+        data: null
+      })
+    )
   }
 }
 
