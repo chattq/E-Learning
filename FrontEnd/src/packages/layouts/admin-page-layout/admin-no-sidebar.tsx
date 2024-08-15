@@ -6,7 +6,10 @@ export default function AdminPageLayoutNoSideBar({ children }: any) {
   const { Content } = Layout;
 
   return (
-    <Layout>
+    <Layout
+      style={{
+        height: "100vh",
+      }}>
       <HeaderPage />
       <Layout
         style={{
@@ -17,6 +20,7 @@ export default function AdminPageLayoutNoSideBar({ children }: any) {
             <div
               style={{
                 width: "100%",
+                height: "100%",
               }}>
               {children}
             </div>

@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useRef } from "react";
 import AdminPageLayout from "../../../packages/layouts/admin-page-layout/admin-page-layout";
-import { Button, Space, Table, TableProps, Tag } from "antd";
+import { Button, Space, Table, TableProps } from "antd";
 import { useWindowSize } from "../../../packages/hooks/useWindowSize";
 import "./AcountBank.scss";
+import {
+  IPopupAddAccountRef,
+  PopupAddAccount,
+} from "./use-popup/PopupAddAccount";
 
 interface DataType {
   key: string;
@@ -12,6 +16,8 @@ interface DataType {
   tags: string[];
 }
 export default function AcountBank() {
+  const popupAddAccountRef = useRef<IPopupAddAccountRef>();
+
   const data: DataType[] = [
     {
       key: "1",
@@ -87,13 +93,15 @@ export default function AcountBank() {
   ];
   const windowSize = useWindowSize();
 
+  const showModal = () => {
+    popupAddAccountRef.current?.showPopup();
+  };
+
   return (
     <AdminPageLayout>
       <div className="px-4 py-4 table-container">
-        <div className="table-toolbar py-[10px] px-4 bg-white border-b-[1px]">
-          <Space size={15}>
-            <Button>Thêm</Button>
-          </Space>
+        <div className="table-toolbar py-[10px] text-right px-4 bg-white border-b-[1px]">
+          <Button onClick={showModal}>Thêm tài khoản</Button>
         </div>
         <Table
           pagination={false}
@@ -102,6 +110,7 @@ export default function AcountBank() {
           scroll={{ y: windowSize.height - 200 }}
         />
       </div>
+      <PopupAddAccount ref={popupAddAccountRef} />
     </AdminPageLayout>
   );
 }

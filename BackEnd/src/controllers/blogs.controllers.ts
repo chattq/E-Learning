@@ -6,7 +6,7 @@ import { pick } from 'lodash'
 
 import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
 
-import { ResultsReturnedUser } from '~/utils/results-api'
+import { ResultsReturned } from '~/utils/results-api'
 import { RegisterReqBody, userModelTypes } from '~/Models2/requests/users/users.requests'
 import Blog from '~/models/blogs.models'
 import blogService from '~/services/blogs.services'
