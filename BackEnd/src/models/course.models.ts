@@ -2,6 +2,8 @@ import { Table, Column, Model, DataType, HasOne, ForeignKey, BelongsTo, BelongsT
 import category from './category.models'
 import course_category from './categoryCourse.models'
 import user from './user.models'
+import promotion_combo from './promotionCombo.models'
+import combo_product from './comboCourse.models'
 
 @Table
 class course extends Model {
@@ -75,6 +77,8 @@ class course extends Model {
 
   @BelongsToMany(() => category, () => course_category)
   declare categories: category[]
+  @BelongsToMany(() => promotion_combo, () => combo_product)
+  declare promotion_combos: promotion_combo[]
 }
 
 export default course

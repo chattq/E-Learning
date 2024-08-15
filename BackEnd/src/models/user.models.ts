@@ -1,6 +1,7 @@
 import { Table, Column, Model, DataType, HasOne, HasMany } from 'sequelize-typescript'
 import refresh_token from './refreshToken.models'
 import course from './course.models'
+import account_bank from './accountBank.models'
 
 @Table
 class user extends Model {
@@ -90,6 +91,10 @@ class user extends Model {
   //Từ khóa declare được sử dụng trong TypeScript để thông báo cho trình biên dịch biết rằng thuộc tính này sẽ được cung cấp bởi Sequelize và không được khởi tạo rõ ràng trong constructor.
   @HasMany(() => course)
   courses!: course[]
+
+  // mối quan hệ 1 nhiều
+  @HasMany(() => account_bank)
+  account_banks!: account_bank[]
 }
 
 export default user

@@ -69,17 +69,17 @@ export const loginValidator = validate(
 export const registerValidator = validate(
   checkSchema(
     {
-      name: {
-        notEmpty: {
-          errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED
-        },
-        in: 'body',
-        isString: {
-          errorMessage: USERS_MESSAGES.NAME_MUST_BE_A_STRING
-        },
-        trim: true,
-        escape: true
-      },
+      // name: {
+      //   notEmpty: {
+      //     errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED
+      //   },
+      //   in: 'body',
+      //   isString: {
+      //     errorMessage: USERS_MESSAGES.NAME_MUST_BE_A_STRING
+      //   },
+      //   trim: true,
+      //   escape: true
+      // },
       email: {
         notEmpty: {
           errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED
