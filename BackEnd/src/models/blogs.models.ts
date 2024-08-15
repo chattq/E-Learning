@@ -14,24 +14,18 @@ class blog extends Model {
     type: DataType.STRING(255),
     allowNull: false
   })
-  title!: string
+  blog_title!: string
 
   @Column({
     type: DataType.TEXT,
     allowNull: false
   })
-  content!: string
+  blog_content!: string
 
   @Column({
     type: DataType.STRING(255)
   })
   image_url!: string
-
-  @Column({
-    type: DataType.STRING(50),
-    defaultValue: 'active'
-  })
-  status!: string
 
   @Column({
     type: DataType.DATE,
@@ -45,7 +39,7 @@ class blog extends Model {
   })
   updated_at!: Date
 
-  // // Thiết lập mối quan hệ với bảng User
+  // Thiết lập mối quan hệ với bảng User
   // @ForeignKey(() => user)
   // @Column({
   //   type: DataType.STRING(100),
