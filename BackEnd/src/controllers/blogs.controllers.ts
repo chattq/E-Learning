@@ -1,4 +1,3 @@
-
 import express, { Request, Response, NextFunction } from 'express'
 
 import userService from '~/services/users.services'
@@ -11,7 +10,6 @@ import { ResultsReturned } from '~/utils/results-api'
 import { RegisterReqBody, userModelTypes } from '~/Models2/requests/users/users.requests'
 import Blog from '~/models/blogs.models'
 import blogService from '~/services/blogs.services'
-import { ResultsReturnedUser } from '~/utils/results-api'
 
 class BlogController {
   // Lấy tất cả các bài blog
@@ -38,7 +36,7 @@ class BlogController {
   async addNewBlog(req: Request, res: Response) {
     const result = await blogService.BlogAddNew(req.body)
     return res.json(
-      new ResultsReturnedUser({
+      new ResultsReturned({
         isSuccess: true,
         message: 'Blog create successful',
         data: { result }
@@ -53,7 +51,7 @@ class BlogController {
     const result = await blogService.BlogDelete(req.body)
 
     return res.json(
-      new ResultsReturnedUser({
+      new ResultsReturned({
         isSuccess: true,
         message: result.message,
         data: null
