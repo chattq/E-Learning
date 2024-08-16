@@ -16,9 +16,9 @@ export default function Register() {
   const onFinish: FormProps<FieldType>["onFinish"] = async (
     values: FieldType
   ) => {
-    const response = await api.login(values.email, values.password);
+    const response = await api.User_register(values.email, values.password);
     if (response.isSuccess) {
-      navigate("/admin/category");
+      navigate("/");
     }
   };
 
@@ -52,8 +52,7 @@ export default function Register() {
                 backgroundColor: "white",
                 color: "#bb0000 ",
               }}
-              onClick={handleClickRegister}
-            >
+              onClick={handleClickRegister}>
               Đăng ký
             </Button>
           </div>
@@ -71,15 +70,13 @@ export default function Register() {
             layout="vertical"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
+            autoComplete="off">
             <Form.Item<FieldType>
               label="Tài Khoản"
               name="email"
               rules={[
                 { required: true, message: "Please input your username!" },
-              ]}
-            >
+              ]}>
               <Input placeholder="Email" />
             </Form.Item>
 
@@ -88,8 +85,7 @@ export default function Register() {
               name="password"
               rules={[
                 { required: true, message: "Please input your password!" },
-              ]}
-            >
+              ]}>
               <Input.Password placeholder="Mật Khẩu" />
             </Form.Item>
             <Form.Item<FieldType>
@@ -97,8 +93,7 @@ export default function Register() {
               name="password"
               rules={[
                 { required: true, message: "Please input your password!" },
-              ]}
-            >
+              ]}>
               <Input.Password placeholder="Nhập Lại Mật Khẩu" />
             </Form.Item>
 

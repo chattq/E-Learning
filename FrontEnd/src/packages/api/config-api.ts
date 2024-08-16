@@ -4,9 +4,10 @@ import { useAuthAPI } from "./API/auth.api";
 import { useCategoriesApi } from "./API/categories.api";
 import { setAccessTokenToLS } from "../../utils/localStorageHandler";
 import { notification } from "antd";
+import { useAccountBankApi } from "./API/account_bank.api";
 
 export const createApiBase = () => {
-  const accessToken = localStorage.getItem("token");
+  const accessToken = localStorage.getItem("access_token");
   const api = axios.create({
     baseURL: `${import.meta.env.VITE_API_DOMAIN}`,
     headers: {
@@ -35,11 +36,13 @@ export const createApiBase = () => {
         message: data.message,
         data: data.data,
       };
+      // console.log(39, url);
       if (url === "/users/login" || url === "/users/register") {
         if (data.isSuccess) {
+          // console.log(data);
           setAccessTokenToLS(data.data.Access_token);
 
-          localStorage.setItem("profile", JSON.stringify(data.data.User));
+          localStorage.setItem("profile", JSON.stringify(data.data.InforUse));
         }
         return result;
       } else {
@@ -48,7 +51,7 @@ export const createApiBase = () => {
     },
     function (error: AxiosError) {
       if (error?.response?.status === 401) {
-        location.href = "/login";
+        // location.href = "/login";
       } else {
         // alert(error.message);
         notification.error({
@@ -69,7 +72,9 @@ export const createClientGateApi = () => {
   const useUploadFile = useFileApi(apiBase);
   const authAPI = useAuthAPI(apiBase);
   const categoriesApi = useCategoriesApi(apiBase);
+  const accountBankApi = useAccountBankApi(apiBase);
   return {
+    ...accountBankApi,
     ...useUploadFile,
     ...authAPI,
     ...categoriesApi,

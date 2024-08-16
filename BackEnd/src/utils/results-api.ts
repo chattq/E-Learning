@@ -1,4 +1,4 @@
-export class ResultsReturnedUser {
+export class ResultsReturned {
   isSuccess: boolean
   message: string
   data: unknown

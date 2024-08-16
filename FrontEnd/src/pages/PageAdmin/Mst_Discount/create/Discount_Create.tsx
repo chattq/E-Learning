@@ -85,7 +85,7 @@ export default function Discount_Create() {
   const windowSize = useWindowSize();
   return (
     <AdminPageLayout>
-      <div className="px-4 pt-3">
+      <div className="px-4 pt-3 mb-[72px]">
         <div className="pb-3 ">
           <Breadcrumb
             style={{
@@ -156,13 +156,16 @@ export default function Discount_Create() {
             </Form>
           </div>
         </div>
-        <div className="bg-[#fff] border-[1px] px-6 pt-5 rounded-md mt-4 flex-1">
+        <div className="bg-[#fff] border-[1px] px-6 pt-5 rounded-md mt-4 flex-1 pb-6">
           <div className="flex items-center justify-between mb-2">
             <h1 className="text-[20px]">Sản phẩm khuyến mãi</h1>
             <Button>Thêm sản phẩm</Button>
           </div>
           <div className="pb-4 pt-3">
             <Table
+              style={{
+                height: windowSize.height - 350,
+              }}
               pagination={false}
               columns={columns}
               dataSource={data}
@@ -170,8 +173,11 @@ export default function Discount_Create() {
             />
           </div>
         </div>
-        <div className="bg-[#fff] w-full px-3 py-3 mt-3 sticky bottom-0 boxShadow-button">
-          <Button>Xác nhận</Button>
+        <div className="bg-[#fff] px-3 py-3 right-[16px] fixed button_Save bottom-0 boxShadow-button">
+          <div className="flex justify-end gap-4">
+            <Button>Hủy</Button>
+            <Button>Xác nhận</Button>
+          </div>
         </div>
       </div>
     </AdminPageLayout>

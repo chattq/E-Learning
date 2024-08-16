@@ -90,22 +90,13 @@ export const adminRoutes: RouteItem[] = [
     ],
   },
   {
-    key: "Admin_category",
+    key: "category",
     path: "admin/category",
     mainMenuTitle: "Quản lý danh mục",
     icon: <ShoppingCartOutlined />,
     mainMenuKey: "category",
     permissionCode: "",
-    children: [
-      {
-        key: "category",
-        path: "admin/category",
-        subMenuTitle: "Category",
-        mainMenuKey: "category",
-        permissionCode: "",
-        getPageElement: () => <Ad_Category />,
-      },
-    ],
+    getPageElement: () => <Ad_Category />,
   },
   {
     key: "blog",

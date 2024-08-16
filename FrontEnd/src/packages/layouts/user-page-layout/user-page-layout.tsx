@@ -81,6 +81,7 @@ export default function UserPageLayout({ children }: any) {
           <div
             style={{
               width: "100%",
+              height: "100%",
             }}>
             {children}
           </div>

@@ -6,7 +6,7 @@ import { pick } from 'lodash'
 
 import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
 
-import { ResultsReturnedUser } from '~/utils/results-api'
+import { ResultsReturned } from '~/utils/results-api'
 import { RegisterReqBody, userModelTypes } from '~/Models2/requests/users/users.requests'
 
 import user from '~/models/user.models'
@@ -17,7 +17,7 @@ class UserController {
 
     const result = await userService.registerUser({ name, email, password })
     return res.json(
-      new ResultsReturnedUser({
+      new ResultsReturned({
         isSuccess: true,
         message: 'Register successful',
         data: {
@@ -36,7 +36,7 @@ class UserController {
       }
     })
     return res.json(
-      new ResultsReturnedUser({
+      new ResultsReturned({
         isSuccess: true,
         message: 'Login successful',
         data: {
@@ -55,7 +55,7 @@ class UserController {
     const user_id = req.decoded_authorization?.user_id
     await userService.logout(user_id as string)
     return res.json(
-      new ResultsReturnedUser({
+      new ResultsReturned({
         isSuccess: true,
         message: USERS_MESSAGES.LOGOUT_SUCCESS,
         data: null
