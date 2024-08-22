@@ -3,12 +3,16 @@ import formidable from 'formidable'
 import fs from 'fs'
 import { UPLOAD_TEMP_DIR } from '~/constants/dir'
 import { v2 as cloudinary } from 'cloudinary'
+import { Storage } from 'megajs'
 
 cloudinary.config({
   cloud_name: 'dkqyptupf',
   api_key: '923633263214567',
   api_secret: '40OayrQ4yqNIhxXtmKTJ47yulNo'
 })
+export const getLoggedInStorage = () => {
+  return new Storage({ email: 'baotuyet927@gmail.com', password: 'baotuyet927' }).ready
+}
 
 export const initFolder = () => {
   if (!fs.existsSync(UPLOAD_TEMP_DIR)) {
@@ -35,20 +39,43 @@ export const handleFileUpload = async (req: Request) => {
       if (err) {
         return reject(err)
       }
-      const response = await cloudinary.uploader
-        .upload(files.file[0].filepath, {
-          folder: 'ELeaning',
-          use_filename: true,
-          unique_filename: false,
-          resource_type: 'auto'
+      if (files.file[0].mimetype.startsWith('image') || files.file[0].mimetype.startsWith('video')) {
+        const response = await cloudinary.uploader
+          .upload(files.file[0].filepath, {
+            folder: 'ELeaning',
+            use_filename: true,
+            unique_filename: false,
+            resource_type: 'auto'
+          })
+          .catch((error) => {
+            reject(error)
+          })
+        resolve({
+          ...response,
+          originalFilename: files.file[0].originalFilename
         })
-        .catch((error) => {
-          reject(error)
+      } else {
+        const mega = await getLoggedInStorage()
+        const uploadStream = mega.upload({
+          name: files.file[0].originalFilename,
+          size: files.file[0].size
         })
-      resolve({
-        ...response,
-        originalFilename: files.file[0].originalFilename
-      })
+        fs.createReadStream(files.file[0].filepath).pipe(uploadStream)
+        uploadStream.on('complete', (file) => {
+          file.link(false, (error, url) => {
+            if (error) {
+              return reject(err)
+            }
+            resolve({
+              created_at: files.file[0].lastModifiedDate,
+              bytes: files.file[0].size,
+              originalFilename: files.file[0].originalFilename,
+              format: files.file[0].mimetype,
+              url: url
+            })
+          })
+        })
+      }
     })
   })
 }

@@ -3,13 +3,23 @@ import { vietQR } from '~/config/vietQr.config'
 
 config()
 
-interface BlogCreateReqBody {
-  title?: string
-  content: string
+interface AcountBankCreateReqBody {
+  BankCode: string
+  AccountNumber: string
+  NameAccount: string
+  FlagDefault: string
 }
 
 class AccountBankService {
   async getListBank() {
+    return new Promise<void>((resolve, reject) => {
+      return vietQR
+        .getBanks()
+        .then((banks: any) => resolve(banks))
+        .catch((err: any) => reject(err))
+    })
+  }
+  async create_account(payload: AcountBankCreateReqBody, user_id: string) {
     return new Promise<void>((resolve, reject) => {
       return vietQR
         .getBanks()

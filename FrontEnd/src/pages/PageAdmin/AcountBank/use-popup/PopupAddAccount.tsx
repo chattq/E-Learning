@@ -4,7 +4,17 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Button, Modal, Form, Input, Select, Space, Switch, Spin } from "antd";
+import {
+  Button,
+  Modal,
+  Form,
+  Input,
+  Select,
+  Space,
+  Switch,
+  Spin,
+  Checkbox,
+} from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { useConfigAPI } from "../../../../packages/api/config-api";
 import axios from "axios";
@@ -37,6 +47,8 @@ export const PopupAddAccount = forwardRef<IPopupAddAccountRef | undefined>(
     useImperativeHandle(ref, () => ({
       showPopup: () => {
         setIsModalOpen(true);
+        formRef.current.resetFields();
+        // console.log(50, );
       },
     }));
     const handleOk = () => {
@@ -50,16 +62,17 @@ export const PopupAddAccount = forwardRef<IPopupAddAccountRef | undefined>(
     const onSave = () => {
       formRef.current?.validateFields().then(async (val: any) => {
         console.log(52, val);
-        //   const response = await api.Categories_Create({
-        //     CategoryName: val.CategoryName,
-        //     CategoryParentCode: val.CategoryParentCode,
-        //     CategoryDesc: val.CategoryDesc,
-        //     FlagActive: val.FlagActive ? "1" : "0",
-        //   });
-        //   if (response.isSuccess) {
-        //     // queryClient.refetchQueries({ queryKey: ["Categories_GetAllActive"] });
-        //     handleCancel();
-        //   }
+        const response = await api.AccountBank_Create({
+          BankCode: val.BankCode,
+          AccountNumber: val.AccountNumber,
+          NameAccount: "TRINH QUANG HOA",
+          FlagDefault: val.FlagDefault ? "1" : "0",
+        });
+        if (response.isSuccess) {
+          console.log(72, response);
+          // queryClient.refetchQueries({ queryKey: ["Categories_GetAllActive"] });
+          // handleCancel();
+        }
       });
     };
 
@@ -69,39 +82,39 @@ export const PopupAddAccount = forwardRef<IPopupAddAccountRef | undefined>(
     };
 
     const handleChangeAccountNumber = (e: any) => {
-      if (e.target.value) {
-        setLoading(true);
-        axios({
-          url: "https://api.vietqr.io/v2/lookup",
-          method: "post",
-          headers: {
-            "x-client-id": "demo-a34a5775-ae15-4a05-8422-1023eccbda3f",
-            "x-api-key": "demo-2a02822e-ede3-4970-999b-18853d8e0ced",
-            "Content-Type": "application/json",
-          },
-          data: JSON.stringify({
-            bin: formRef.current?.getFieldValue("BankName"),
-            accountNumber: e.target.value,
-          }),
-        })
-          .then((response) => {
-            setLoading(false);
-            const nameAccount = response.data.data.accountName;
-            formRef.current.setFieldValue("NameAccount", nameAccount);
-            console.log(formRef);
-          })
-          .catch((error) => {
-            formRef.current.setFieldValue("NameAccount", "");
-            setLoading(false);
-            formRef.current.setFields([
-              {
-                name: "AccountNumber",
-                errors: ["Lỗi không xác định"],
-              },
-            ]);
-            console.log(error);
-          });
-      }
+      // if (e.target.value) {
+      //   setLoading(true);
+      //   axios({
+      //     url: "https://api.vietqr.io/v2/lookup",
+      //     method: "post",
+      //     headers: {
+      //       "x-client-id": "demo-a34a5775-ae15-4a05-8422-1023eccbda3f",
+      //       "x-api-key": "demo-2a02822e-ede3-4970-999b-18853d8e0ced",
+      //       "Content-Type": "application/json",
+      //     },
+      //     data: JSON.stringify({
+      //       bin: formRef.current?.getFieldValue("BankName"),
+      //       accountNumber: e.target.value,
+      //     }),
+      //   })
+      //     .then((response) => {
+      //       setLoading(false);
+      //       const nameAccount = response.data.data.accountName;
+      //       formRef.current.setFieldValue("NameAccount", nameAccount);
+      //       console.log(formRef);
+      //     })
+      //     .catch((error) => {
+      //       formRef.current.setFieldValue("NameAccount", "");
+      //       setLoading(false);
+      //       formRef.current.setFields([
+      //         {
+      //           name: "AccountNumber",
+      //           errors: ["Lỗi không xác định"],
+      //         },
+      //       ]);
+      //       console.log(error);
+      //     });
+      // }
     };
 
     return (
@@ -124,15 +137,20 @@ export const PopupAddAccount = forwardRef<IPopupAddAccountRef | undefined>(
         <Form
           ref={formRef}
           initialValues={{
-            CategoryName: "",
-            CategoryParentCode: "",
-            CategoryDesc: "",
-            FlagActive: true,
+            BankCode: "",
+            AccountNumber: "",
+            NameAccount: "",
+            FlagDefault: false,
           }}
           name="validate_other"
           {...formItemLayout}
           style={{ width: "100%" }}>
-          <Form.Item name="BankName" label="Tên ngân hàng">
+          <Form.Item
+            name="BankCode"
+            label="Tên ngân hàng"
+            rules={[
+              { required: true, message: "Tên ngân hàng không được để trống!" },
+            ]}>
             <Select
               showSearch={true}
               filterOption={(input: string, option: any) =>
@@ -154,7 +172,9 @@ export const PopupAddAccount = forwardRef<IPopupAddAccountRef | undefined>(
           <Form.Item
             name="AccountNumber"
             label="Số tài khoản"
+            required
             rules={[
+              { required: true, message: "Số tài khoản không được để trống!" },
               {
                 validator: async (_, value) => {
                   const bankName = formRef.current?.getFieldValue("BankName");
@@ -173,6 +193,12 @@ export const PopupAddAccount = forwardRef<IPopupAddAccountRef | undefined>(
 
           <Form.Item label="Tên tài khoản" name="NameAccount">
             <Input readOnly={true} />
+          </Form.Item>
+          <Form.Item
+            label="Đặt làm mặc định"
+            name="FlagDefault"
+            valuePropName="checked">
+            <Checkbox />
           </Form.Item>
         </Form>
       </Modal>

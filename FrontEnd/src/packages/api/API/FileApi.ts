@@ -8,7 +8,7 @@ export const useFileApi = (apiBase: AxiosInstance) => {
       const form = new FormData();
       form.append("file", file);
       return await apiBase.post<File, ApiResponse<any>>(
-        "/File/UploadFile",
+        "/medias/upload-images",
         form,
         {
           headers: {

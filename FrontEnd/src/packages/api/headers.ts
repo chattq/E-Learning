@@ -6,7 +6,7 @@ export const useApiHeaders = () => {
 };
 export const buildHeaders = () => {
   return {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-    "Content-Type": "application/x-www-form-urlencoded",
+    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    "Content-Type": "multipart/form-data",
   };
 };
