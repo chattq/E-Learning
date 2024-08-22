@@ -24,6 +24,10 @@ class account_bank extends Model {
     type: DataType.STRING(300)
   })
   create_at!: string
+  @Column({
+    type: DataType.ENUM('1', '0')
+  })
+  flag_active!: string
 
   // khóa ngoại
   @ForeignKey(() => user)

@@ -18,6 +18,17 @@ class AccountBankController {
       })
     )
   }
+  async createBank(req: Request, res: Response) {
+    const user_id = req.decoded_authorization?.user_id
+    await accountBankServices.create_account(req.body, user_id)
+    return res.json(
+      new ResultsReturned({
+        isSuccess: true,
+        message: 'Tạo thành công',
+        data: []
+      })
+    )
+  }
 }
 
 const accountBankController = new AccountBankController()

@@ -11,7 +11,7 @@ import {
   Space,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import UploadFileCustom from "../../../../../packages/ui/UploadFile/UploadFile";
+import { UploadFileCustom } from "../../../../../packages/ui/UploadFile/UploadFile";
 
 export const InforBaseCourse = forwardRef(() => {
   const { Option } = Select;

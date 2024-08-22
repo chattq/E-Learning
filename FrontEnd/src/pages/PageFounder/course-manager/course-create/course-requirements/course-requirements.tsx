@@ -26,7 +26,7 @@ export default function CourseRequirements() {
                     <Card
                       className="card-wapper"
                       style={{
-                        width: (windowSize.width - 380) / 3,
+                        width: (windowSize.width - 390) / 3,
                       }}
                       title={`Yêu cầu ${field.name + 1}`}
                       key={field.key}

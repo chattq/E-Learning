@@ -30,9 +30,8 @@ export default function CourseCreate() {
             "pb-[14.5px] fixed bottom-0 z-10 mb-[0px] right-[15px] left-[266px] boxShadowButton rounded-none"
           }>
           <div className="flex gap-4 justify-end">
-            <Button color="red">Primary</Button>
-            <Button color="red">Primary</Button>
-            <Button color="red">Primary</Button>
+            <Button color="red">Lưu</Button>
+            <Button color="red">Hủy</Button>
           </div>
         </CardLayout>
       </div>
