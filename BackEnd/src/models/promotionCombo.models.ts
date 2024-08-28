@@ -17,7 +17,7 @@ class promotion_combo extends Model {
   })
   course_id!: string
   @BelongsTo(() => combo_product, { foreignKey: 'course_id' })
-  combo_products!: combo_product // declare user: Users: Khai báo thuộc tính users sẽ chứa đối tượng User liên quan.
+  combo_product!: combo_product // declare user: Users: Khai báo thuộc tính users sẽ chứa đối tượng User liên quan.
 
   @Column({
     type: DataType.STRING(100)

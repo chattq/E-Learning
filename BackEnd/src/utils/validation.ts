@@ -3,7 +3,7 @@ import { body, validationResult, ValidationChain } from 'express-validator'
 import { RunnableValidationChains } from 'express-validator/lib/middlewares/schema'
 
 import { omit } from 'lodash'
-import { EntityError, ErrorWithStatus } from '~/Models2/Errors'
+import { EntityError, ErrorWithStatus } from '~/utils/Errors'
 import { httpStatus } from '~/constants/httpStatus'
 
 // can be reused by many routes
