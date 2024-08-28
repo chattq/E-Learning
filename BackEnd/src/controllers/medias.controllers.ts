@@ -22,7 +22,7 @@ class MediasController {
     return res.json({
       isSuccess: true,
       message: MEDIAS_MESSAGES.UPLOAD_SUCCESS,
-      Data: result
+      data: result
     })
   }
 

@@ -1,71 +1,121 @@
-import { useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
-import { Modal, Upload } from "antd";
-import type { GetProp, UploadFile, UploadProps } from "antd";
+import { forwardRef, ReactNode, useState } from "react";
+import {
+  LoadingOutlined,
+  PlusOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
+import { Button, Modal, Spin, Upload } from "antd";
+import type { UploadFile, UploadProps } from "antd";
 import "./UploadFile.scss";
+import { useConfigAPI } from "../../api/config-api";
+import { UploadListType } from "antd/es/upload/interface";
 
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
-
-const getBase64 = (file: FileType): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
-export default function UploadFileCustom() {
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState<UploadFile[] | any>([
+type UploadFileCustomProps = {
+  multiple?: boolean;
+  maxFileUpload?: number;
+  listType?: UploadListType;
+  customButtonUpload?: ReactNode;
+};
+export const UploadFileCustom = forwardRef(
+  (
     {
-      uid: "-1",
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-  ]);
+      multiple = false,
+      maxFileUpload = 1,
+      listType = "picture-card",
+      customButtonUpload,
+    }: UploadFileCustomProps,
+    ref: any
+  ) => {
+    const api = useConfigAPI();
+    const [loading, setLoading] = useState(false);
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [fileList, setFileList] = useState<UploadFile[] | any>([]);
+    const [previewVisible, setPreviewVisible] = useState(false);
+    const [previewTitle, setPreviewTitle] = useState("");
+    const [previewType, setPreviewType] = useState("");
+    const [previewUrl, setPreviewUrl] = useState("");
 
-  const handleCancel = () => setPreviewOpen(false);
+    const handleCancel = () => setPreviewOpen(false);
 
-  const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as FileType);
-    }
+    const handlePreview = async (file) => {
+      if (!file.url && !file.preview) {
+        file.preview = URL.createObjectURL(file.originFileObj);
+      }
 
-    setPreviewImage(file.url || (file.preview as string));
-    setPreviewOpen(true);
-    setPreviewTitle(
-      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
+      setPreviewType(file.type.startsWith("video") ? "video" : "image");
+      setPreviewUrl(file.url || file.preview);
+      setPreviewTitle(
+        file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+      );
+      setPreviewVisible(true);
+    };
+
+    const handleChange: UploadProps["onChange"] = ({
+      fileList: newFileList,
+    }) => {
+      setFileList(newFileList);
+    };
+
+    const uploadButton = (
+      <button style={{ border: 0, background: "none" }} type="button">
+        <PlusOutlined />
+        <div style={{ marginTop: 8 }}>Upload</div>
+      </button>
     );
-  };
 
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
+    return (
+      <>
+        <Upload
+          action={`${import.meta.env.VITE_API_DOMAIN}/medias/upload-images`}
+          listType={listType}
+          fileList={fileList}
+          headers={{
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            "Content-Type": "multipart/form-data",
+          }}
+          customRequest={async ({ file, onSuccess, onError }: any) => {
+            setLoading(true);
+            // Xử lý việc upload file bằng axios
+            const respone = await api.File_Upload(file as File);
+            console.log(80, respone);
+            if (respone.isSuccess) {
+              setLoading(false);
+              onSuccess(respone.data);
+            } else {
+              setLoading(false);
+            }
+          }}
+          multiple={multiple}
+          onPreview={handlePreview}
+          showUploadList={!loading}
+          // itemRender={() => {
+          //   return <div>a</div>;
+          // }}
+          onChange={handleChange}>
+          {loading ? (
+            <Spin indicator={<LoadingOutlined spin />} />
+          ) : fileList.length >= maxFileUpload ? null : customButtonUpload ? (
+            customButtonUpload
+          ) : (
+            uploadButton
+          )}
+        </Upload>
 
-  const uploadButton = (
-    <button style={{ border: 0, background: "none" }} type="button">
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </button>
-  );
-  return (
-    <>
-      <Upload
-        action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-        listType="picture-card"
-        fileList={fileList}
-        onPreview={handlePreview}
-        onChange={handleChange}>
-        {fileList.length >= 1 ? null : uploadButton}
-      </Upload>
-      <Modal
-        open={previewOpen}
-        title={previewTitle}
-        footer={null}
-        onCancel={handleCancel}>
-        <img alt="example" style={{ width: "100%" }} src={previewImage} />
-      </Modal>
-    </>
-  );
-}
+        <Modal
+          open={previewOpen}
+          title={previewTitle}
+          footer={null}
+          onCancel={handleCancel}>
+          {previewType === "video" ? (
+            <video width="100%" controls>
+              <source src={previewUrl} type="video/mp4" />
+              Your browser does not support HTML video.
+            </video>
+          ) : (
+            <img alt="preview" style={{ width: "100%" }} src={previewUrl} />
+          )}
+        </Modal>
+      </>
+    );
+  }
+);

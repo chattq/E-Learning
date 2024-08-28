@@ -10,7 +10,7 @@ export default function InforDetailCourse() {
   return (
     <div className="mt-3 border-b-[0.5px] pb-5">
       <div className="flex justify-center font-semibold mb-1 underline">
-        Nội dung bài học
+        Kiến thức mà học viên sẽ đạt được
       </div>
       <Form
         form={form}
@@ -26,7 +26,7 @@ export default function InforDetailCourse() {
                     <Card
                       className="card-wapper"
                       style={{
-                        width: (windowSize.width - 380) / 3,
+                        width: (windowSize.width - 390) / 3,
                       }}
                       title={`Nội dung ${field.name + 1}`}
                       key={field.key}

@@ -9,5 +9,10 @@ export const useAccountBankApi = (apiBase: AxiosInstance) => {
         {}
       );
     },
+    AccountBank_Create: async (data: any): Promise<ApiResponse<any>> => {
+      return await apiBase.post<any, ApiResponse<any>>("/AccountBank/Create", {
+        ...data,
+      });
+    },
   };
 };
