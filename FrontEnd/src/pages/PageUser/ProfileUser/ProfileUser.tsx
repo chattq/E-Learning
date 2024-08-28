@@ -59,7 +59,7 @@ export default function ProfileUser() {
                   <div className="bg-[#ffff] h-[600px] box-shadow-card"></div>
                   <div className="w-[80%] m-auto absolute top-0 left-[50%] translate-x-[-50%]">
                     <div className="relative">
-                      <div className="rounded-b-[15px] h-[400px] overflow-hidden">
+                      <div className="rounded-[15px] h-[300px] overflow-hidden">
                         <img src={item.BannerImg} className="h-full w-full" />
                       </div>
                       <div className="absolute bottom-[-145px] left-[40px] right-[40px] border-b-[1px] border-[#c9c9c9] ">

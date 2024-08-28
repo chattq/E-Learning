@@ -40,7 +40,7 @@ export default function UserPageLayout({ children }: any) {
           backgroundColor: "#fff",
           lineHeight: "65px",
         }}
-        className="box-shadow-header header-wrapper">
+        className="box-shadow-header header-wrapper ">
         <LogoLayout />
         <HeaderLayout />
       </Header>
@@ -59,7 +59,7 @@ export default function UserPageLayout({ children }: any) {
             background: "#fff",
             paddingTop: "5px",
           }}
-          className="scrollable-wrapper sider_bar_user_page border-r-[0.5px]">
+          className="scrollable-wrapper sider_bar_user_page border-r-[0.5px] ">
           <Menu
             className=""
             mode="inline"

@@ -11,34 +11,64 @@ import {
 import { memo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import CartHeader from "../CartHeader/CartHeader";
+import { TbLogout } from "react-icons/tb";
+import { TbLogin } from "react-icons/tb";
+import { FaBookmark } from "react-icons/fa6";
+import { HiPencilAlt } from "react-icons/hi";
 
 export default memo(function HeaderLayout() {
   const { pathname } = useLocation();
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: <Link to={"/login"}>Login</Link>,
+      label: (
+        <Link to={"/login"}>
+          <div className="flex items-center gap-2">
+            <div className="mt-[2px]">
+              <TbLogin />
+            </div>
+            <div>Đăng nhập</div>
+          </div>
+        </Link>
+      ),
     },
     {
       key: "2",
       label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com">
-          2nd menu item
-        </a>
+        <Link to={"/blog/create"}>
+          <div className="flex items-center gap-2">
+            <div className="mt-[2px]">
+              <HiPencilAlt />
+            </div>
+            <div>Tạo bài viết</div>
+          </div>
+        </Link>
       ),
     },
     {
       key: "3",
       label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.luohanacademy.com">
-          3rd menu item
-        </a>
+        <Link to={"/blog/create"}>
+          <div className="flex items-center gap-2 ">
+            <div className="mt-[2px]">
+              <FaBookmark />
+            </div>
+            <div>Bài viết của tôi</div>
+          </div>
+        </Link>
+      ),
+    },
+    {
+      key: "4",
+      label: (
+        <Link to={"/blog/create"}>
+          <div className="flex items-center gap-2">
+            <div className="mt-[2px]">
+              <TbLogout size={15} />
+            </div>
+            <div>Đăng xuất</div>
+          </div>
+        </Link>
       ),
     },
   ];

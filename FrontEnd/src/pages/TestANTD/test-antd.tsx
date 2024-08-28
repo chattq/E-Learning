@@ -430,7 +430,7 @@ export default function TestAntd() {
 
   return (
     <>
-      <div className="flex gap-5" ref={ref}>
+      <div className="flex gap-5 " ref={ref}>
         <div>
           <div>bảng task</div>
           {UnassignedTask.map((item: any) => {
