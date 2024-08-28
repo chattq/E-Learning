@@ -1,9 +1,20 @@
-import { Table, Column, Model, DataType, HasOne, ForeignKey, BelongsTo, BelongsToMany } from 'sequelize-typescript'
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  HasOne,
+  ForeignKey,
+  BelongsTo,
+  BelongsToMany,
+  HasMany
+} from 'sequelize-typescript'
 import category from './category.models'
 import course_category from './categoryCourse.models'
 import user from './user.models'
 import promotion_combo from './promotionCombo.models'
 import combo_product from './comboCourse.models'
+import buyer_course from './buyer.models'
 
 @Table
 class course extends Model {
@@ -79,6 +90,8 @@ class course extends Model {
   declare categories: category[]
   @BelongsToMany(() => promotion_combo, () => combo_product)
   declare promotion_combos: promotion_combo[]
+  @HasMany(() => buyer_course)
+  buyer_courses!: buyer_course[]
 }
 
 export default course

@@ -37,7 +37,7 @@ class account_bank extends Model {
   user_id!: string
   // mối liên hệ với bảng
   @BelongsTo(() => user, { foreignKey: 'user_id' })
-  users!: user // tham chiếu đến bảng
+  user!: user // tham chiếu đến bảng
 }
 
 export default account_bank
