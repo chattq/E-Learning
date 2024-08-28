@@ -4,12 +4,11 @@
   width: 30%;
   // padding: 20px 0;
 
-  h4{
+  h4 {
     font-size: 34px;
     font-weight: bold;
     margin-bottom: 20px;
   }
-
 
   .ant-btn-default {
     color: white;
@@ -28,4 +27,12 @@
 .blog-detail-item {
   background-color: white;
   border-radius: 30px;
+}
+.blog-title .ant-input:focus {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.scroll-blog::-webkit-scrollbar {
+  width: 5px;
 }

@@ -88,7 +88,7 @@ export default function Ad_Category() {
   const windowSize = useWindowSize();
   return (
     <AdminPageLayout>
-      <div className="px-4 pt-4">
+      <div className="px-4 pt-4 ">
         <div
           className="p-[24px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff]"
           style={{

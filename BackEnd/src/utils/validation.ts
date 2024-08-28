@@ -1,10 +1,10 @@
 import express from 'express'
 import { body, validationResult, ValidationChain } from 'express-validator'
-import { RunnableValidationChains } from 'express-validator/src/middlewares/schema'
 
 import { omit } from 'lodash'
 import { EntityError, ErrorWithStatus } from '~/utils/Errors'
 import { httpStatus } from '~/constants/httpStatus'
+import { RunnableValidationChains } from 'express-validator/lib/middlewares/schema'
 
 // can be reused by many routes
 
