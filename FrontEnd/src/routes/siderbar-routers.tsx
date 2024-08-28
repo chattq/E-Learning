@@ -44,9 +44,10 @@ export const siderbarRouters: RouteItem[] = [
   },
   {
     key: "users_post4",
-    path: "/posts",
+    path: "/events",
     mainMenuTitle: "Sự kiện",
     permissionCode: "",
     icon: <ScheduleOutlined size={20} />,
+    getPageElement: () => <BlogDetail />,
   },
 ];

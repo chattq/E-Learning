@@ -19,6 +19,7 @@ import Mst_Voucher from "../pages/PageAdmin/Mst_Voucher/Mst_Voucher";
 import Mst_Discount from "../pages/PageAdmin/Mst_Discount/Mst_Discount";
 import Mst_FlashSale from "../pages/PageAdmin/Mst_FlashSale/Mst_FlashSale";
 import Discount_Create from "../pages/PageAdmin/Mst_Discount/create/Discount_Create";
+import BlogCreate from "../pages/Blog/BlogCreate";
 
 export const adminRoutes: RouteItem[] = [
   {
@@ -116,11 +117,19 @@ export const adminRoutes: RouteItem[] = [
       },
       {
         key: "blogDetail",
-        path: "blog/blog-detail",
+        path: "blog/blog-detail/:code",
         subMenuTitle: "BlogDetail",
         mainMenuKey: "blog-detail",
         permissionCode: "",
         getPageElement: () => <BlogDetail />,
+      },
+      {
+        key: "blogCreate",
+        path: "blog/create",
+        subMenuTitle: "BlogCreate",
+        mainMenuKey: "blog-create",
+        permissionCode: "",
+        getPageElement: () => <BlogCreate />,
       },
     ],
   },

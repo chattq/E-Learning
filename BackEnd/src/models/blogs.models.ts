@@ -28,6 +28,11 @@ class blog extends Model {
   image_url!: string
 
   @Column({
+    type: DataType.STRING(255)
+  })
+  blog_author!: string
+
+  @Column({
     type: DataType.DATE,
     defaultValue: DataType.NOW
   })

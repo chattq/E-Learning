@@ -36,7 +36,7 @@ export const addNewBlogValidator = validate(
           errorMessage: BLOGS_MESSAGES.STATUS_IS_INVALID
         }
       },
-      image_url: {
+      blog_image: {
         in: ['body'],
         optional: true,
         isURL: {
@@ -51,7 +51,7 @@ export const addNewBlogValidator = validate(
 export const deleteBlogValidator = validate(
   checkSchema(
     {
-      id: {
+      blog_id: {
         in: ['body'], // Expecting 'id' to be in request params
         notEmpty: {
           errorMessage: BLOGS_MESSAGES.ID_IS_REQUIRED
@@ -62,7 +62,8 @@ export const deleteBlogValidator = validate(
         },
         custom: {
           options: async (value: number) => {
-            const blog = await Blog.findOne({ where: { blog_id: value } })
+            const blog = await Blog.findOne({ where: { blog_id: '1' } })
+            console.log(value)
             if (!blog) {
               throw new Error(BLOGS_MESSAGES.BLOG_NOT_FOUND)
             }
