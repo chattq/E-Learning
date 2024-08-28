@@ -17,8 +17,9 @@ class BlogController {
     try {
       const blogs = await Blog.findAll()
       return res.status(200).json({
-        success: true,
-        data: blogs
+        isSuccess: true,
+        message: 'Blog get all successful',
+        data: { blogs }
       })
     } catch (error: unknown) {
       let errorMessage = 'Có lỗi xảy ra khi lấy dữ liệu blog'

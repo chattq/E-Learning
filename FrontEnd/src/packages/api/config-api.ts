@@ -5,6 +5,7 @@ import { useCategoriesApi } from "./API/categories.api";
 import { setAccessTokenToLS } from "../../utils/localStorageHandler";
 import { notification } from "antd";
 import { useAccountBankApi } from "./API/account_bank.api";
+import { useBlogsApi } from "./API/blogs.api";
 
 export const createApiBase = () => {
   const accessToken = localStorage.getItem("access_token");
@@ -73,11 +74,13 @@ export const createClientGateApi = () => {
   const authAPI = useAuthAPI(apiBase);
   const categoriesApi = useCategoriesApi(apiBase);
   const accountBankApi = useAccountBankApi(apiBase);
+  const blogsApi = useBlogsApi(apiBase);
   return {
     ...accountBankApi,
     ...useUploadFile,
     ...authAPI,
     ...categoriesApi,
+    ...blogsApi,
   };
 };
 export const useConfigAPI = () => {
