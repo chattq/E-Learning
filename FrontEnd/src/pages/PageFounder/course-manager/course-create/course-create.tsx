@@ -24,20 +24,26 @@ export default function CourseCreate() {
         <CardLayout title={"Thông tin cơ bản"}>
           <InforBaseCourse onChangeCourseType={onChangeCourseType} />
         </CardLayout>
-        {CourseType !== "" && (
-          <>
-            <CardLayout title={"Chi tiết khóa học"}>
+
+        <CardLayout
+          title={"Chi tiết khóa học"}
+          textNoChild={"Có thể điều chỉnh sau khi chọn mô hình khóa học"}>
+          {CourseType !== "" && (
+            <>
               <InforDetailCourse />
               <CourseRequirements />
               <CourseDescription />
-            </CardLayout>
-            {CourseType !== "online" && (
-              <CardLayout title={"Nội dung khóa học"}>
-                <InforContentCourse />
-              </CardLayout>
-            )}
-          </>
+            </>
+          )}
+        </CardLayout>
+        {CourseType !== "online" && (
+          <CardLayout
+            title={"Nội dung khóa học"}
+            textNoChild={"Có thể điều chỉnh sau khi chọn mô hình khóa học"}>
+            <InforContentCourse />
+          </CardLayout>
         )}
+
         <div className="h-[63px]"></div>
         <CardLayout
           className={

@@ -8,7 +8,7 @@ function generateRandomChars(length: any) {
   return randomChars
 }
 export const useAutoCodeGen = () => {
-  const autoCodeGenCategory = () => {
+  const autoCodeGen = (businessCode: string) => {
     // Lấy ngày và thời gian hiện tại
     const currentDate = new Date()
     const year = currentDate.getFullYear().toString().slice(-2) // Lấy 2 số cuối của năm
@@ -25,13 +25,10 @@ export const useAutoCodeGen = () => {
     const timeArray = [month, day, hours, minutes, seconds, randomChars]
     timeArray.sort(() => Math.random() - 0.5)
     const randomizedTime = timeArray.join('')
-
-    // Tạo mã category_id
-    const category_id = `${year}CTGRCODE${randomizedTime}`
-
-    return category_id
+    const code = `${year}${businessCode}${randomizedTime}`
+    return code
   }
   return {
-    autoCodeGenCategory
+    autoCodeGen
   }
 }

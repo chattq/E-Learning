@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import categoryController from '~/controllers/categories.controllers'
 import userController from '~/controllers/users.controllers'
+import { categoriesValidator } from '~/middlewares/categories.middlewares'
 import {
   accessTokenValidator,
   emailVerifyTokenValidator,
@@ -19,7 +20,12 @@ const categoriesRouter = Router()
  * Header:
  * Body: strJson
  */
-categoriesRouter.post('/create', accessTokenValidator, wrapRequestHandler(categoryController.categoryCreate))
+categoriesRouter.post(
+  '/create',
+  accessTokenValidator,
+  categoriesValidator,
+  wrapRequestHandler(categoryController.categoryCreate)
+)
 /**
  * Description: lấy tất cả categories active
  * Path: /AdCategories/getAllActive

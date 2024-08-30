@@ -11,6 +11,7 @@ import {
   Checkbox,
   Form,
   Input,
+  message,
   Radio,
   Tooltip,
   Typography,
@@ -24,6 +25,14 @@ import { nanoid } from "nanoid";
 export const InforContentCourse = forwardRef(({}, ref: any) => {
   const [form] = Form.useForm();
   const [value, setValue] = useState("");
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const success = () => {
+    messageApi.open({
+      type: "success",
+      content: "Xóa bài công",
+    });
+  };
   const modules = {
     toolbar: [
       [
@@ -50,7 +59,7 @@ export const InforContentCourse = forwardRef(({}, ref: any) => {
     <div className="mt-5">
       <Form
         layout="horizontal"
-        wrapperCol={{ span: 18 }}
+        // wrapperCol={{ span: 18 }}
         colon={true}
         form={form}
         labelWrap
@@ -231,6 +240,7 @@ export const InforContentCourse = forwardRef(({}, ref: any) => {
                                         size={20}
                                         onClick={() => {
                                           subOpt.remove(subField.name);
+                                          success();
                                         }}
                                       />
                                     </Tooltip>
@@ -279,6 +289,7 @@ export const InforContentCourse = forwardRef(({}, ref: any) => {
           )}
         </Form.Item>
       </Form>
+      {contextHolder}
     </div>
   );
 });

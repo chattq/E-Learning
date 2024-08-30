@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import "./infor-base-course.scss";
 import {
   Button,
@@ -7,6 +7,7 @@ import {
   Form,
   Input,
   Radio,
+  RadioChangeEvent,
   Select,
   Space,
 } from "antd";
@@ -74,11 +75,20 @@ export const InforBaseCourse = forwardRef(
       console.log(`selected ${value}`);
       onChangeCourseType(value);
     };
+    const [value, setValue] = useState(1);
+
+    const onChange = (e: RadioChangeEvent) => {
+      console.log("radio checked", e.target.value);
+      setValue(e.target.value);
+    };
     return (
       <Form
         name="validate_other"
         {...formItemLayout}
         labelWrap
+        initialValues={{
+          CourseType: 1,
+        }}
         onFinish={onFinish}
         style={{ width: "100%", paddingTop: 20 }}>
         <Form.Item
@@ -130,7 +140,7 @@ export const InforBaseCourse = forwardRef(
           <Cascader options={residences} placeholder={"Chọn ngành hàng"} />
         </Form.Item>
         <Form.Item
-          name="CourseType"
+          name="CourseModel"
           label="Mô hình khóa học"
           rules={[
             {
@@ -145,6 +155,37 @@ export const InforBaseCourse = forwardRef(
               { value: "online", label: "Online" },
             ]}
           />
+        </Form.Item>
+        <Form.Item
+          name="CourseType"
+          label="Loại khóa học"
+          rules={[
+            {
+              required: true,
+              message: "Please select your favourite colors!",
+            },
+          ]}>
+          <Radio.Group defaultValue={1}>
+            <Radio value={1}>Mất phí</Radio>
+            <Radio value={2}>Free</Radio>
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item
+          shouldUpdate={(prevValues, currentValues) =>
+            prevValues.CourseType !== currentValues.CourseType
+          }
+          noStyle>
+          {({ getFieldValue }) => {
+            const courseType = getFieldValue("CourseType");
+            return courseType === 1 ? (
+              <Form.Item
+                labelCol={{ span: 3 }}
+                wrapperCol={{ span: 18 }}
+                label="Đơn giá">
+                <Input />
+              </Form.Item>
+            ) : null;
+          }}
         </Form.Item>
         <Form.Item
           name="ProductDes"

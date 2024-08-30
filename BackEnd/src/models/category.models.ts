@@ -27,7 +27,7 @@ class category extends Model {
   @Column({
     type: DataType.INTEGER
   })
-  catefory_total_course!: string
+  category_total_course!: string
   @Column({
     type: DataType.STRING(50),
     defaultValue: '1'

@@ -92,7 +92,7 @@ export default function Ad_Category() {
         <div
           className="p-[24px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff]"
           style={{
-            height: windowSize.height - 93,
+            height: windowSize.height - 98,
           }}>
           <Space align="center" style={{ marginBottom: 16 }}>
             <Button onClick={handleShowPopupAdd}>Thêm mới</Button>

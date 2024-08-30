@@ -4,7 +4,6 @@ import { checkSchema } from 'express-validator'
 import { JsonWebTokenError } from 'jsonwebtoken'
 import { capitalize } from 'lodash'
 import { ErrorWithStatus } from '~/utils/Errors'
-import userModel from '~/Models2/requests/users/users.models'
 
 import { httpStatus } from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
@@ -194,7 +193,8 @@ export const refreshTokenValidator = validate(
                 secretOrPublickey: process.env.JWT_SECRET_REFRESH_TOKEN as string
               })
 
-              const refreshToken = await userModel.findRefreshToken(value, decoded_refresh_token.user_id)
+              // const refreshToken = await userModel.findRefreshToken(value, decoded_refresh_token.user_id)
+              const refreshToken = ''
               ;(req as Request).decoded_refresh_token = decoded_refresh_token
 
               if (!refreshToken) {

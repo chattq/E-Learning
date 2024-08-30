@@ -1,15 +1,25 @@
 import express, { Request, Response, NextFunction } from 'express'
-
 import userService from '~/services/users.services'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { pick } from 'lodash'
-
 import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
-
 import { ResultsReturned } from '~/utils/results-api'
-import { RegisterReqBody, userModelTypes } from '~/Models2/requests/users/users.requests'
-
 import user from '~/models/user.models'
+import { TokenType } from '~/constants/enums'
+import { JwtPayload } from 'jsonwebtoken'
+
+export interface RegisterReqBody {
+  name?: string
+  email: string
+  password: string
+  confirm_password?: string
+  date_of_birth?: string
+}
+
+export interface TokenPayload extends JwtPayload {
+  token_type: TokenType
+  user_id: string
+}
 
 class UserController {
   async registerController(req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) {
