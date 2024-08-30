@@ -1,6 +1,5 @@
 import { config } from 'dotenv'
-import userModel from '~/Models2/requests/users/users.models'
-import { RegisterReqBody } from '~/Models2/requests/users/users.requests'
+
 import { TokenType } from '~/constants/enums'
 import blog from '~/models/blogs.models'
 import refresh_token from '~/models/refreshToken.models'

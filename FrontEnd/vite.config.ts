@@ -10,4 +10,7 @@ export default defineConfig({
   css: {
     devSourcemap: true,
   },
+  optimizeDeps: {
+    include: ["@ant-design/charts"],
+  },
 });

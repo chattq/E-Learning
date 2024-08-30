@@ -7,6 +7,7 @@ import "./Blog.scss";
 
 export default function BlogCreate() {
   const [value, setValue] = useState("");
+
   const modules = {
     toolbar: [
       [
@@ -28,6 +29,7 @@ export default function BlogCreate() {
       matchVisual: false, // Giữ nguyên định dạng của nội dung được dán
     },
   };
+
   const windowSize = useWindowSize();
 
   return (
@@ -40,10 +42,11 @@ export default function BlogCreate() {
         <div className="flex px-4">
           <div className="w-[50%] border-r-[1px]">
             <Input
-              className="px-4 w-full border-none focus:outline-none focus:border-none focus:shadow-none text-[28px] outline-none"
+              className="px-4 w-full font-bold border-none focus:outline-none focus:border-none focus:shadow-none text-[28px] outline-none"
               placeholder="Nhập tiêu đề"
             />
             <ReactQuill
+              placeholder="Nội dung nhập ở đây"
               style={{
                 background: "#fff",
                 height: windowSize.height - 233,
@@ -56,7 +59,8 @@ export default function BlogCreate() {
             />
           </div>
           <div className="w-[50%]">
-            <div className="border-b-[1px] py-[10px] flex justify-end">
+            <div className="border-b-[1px] py-[10px] flex justify-between">
+              <div className="text-[20px] ml-4 font-bold">Preview</div>
               <Button>Lưu bài viết</Button>
             </div>
             <div

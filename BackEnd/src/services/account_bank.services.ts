@@ -19,7 +19,7 @@ class AccountBankService {
         .catch((err: any) => reject(err))
     })
   }
-  async create_account(payload: AcountBankCreateReqBody, user_id: string) {
+  async create_account(payload: AcountBankCreateReqBody, user_id: string | undefined) {
     return new Promise<void>((resolve, reject) => {
       return vietQR
         .getBanks()

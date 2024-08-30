@@ -1,7 +1,7 @@
 import { config } from 'dotenv'
-import userModel from '~/Models2/requests/users/users.models'
-import { RegisterReqBody } from '~/Models2/requests/users/users.requests'
+
 import { TokenType } from '~/constants/enums'
+import { RegisterReqBody } from '~/controllers/users.controllers'
 import refresh_token from '~/models/refreshToken.models'
 import user from '~/models/user.models'
 import { hasPassword } from '~/utils/crypto'
@@ -78,7 +78,7 @@ class UserService {
     }
   }
   async logout(user_id: string) {
-    return await userModel.logoutQuery(user_id)
+    // return await userModel.logoutQuery(user_id)
   }
 }
 const userService = new UserService()

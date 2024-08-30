@@ -1,22 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import AdminPageLayout from "../../../packages/layouts/admin-page-layout/admin-page-layout";
-import { BarChart } from "@mui/x-charts/BarChart";
-import { LineChart } from "@mui/x-charts";
+import { Line } from "@ant-design/charts";
 
 export default function AdminDasboard() {
+  const data = [
+    { year: "1991", value: 3 },
+    { year: "1992", value: 4 },
+    { year: "1993", value: 3.5 },
+    { year: "1994", value: 5 },
+    { year: "1995", value: 4.9 },
+    { year: "1996", value: 6 },
+    { year: "1997", value: 7 },
+    { year: "1998", value: 9 },
+    { year: "1999", value: 13 },
+  ];
+  const config = {
+    data,
+    xField: "year",
+    yField: "value",
+    point: {
+      shapeField: "square",
+      sizeField: 4,
+    },
+    interaction: {
+      tooltip: {
+        marker: false,
+      },
+    },
+    style: {
+      lineWidth: 2,
+    },
+  };
   return (
     <AdminPageLayout>
-      <BarChart
-        series={[
-          { data: [35, 44, 24, 34] },
-          { data: [51, 6, 49, 30] },
-          { data: [15, 25, 30, 50] },
-          { data: [60, 50, 15, 25] },
-        ]}
-        height={290}
-        xAxis={[{ data: ["Q1", "Q2", "Q3", "Q4"], scaleType: "band" }]}
-        margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
-      />
+      <Line {...config} />;
     </AdminPageLayout>
   );
 }
