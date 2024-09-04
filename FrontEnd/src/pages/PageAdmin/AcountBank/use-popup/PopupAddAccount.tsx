@@ -62,17 +62,17 @@ export const PopupAddAccount = forwardRef<IPopupAddAccountRef | undefined>(
     const onSave = () => {
       formRef.current?.validateFields().then(async (val: any) => {
         console.log(52, val);
-        const response = await api.AccountBank_Create({
-          BankCode: val.BankCode,
-          AccountNumber: val.AccountNumber,
-          NameAccount: "TRINH QUANG HOA",
-          FlagDefault: val.FlagDefault ? "1" : "0",
-        });
-        if (response.isSuccess) {
-          console.log(72, response);
-          // queryClient.refetchQueries({ queryKey: ["Categories_GetAllActive"] });
-          // handleCancel();
-        }
+        // const response = await api.AccountBank_Create({
+        //   BankCode: val.BankCode,
+        //   AccountNumber: val.AccountNumber,
+        //   NameAccount: "TRINH QUANG HOA",
+        //   FlagDefault: val.FlagDefault ? "1" : "0",
+        // });
+        // if (response.isSuccess) {
+        //   console.log(72, response);
+        //   // queryClient.refetchQueries({ queryKey: ["Categories_GetAllActive"] });
+        //   // handleCancel();
+        // }
       });
     };
 
@@ -82,39 +82,39 @@ export const PopupAddAccount = forwardRef<IPopupAddAccountRef | undefined>(
     };
 
     const handleChangeAccountNumber = (e: any) => {
-      // if (e.target.value) {
-      //   setLoading(true);
-      //   axios({
-      //     url: "https://api.vietqr.io/v2/lookup",
-      //     method: "post",
-      //     headers: {
-      //       "x-client-id": "demo-a34a5775-ae15-4a05-8422-1023eccbda3f",
-      //       "x-api-key": "demo-2a02822e-ede3-4970-999b-18853d8e0ced",
-      //       "Content-Type": "application/json",
-      //     },
-      //     data: JSON.stringify({
-      //       bin: formRef.current?.getFieldValue("BankName"),
-      //       accountNumber: e.target.value,
-      //     }),
-      //   })
-      //     .then((response) => {
-      //       setLoading(false);
-      //       const nameAccount = response.data.data.accountName;
-      //       formRef.current.setFieldValue("NameAccount", nameAccount);
-      //       console.log(formRef);
-      //     })
-      //     .catch((error) => {
-      //       formRef.current.setFieldValue("NameAccount", "");
-      //       setLoading(false);
-      //       formRef.current.setFields([
-      //         {
-      //           name: "AccountNumber",
-      //           errors: ["Lỗi không xác định"],
-      //         },
-      //       ]);
-      //       console.log(error);
-      //     });
-      // }
+      if (e.target.value) {
+        setLoading(true);
+        axios({
+          url: "https://api.vietqr.io/v2/lookup",
+          method: "post",
+          headers: {
+            "x-client-id": "demo-a34a5775-ae15-4a05-8422-1023eccbda3f",
+            "x-api-key": "demo-2a02822e-ede3-4970-999b-18853d8e0ced",
+            "Content-Type": "application/json",
+          },
+          data: JSON.stringify({
+            bin: formRef.current?.getFieldValue("BankName"),
+            accountNumber: e.target.value,
+          }),
+        })
+          .then((response) => {
+            setLoading(false);
+            const nameAccount = response.data.data.accountName;
+            formRef.current.setFieldValue("NameAccount", nameAccount);
+            console.log(formRef);
+          })
+          .catch((error) => {
+            formRef.current.setFieldValue("NameAccount", "");
+            setLoading(false);
+            formRef.current.setFields([
+              {
+                name: "AccountNumber",
+                errors: ["Lỗi không xác định"],
+              },
+            ]);
+            console.log(error);
+          });
+      }
     };
 
     return (
