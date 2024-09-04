@@ -10,6 +10,7 @@ import CourseCreate from "../pages/PageFounder/course-manager/course-create/cour
 import CourseOnline from "../pages/PageUser/Courses/course-online/CourseOnline";
 import CourseRoom from "../pages/PageUser/Courses/course-online/CourseRoom";
 import ProfileUser from "../pages/PageUser/ProfileUser/ProfileUser";
+import BlogCreate from "../pages/Blog/BlogCreate";
 
 export const userRoutes: RouteItem[] = [
   {
@@ -18,5 +19,12 @@ export const userRoutes: RouteItem[] = [
     mainMenuTitle: "",
     permissionCode: "",
     getPageElement: () => <ProductList />,
+  },
+  {
+    key: "blog",
+    path: "/blog/create",
+    mainMenuTitle: "",
+    permissionCode: "",
+    getPageElement: () => <BlogCreate />,
   },
 ];
