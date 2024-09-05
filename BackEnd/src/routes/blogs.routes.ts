@@ -8,7 +8,7 @@ import { wrapRequestHandler } from '~/utils/handlers'
 const blogsRouter = Router()
 
 blogsRouter.get('/getall', wrapRequestHandler(blogController.getAllBlogs))
-blogsRouter.post('/create', addNewBlogValidator, wrapRequestHandler(blogController.addNewBlog))
+blogsRouter.post('/create', addNewBlogValidator, accessTokenValidator, wrapRequestHandler(blogController.addNewBlog))
 blogsRouter.delete('/delete', deleteBlogValidator, wrapRequestHandler(blogController.deleteBlog))
 
 // usersRouter.post(

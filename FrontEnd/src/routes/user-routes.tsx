@@ -11,6 +11,7 @@ import CourseOnline from "../pages/PageUser/Courses/course-online/CourseOnline";
 import CourseRoom from "../pages/PageUser/Courses/course-online/CourseRoom";
 import ProfileUser from "../pages/PageUser/ProfileUser/ProfileUser";
 import BlogCreate from "../pages/Blog/BlogCreate";
+import BlogDetail from "../pages/Blog/BlogDetail";
 
 export const userRoutes: RouteItem[] = [
   {
@@ -26,5 +27,12 @@ export const userRoutes: RouteItem[] = [
     mainMenuTitle: "",
     permissionCode: "",
     getPageElement: () => <BlogCreate />,
+  },
+  {
+    key: "blog",
+    path: "/blog/blog-detail/:code",
+    mainMenuTitle: "",
+    permissionCode: "",
+    getPageElement: () => <BlogDetail />,
   },
 ];
