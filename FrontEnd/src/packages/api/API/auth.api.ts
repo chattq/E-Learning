@@ -14,12 +14,13 @@ export const useAuthAPI = (apiBase: AxiosInstance) => {
     },
     User_register: async (
       email: string,
-      password: string
+      password: string,
+      confirmPassword: string
     ): Promise<ApiResponse<any>> => {
       return await apiBase.post<any, ApiResponse<any>>("/users/register", {
         email: email,
         password: password,
-        confirm_password: password,
+        confirm_password: confirmPassword,
       });
     },
   };

@@ -22,6 +22,11 @@ export default function CourseOnline() {
   const nav = useNavigate();
   const [room, setRoom] = useState("");
   const navigate = useNavigate();
+  const windowSize = useWindowSize();
+  const { Header, Content } = Layout;
+  const { Option } = Select;
+  const popupCallRef = useRef<any>(null);
+  const videoRef = useRef<any>(null);
 
   const handleSubmitForm = useCallback(
     (e: any) => {
@@ -46,13 +51,6 @@ export default function CourseOnline() {
   //     socket.off("room:join", handleJoinRoom);
   //   };
   // }, [socket, handleJoinRoom]);
-  const windowSize = useWindowSize();
-  const { Header, Content } = Layout;
-
-  const { Option } = Select;
-  const popupCallRef = useRef<any>(null);
-  const videoRef = useRef<any>(null);
-
   const handleTogglePictureInPicture = () => {
     if (document.pictureInPictureElement) {
       document.exitPictureInPicture().catch((error) => {
@@ -76,13 +74,15 @@ export default function CourseOnline() {
             style={{
               height: windowSize.height - 61,
             }}
-            className="w-[350px] bg-slate-200"></div>
+            className="w-[350px] bg-slate-200"
+          ></div>
         </div>
         <div>
           <Layout
             style={{
               width: windowSize.width - 350,
-            }}>
+            }}
+          >
             <Header
               style={{
                 display: "flex",
@@ -92,7 +92,8 @@ export default function CourseOnline() {
                 backgroundColor: "#fff",
                 lineHeight: "56px",
               }}
-              className="box-shadow-header header-wrapper">
+              className="box-shadow-header header-wrapper"
+            >
               <Flex justify="">
                 <Button
                   style={{
@@ -144,7 +145,8 @@ export default function CourseOnline() {
                   <div
                     style={{
                       width: "100%",
-                    }}>
+                    }}
+                  >
                     <div>
                       <CardLayout>
                         <div>

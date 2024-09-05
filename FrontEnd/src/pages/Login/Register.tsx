@@ -2,12 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { useConfigAPI } from "../../packages/api/config-api";
 import "./Login.scss";
 
-import { Button, Checkbox, Col, Form, type FormProps, Input, Row } from "antd";
+import { Button, Col, Form, type FormProps, Input, Row } from "antd";
 
 type FieldType = {
   email: string;
   password: string;
-  remember?: string;
+  confirmPassword: string;
 };
 
 export default function Register() {
@@ -16,7 +16,11 @@ export default function Register() {
   const onFinish: FormProps<FieldType>["onFinish"] = async (
     values: FieldType
   ) => {
-    const response = await api.User_register(values.email, values.password);
+    const response = await api.User_register(
+      values.email,
+      values.password,
+      values.confirmPassword
+    );
     if (response.isSuccess) {
       navigate("/");
     }
@@ -39,44 +43,44 @@ export default function Register() {
   return (
     <>
       <Row>
-        <Col span={12} className="right"></Col>
-        <Col span={12} className="formRegister">
+        <Col
+          xs={0} // Ẩn phần này trên màn hình nhỏ
+          md={12} // Chỉ hiển thị từ màn hình medium trở lên
+          className="right"
+        ></Col>
+        <Col xs={24} md={12} className="formRegister">
           <h4>Đăng ký</h4>
           <div className="groupButton">
             <Button className="buttonLogin" onClick={handleClickLogin}>
               Đăng nhập
             </Button>
             <Button
-              className="buttonLogin "
+              className="buttonLogin"
               style={{
                 backgroundColor: "white",
-                color: "#bb0000 ",
+                color: "#bb0000",
               }}
-              onClick={handleClickRegister}>
+              onClick={handleClickRegister}
+            >
               Đăng ký
             </Button>
           </div>
           <Form
-            className="formLoginItem"
+            className="formRegisterItem"
             name="basic"
-            // labelCol={{ span: 8 }}
-            // wrapperCol={{ span: 16 }}
-            style={{ maxWidth: "100%" }}
-            // initialValues={{
-            //   remember: true,
-            //   email: "quang@gmail.com",
-            //   password: "123456@tQ",
-            // }}
             layout="vertical"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off">
+            autoComplete="off"
+          >
             <Form.Item<FieldType>
               label="Tài Khoản"
               name="email"
               rules={[
-                { required: true, message: "Please input your username!" },
-              ]}>
+                { required: true, message: "Please input your email!" },
+                { type: "email", message: "Email không đúng định dạng!" },
+              ]}
+            >
               <Input placeholder="Email" />
             </Form.Item>
 
@@ -85,21 +89,46 @@ export default function Register() {
               name="password"
               rules={[
                 { required: true, message: "Please input your password!" },
-              ]}>
+              ]}
+            >
               <Input.Password placeholder="Mật Khẩu" />
             </Form.Item>
+
             <Form.Item<FieldType>
               label="Nhập Lại Mật Khẩu"
-              name="password"
+              name="confirmPassword"
               rules={[
-                { required: true, message: "Please input your password!" },
-              ]}>
+                { required: true, message: "Please confirm your password!" },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error("Mật khẩu không khớp!"));
+                  },
+                }),
+              ]}
+            >
               <Input.Password placeholder="Nhập Lại Mật Khẩu" />
             </Form.Item>
 
+            <div>
+              Bạn đã có tài khoản?{" "}
+              <span
+                onClick={handleClickLogin}
+                style={{
+                  color: "#bb0000",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+              >
+                Đăng nhập
+              </span>
+            </div>
+
             <Form.Item>
               <Button htmlType="submit" className="btnLogin">
-                Submit
+                Đăng ký
               </Button>
             </Form.Item>
           </Form>
