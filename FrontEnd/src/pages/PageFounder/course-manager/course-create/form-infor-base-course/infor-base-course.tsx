@@ -6,6 +6,7 @@ import {
   CascaderProps,
   Form,
   Input,
+  InputNumber,
   Radio,
   RadioChangeEvent,
   Select,
@@ -13,81 +14,81 @@ import {
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { UploadFileCustom } from "../../../../../packages/ui/UploadFile/UploadFile";
+import { useQuery } from "@tanstack/react-query";
+import { useConfigAPI } from "../../../../../packages/api/config-api";
+import { formatDataCategoriesCourse } from "../logic";
+import ReactQuill from "react-quill";
 
 type InforBaseCourseProps = {
   onChangeCourseType: (value: string) => void;
 };
 
 export const InforBaseCourse = forwardRef(
-  ({ onChangeCourseType }: InforBaseCourseProps, ref) => {
-    const { Option } = Select;
+  ({ onChangeCourseType }: InforBaseCourseProps, ref: any) => {
+    const api = useConfigAPI();
+    const { data: Categories_GetAllActive, isLoading } = useQuery({
+      queryKey: ["Categories_GetAllActive"],
+      queryFn: async () => {
+        const response = await api.Categories_GetAllActive();
+        if (response.isSuccess) {
+          return response.data;
+        } else {
+          console.log(response);
+        }
+      },
+    });
+    const [value, setValue] = useState("");
 
+    const modules = {
+      toolbar: [
+        [
+          { align: "" },
+          { align: "center" },
+          { align: "right" },
+          { align: "justify" },
+        ], // Căn trái, giữa, phải, đều
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["bold", "italic", "underline"],
+        [{ color: [] }, { background: [] }],
+        [{ font: [] }],
+        [{ align: [] }],
+        ["link", "image"],
+        ["clean"], // Xóa định dạng
+      ],
+      clipboard: {
+        matchVisual: false, // Giữ nguyên định dạng của nội dung được dán
+      },
+    };
     const formItemLayout = {
       labelCol: { span: 3 },
       wrapperCol: { span: 18 },
       colon: false, //  là dấu :
     };
-    interface DataNodeType {
-      value: string;
-      label: string;
-      children?: DataNodeType[];
-    }
-
-    const residences: CascaderProps<DataNodeType>["options"] = [
-      {
-        value: "zhejiang",
-        label: "Zhejiang",
-        children: [
-          {
-            value: "hangzhou",
-            label: "Hangzhou",
-            children: [
-              {
-                value: "xihu",
-                label: "West Lake",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        value: "jiangsu",
-        label: "Jiangsu",
-        children: [
-          {
-            value: "nanjing",
-            label: "Nanjing",
-            children: [
-              {
-                value: "zhonghuamen",
-                label: "Zhong Hua Men",
-              },
-            ],
-          },
-        ],
-      },
-    ];
 
     const onFinish = (values: any) => {
       console.log("Received values of form: ", values);
     };
-    const handleChangeCourseType = (value: string) => {
-      console.log(`selected ${value}`);
-      onChangeCourseType(value);
+    const handleChangeCourseType = (e: RadioChangeEvent) => {
+      console.log(`selected ${e.target.value}`);
+      onChangeCourseType(e.target.value);
     };
-    const [value, setValue] = useState(1);
 
-    const onChange = (e: RadioChangeEvent) => {
-      console.log("radio checked", e.target.value);
-      setValue(e.target.value);
-    };
     return (
       <Form
+        ref={ref}
         name="validate_other"
         {...formItemLayout}
         labelWrap
         initialValues={{
-          CourseType: 1,
+          CourseType: "charge",
+          CourseDescription: "",
+          ImageCourse: "",
+          VideoIntroCourse: "",
+          CourseName: "",
+          CourseModel: "",
+          CourseCategory: "",
+          CoursePrice: 0,
         }}
         onFinish={onFinish}
         style={{ width: "100%", paddingTop: 20 }}>
@@ -95,7 +96,9 @@ export const InforBaseCourse = forwardRef(
           name="ImageCourse"
           label="Ảnh khóa học"
           className="labelCustom"
-          rules={[{ required: true, message: "Không được để trống ô" }]}>
+          rules={[
+            { required: true, message: "Ảnh khóa học không được để trống!" },
+          ]}>
           <Space size={30} align="center">
             <UploadFileCustom />
             <div>
@@ -107,7 +110,7 @@ export const InforBaseCourse = forwardRef(
           </Space>
         </Form.Item>
         <Form.Item
-          name="VideoIntro"
+          name="VideoIntroCourse"
           label="Video intro"
           className="labelCustom">
           <Space size={30} align="center">
@@ -122,22 +125,10 @@ export const InforBaseCourse = forwardRef(
           </Space>
         </Form.Item>
         <Form.Item
-          name="ProductName"
+          name="CourseName"
           label="Tên khóa học"
-          rules={[{ required: true, message: "Không được để trống ô" }]}>
-          <Input showCount maxLength={120} placeholder="Nhập vào" />
-        </Form.Item>
-
-        <Form.Item
-          name="ProductCategory"
-          label="Danh mục"
-          rules={[
-            {
-              required: true,
-              message: "Please select your favourite colors!",
-            },
-          ]}>
-          <Cascader options={residences} placeholder={"Chọn ngành hàng"} />
+          rules={[{ required: true, message: "Không được để trống ô!" }]}>
+          <Input placeholder="Nhập vào" />
         </Form.Item>
         <Form.Item
           name="CourseModel"
@@ -145,29 +136,33 @@ export const InforBaseCourse = forwardRef(
           rules={[
             {
               required: true,
-              message: "Please select your favourite colors!",
+              message: "Không được để trống ô!",
             },
           ]}>
-          <Select
-            onChange={handleChangeCourseType}
-            options={[
-              { value: "video", label: "Video" },
-              { value: "online", label: "Online" },
-            ]}
-          />
+          <Radio.Group onChange={handleChangeCourseType}>
+            <Radio value={"video"}>Video</Radio>
+            <Radio value={"online"}>Online</Radio>
+          </Radio.Group>
         </Form.Item>
         <Form.Item
-          name="CourseType"
-          label="Loại khóa học"
+          name="CourseCategory"
+          label="Danh mục"
           rules={[
             {
               required: true,
-              message: "Please select your favourite colors!",
+              message: "Không được để trống ô!",
             },
           ]}>
-          <Radio.Group defaultValue={1}>
-            <Radio value={1}>Mất phí</Radio>
-            <Radio value={2}>Free</Radio>
+          <Cascader
+            options={formatDataCategoriesCourse(Categories_GetAllActive)}
+            placeholder={"Chọn ngành hàng"}
+          />
+        </Form.Item>
+
+        <Form.Item name="CourseType" label="Loại khóa học">
+          <Radio.Group defaultValue={"charge"}>
+            <Radio value={"charge"}>Mất phí</Radio>
+            <Radio value={"free"}>Free</Radio>
           </Radio.Group>
         </Form.Item>
         <Form.Item
@@ -177,31 +172,36 @@ export const InforBaseCourse = forwardRef(
           noStyle>
           {({ getFieldValue }) => {
             const courseType = getFieldValue("CourseType");
-            return courseType === 1 ? (
+            return courseType === "charge" ? (
               <Form.Item
                 labelCol={{ span: 3 }}
                 wrapperCol={{ span: 18 }}
+                name={"CoursePrice"}
                 label="Đơn giá">
-                <Input />
+                <InputNumber
+                  min={0}
+                  style={{
+                    width: "100%",
+                  }}
+                />
               </Form.Item>
             ) : null;
           }}
         </Form.Item>
         <Form.Item
-          name="ProductDes"
-          label="Mô tả khóa học"
+          name="CourseOverview"
+          label="Tổng quan"
           rules={[
             {
-              type: "array",
               required: true,
-              message: "Mô tả sản phẩm không được để trống",
+              message: "Tổng quan khóa học không được để trống",
             },
           ]}>
-          <TextArea
-            showCount
-            maxLength={3000}
-            // onChange={onChange}
-            style={{ height: 200, resize: "none" }}
+          <ReactQuill
+            modules={modules}
+            theme="snow"
+            value={value}
+            onChange={setValue}
           />
         </Form.Item>
       </Form>
