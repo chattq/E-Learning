@@ -9,6 +9,7 @@ import { RouteItem } from "../types";
 import BlogDetail from "../pages/Blog/BlogDetail";
 import ProfileUser from "../pages/PageUser/ProfileUser/ProfileUser";
 import { MyCourses } from "../pages/PageUser/MyCourses/MyCourses";
+import BlogList from "../pages/Blog/BlogList";
 
 export const siderbarRouters: RouteItem[] = [
   {
@@ -32,7 +33,7 @@ export const siderbarRouters: RouteItem[] = [
     mainMenuTitle: "bài viết",
     permissionCode: "",
     icon: <SnippetsOutlined size={20} />,
-    getPageElement: () => <BlogDetail />,
+    getPageElement: () => <BlogList />,
   },
   {
     key: "users_post3",
@@ -48,6 +49,6 @@ export const siderbarRouters: RouteItem[] = [
     mainMenuTitle: "Sự kiện",
     permissionCode: "",
     icon: <ScheduleOutlined size={20} />,
-    getPageElement: () => <BlogDetail />,
+    getPageElement: () => <BlogList />,
   },
 ];
