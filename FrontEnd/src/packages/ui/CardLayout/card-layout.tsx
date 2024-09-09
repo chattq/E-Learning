@@ -5,6 +5,7 @@ interface CardLayoutProps {
   className?: String;
   title?: String;
   textNoChild?: String;
+  visible?: boolean;
 }
 export const CardLayout = forwardRef(
   (
@@ -13,23 +14,28 @@ export const CardLayout = forwardRef(
       className,
       title,
       textNoChild = "Vui lòng thêm content",
+      visible = false,
     }: CardLayoutProps,
     ref: any
   ) => {
     return (
-      <div
-        className={`px-[24px] pb-[24px] pt-[16px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff] ${className}`}>
-        {title && (
-          <div className="font-bold text-[20px] border-b-[0.5px] pb-1">
-            {title}
+      <>
+        {!visible && (
+          <div
+            className={`px-[24px] pb-[24px] pt-[16px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff] ${className}`}>
+            {title && (
+              <div className="font-bold text-[20px] border-b-[0.5px] pb-1">
+                {title}
+              </div>
+            )}
+            {children ? (
+              children
+            ) : (
+              <div className="mt-3 font-medium text-[#999]">{textNoChild}</div>
+            )}
           </div>
         )}
-        {children ? (
-          children
-        ) : (
-          <div className="mt-3 font-medium text-[#999]">{textNoChild}</div>
-        )}
-      </div>
+      </>
     );
   }
 );
