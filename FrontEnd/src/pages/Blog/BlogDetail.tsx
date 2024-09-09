@@ -111,9 +111,12 @@ export default function BlogDetail() {
           >
             {dataItem?.blog_title}
           </h1>
-          <div className="blog-detail-item-content">
+          {/* <div className="blog-detail-item-content">
             <p>{dataItem?.blog_content}</p>
-          </div>
+          </div> */}
+          <div
+            dangerouslySetInnerHTML={{ __html: `${dataItem?.blog_content}` }}
+          />
         </div>
         <div
           className="bg-[#fff] rounded-md border-[0.5px]"
