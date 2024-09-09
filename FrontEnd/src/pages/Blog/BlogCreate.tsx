@@ -5,6 +5,8 @@ import { Button, Input, Upload, UploadProps, message } from "antd";
 import { useWindowSize } from "../../packages/hooks/useWindowSize";
 import "./Blog.scss";
 import { UploadOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import { useConfigAPI } from "../../packages/api/config-api";
 
 export default function BlogCreate() {
   const [value, setValue] = useState(""); // Nội dung bài viết
@@ -12,6 +14,9 @@ export default function BlogCreate() {
   const [coverImage, setCoverImage] = useState<string | null>(null); // URL của ảnh bìa
   const [uploadedFile, setUploadedFile] = useState<any>(null); // Thông tin file upload
   const windowSize = useWindowSize();
+  const nav = useNavigate();
+  const api = useConfigAPI();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const modules = {
     toolbar: [
@@ -67,38 +72,34 @@ export default function BlogCreate() {
     },
   };
 
-  const onCreateBlog = () => {
+  const onCreateBlog = async () => {
     if (!title || !value) {
       message.error("Vui lòng nhập đầy đủ thông tin bài viết!");
       return;
     }
 
     const blogData = {
-      title,
+      title: title,
       content: value,
-      coverImage, // URL của ảnh bìa
+      blog_image: coverImage, // URL của ảnh bìa
       uploadedFile, // Thông tin file đã upload
     };
 
-    console.log("Blog data: ", blogData);
-
-    // Gửi dữ liệu tới API hoặc xử lý tiếp theo
-    // Ví dụ: fetch API để lưu bài viết
-    /*
-    fetch('/api/blog', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(blogData),
-    }).then(response => {
-      if (response.ok) {
-        message.success("Bài viết đã được tạo thành công!");
-      } else {
-        message.error("Tạo bài viết thất bại!");
-      }
-    });
-    */
+    console.log("blogdata", blogData);
+    const response = await api.Blogs_Create(blogData);
+    console.log("response", response);
+    if (response.isSuccess) {
+      messageApi.open({
+        type: "success",
+        content: "This is a success message",
+      });
+    } else {
+      console.log(response);
+      messageApi.open({
+        type: "error",
+        content: "This is an error message",
+      });
+    }
   };
 
   return (

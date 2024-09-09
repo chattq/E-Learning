@@ -13,7 +13,7 @@ export const useBlogsApi = (apiBase: AxiosInstance) => {
       return await apiBase.post<any, ApiResponse<BlogResponse[]>>(
         "/blogs/create",
         {
-          strJson: JSON.stringify(data),
+          ...data,
         }
       );
     },
