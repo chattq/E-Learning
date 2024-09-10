@@ -1,7 +1,6 @@
 import { SettingOutlined } from "@ant-design/icons";
 import { Collapse, CollapseProps } from "antd";
-import { ExpandIconPosition } from "antd/es/collapse/Collapse";
-import React, { useState } from "react";
+
 import { useWindowSize } from "../../../../../packages/hooks/useWindowSize";
 import { nanoid } from "nanoid";
 import ReactPlayer from "react-player";
@@ -12,15 +11,6 @@ export default function Course_Offline_Room() {
   Known for its loyalty and faithfulness,
   it can be found as a welcome guest in many households across the world.
 `;
-
-  type ExpandIconPosition = "start" | "end";
-
-  const [expandIconPosition, setExpandIconPosition] =
-    useState<ExpandIconPosition>("start");
-
-  const onPositionChange = (newExpandIconPosition: ExpandIconPosition) => {
-    setExpandIconPosition(newExpandIconPosition);
-  };
 
   const onChange = (key: string | string[]) => {
     console.log(key);
