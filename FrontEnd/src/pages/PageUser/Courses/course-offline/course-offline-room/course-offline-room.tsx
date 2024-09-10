@@ -1,6 +1,5 @@
 import { SettingOutlined } from "@ant-design/icons";
 import { Collapse, CollapseProps } from "antd";
-
 import { useWindowSize } from "../../../../../packages/hooks/useWindowSize";
 import { nanoid } from "nanoid";
 import ReactPlayer from "react-player";
