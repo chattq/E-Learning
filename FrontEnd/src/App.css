@@ -20,6 +20,6 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #b3b3b3;
-  border-radius: 5px;
+  background: #b6b6b6;
+  /* border-radius: 5px; */
 }
