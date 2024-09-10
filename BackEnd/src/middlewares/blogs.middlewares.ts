@@ -26,7 +26,7 @@ export const addNewBlogValidator = validate(
           errorMessage: BLOGS_MESSAGES.CONTENT_MUST_BE_A_STRING
         },
         trim: true,
-        escape: true
+        escape: false
       },
       status: {
         in: ['body'],

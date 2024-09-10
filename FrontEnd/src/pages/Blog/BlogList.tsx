@@ -37,11 +37,16 @@ export default function BlogList() {
     },
   });
 
-  console.log(Blogs_GetAllActive);
+  console.log("Blogs_GetAllActive", Blogs_GetAllActive?.blogs);
 
   return (
     <UserPageLayout>
       {isLoading && <LoadPanel />}
+
+      <div
+        dangerouslySetInnerHTML={{
+          __html: Blogs_GetAllActive?.blogs[6].blog_content,
+        }}></div>
 
       <div className="px-4 py-4">
         <Button onClick={() => handleClickCreateBlog()}>

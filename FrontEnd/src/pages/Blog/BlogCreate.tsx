@@ -108,8 +108,7 @@ export default function BlogCreate() {
         className="m-4 bg-[#fff] rounded-md border-[1px] "
         style={{
           height: windowSize.height - 98,
-        }}
-      >
+        }}>
         <div className="flex px-4">
           <div className="w-[50%] border-r-[1px]">
             <Input
@@ -144,8 +143,7 @@ export default function BlogCreate() {
               className="overflow-y-scroll py-1 px-5 scroll-blog"
               style={{
                 height: windowSize.height - 168,
-              }}
-            >
+              }}>
               {coverImage && (
                 <img
                   src={coverImage}
