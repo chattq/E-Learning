@@ -3,6 +3,7 @@ import CourseOfflineDetail from "../pages/PageUser/Courses/course-offline/course
 import Payment from "../pages/PageUser/Payment/Payment";
 import CartPage from "../pages/Cart-page/Cart-page";
 import CourseRoom from "../pages/PageUser/Courses/course-online/CourseRoom";
+import Course_Offline_Room from "../pages/PageUser/Courses/course-offline/course-offline-room/course-offline-room";
 
 export const courseRoutes: RouteItem[] = [
   {
@@ -20,6 +21,14 @@ export const courseRoutes: RouteItem[] = [
     mainMenuKey: "course",
     permissionCode: "",
     getPageElement: () => <CourseRoom />,
+  },
+  {
+    key: "course_offline",
+    path: "/learning/course",
+    mainMenuTitle: "",
+    mainMenuKey: "course",
+    permissionCode: "",
+    getPageElement: () => <Course_Offline_Room />,
   },
   {
     key: "payment",
