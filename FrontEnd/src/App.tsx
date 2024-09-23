@@ -6,12 +6,14 @@ import { nanoid } from "nanoid";
 import UserDasboard from "./pages/PageUser/UserDasboard/UserDasboard";
 import Register from "./pages/Login/Register";
 import Test from "./pages/Test/Test";
+import VerifyEmail from "./pages/Login/VerifyEmail";
 
 function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/register/verify-email" element={<VerifyEmail />} />
       <Route path="/test" element={<Test />} />
       <Route path="/" element={<UserDasboard />} />
       {protectedRoutes.map((route) => {
@@ -19,7 +21,8 @@ function App() {
           <Route
             key={nanoid()}
             path={`${route.path}`}
-            element={route.getPageElement?.()}>
+            element={route.getPageElement?.()}
+          >
             {route.children &&
               route.children.length > 0 &&
               route.children.map((child) => {
