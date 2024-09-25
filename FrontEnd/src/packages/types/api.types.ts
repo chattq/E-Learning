@@ -4,33 +4,11 @@ export interface ApiResponse<T> {
   message?: string;
 }
 export interface UploadedFile {
-  FileId: string;
-  NodeID: string;
-  NetworkID: string;
-  SolutionCode: string;
-  FileUrlLocal: string;
-  FileUrlFS: string;
-  FileFullName: string;
-  FileType: string;
+  FileName: string;
   FileSize: number;
-  FileContent: string;
-  RefNo: string;
-  RefType: string;
-  FileIdDelete: string;
-  CreateDTimeUTC: string;
-  CreateBy: string;
-  LUDTimeUTC: string;
-  LUBy: string;
-  UpdDTimeUTC: string;
-  UpdBy: string;
-  DeleteDTimeUTC: string;
-  DeleteBy: string;
-  FlagIsDeleted: string;
-  FlagIsRecycle: string;
-  LogLUDTimeUTC: string;
-  LogLUBy: string;
-  isUploading?: boolean;
-  Idx?: any;
+  FileType: string;
+  FileUrl: string;
+  TimeUpload: string;
 }
 
 export interface CategoryResponse {

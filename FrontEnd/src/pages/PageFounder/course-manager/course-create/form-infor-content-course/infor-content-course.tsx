@@ -24,13 +24,13 @@ import { nanoid } from "nanoid";
 
 export const InforContentCourse = forwardRef(({}, ref: any) => {
   const [form] = Form.useForm();
-  const [value, setValue] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
+  const [uploadStates, setUploadStates] = useState({});
 
   const success = () => {
     messageApi.open({
       type: "success",
-      content: "Xóa bài công",
+      content: "Xóa bài học thành công!",
     });
   };
   const modules = {
@@ -58,6 +58,7 @@ export const InforContentCourse = forwardRef(({}, ref: any) => {
   return (
     <div className="mt-5">
       <Form
+        ref={ref}
         layout="horizontal"
         // wrapperCol={{ span: 18 }}
         colon={true}
@@ -75,6 +76,7 @@ export const InforContentCourse = forwardRef(({}, ref: any) => {
                   TypeLesson: "upload",
                   PublicMode: false,
                   LinkLesson: "",
+                  LinkVideo: "",
                   File: "",
                   Remark: "",
                 },
@@ -96,7 +98,13 @@ export const InforContentCourse = forwardRef(({}, ref: any) => {
                         labelCol={{ span: 6 }}
                         wrapperCol={{ span: 18 }}
                         name={[field.name, "ChapterTitle"]}
-                        className="TitileCourse flex-1">
+                        className="TitileCourse flex-1"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Tiêu đề chương học không được để trống!",
+                          },
+                        ]}>
                         <Input
                           className="mr-2 "
                           placeholder={`Nhập tiêu đề chương  ${index + 1}`}
@@ -128,7 +136,14 @@ export const InforContentCourse = forwardRef(({}, ref: any) => {
                                       labelCol={{ span: 3 }}
                                       wrapperCol={{ span: 18 }}
                                       label={`Tên bài học ${index + 1}:`}
-                                      name={[subField.name, "LessonName"]}>
+                                      name={[subField.name, "LessonName"]}
+                                      rules={[
+                                        {
+                                          required: true,
+                                          message:
+                                            "Tiêu đề chương học không được để trống!",
+                                        },
+                                      ]}>
                                       <Input />
                                     </Form.Item>
                                     <Form.Item
@@ -158,7 +173,7 @@ export const InforContentCourse = forwardRef(({}, ref: any) => {
                                         currentValues.items?.[field.name]
                                           ?.list?.[subField.name]?.TypeLesson
                                       }>
-                                      {({ getFieldValue }) => {
+                                      {({ getFieldValue, setFieldsValue }) => {
                                         const selectedOption = getFieldValue([
                                           "items",
                                           field.name,
@@ -176,10 +191,53 @@ export const InforContentCourse = forwardRef(({}, ref: any) => {
                                               labelCol={{ span: 3 }}
                                               wrapperCol={{ span: 18 }}
                                               label="Upload video:"
-                                              name={[subField.name, "upload"]}>
+                                              name={[
+                                                subField.name,
+                                                "LinkVideo",
+                                              ]}
+                                              rules={[
+                                                {
+                                                  required: true,
+                                                  message: "Chưa upload video",
+                                                },
+                                              ]}>
                                               <UploadFileCustom
                                                 multiple={false}
                                                 maxFileUpload={1}
+                                                getDataFile={(data) => {
+                                                  if (data) {
+                                                    setFieldsValue({
+                                                      ["items"]: {
+                                                        ...getFieldValue(
+                                                          "items"
+                                                        ),
+                                                        [field.name]: {
+                                                          ...getFieldValue([
+                                                            "items",
+                                                            field.name,
+                                                          ]),
+                                                          list: {
+                                                            ...getFieldValue([
+                                                              "items",
+                                                              field.name,
+                                                              "list",
+                                                            ]),
+                                                            [subField.name]: {
+                                                              ...getFieldValue([
+                                                                "items",
+                                                                field.name,
+                                                                "list",
+                                                                subField.name,
+                                                              ]),
+                                                              LinkVideo:
+                                                                data?.FileUrl, // Cập nhật giá trị vào form
+                                                            },
+                                                          },
+                                                        },
+                                                      },
+                                                    });
+                                                  }
+                                                }}
                                               />
                                             </Form.Item>
 
@@ -188,7 +246,17 @@ export const InforContentCourse = forwardRef(({}, ref: any) => {
                                               labelCol={{ span: 3 }}
                                               wrapperCol={{ span: 18 }}
                                               label="Link:"
-                                              name={[subField.name, "link"]}>
+                                              name={[
+                                                subField.name,
+                                                "LinkLesson",
+                                              ]}
+                                              rules={[
+                                                {
+                                                  required: true,
+                                                  message:
+                                                    "Link khóa học không được để trống",
+                                                },
+                                              ]}>
                                               <Input />
                                             </Form.Item>
                                           </>
@@ -226,8 +294,6 @@ export const InforContentCourse = forwardRef(({}, ref: any) => {
                                       <ReactQuill
                                         modules={modules}
                                         theme="snow"
-                                        value={value}
-                                        onChange={setValue}
                                       />
                                     </Form.Item>
                                   </div>
@@ -259,6 +325,7 @@ export const InforContentCourse = forwardRef(({}, ref: any) => {
                                   TypeLesson: "upload",
                                   PublicMode: false,
                                   LinkLesson: "",
+                                  LinkVideo: "",
                                   File: "",
                                   Remark: "",
                                 })

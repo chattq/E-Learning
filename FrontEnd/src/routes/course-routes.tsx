@@ -4,6 +4,7 @@ import Payment from "../pages/PageUser/Payment/Payment";
 import CartPage from "../pages/Cart-page/Cart-page";
 import CourseRoom from "../pages/PageUser/Courses/course-online/CourseRoom";
 import Course_Offline_Room from "../pages/PageUser/Courses/course-offline/course-offline-room/course-offline-room";
+import App from "../pages/TestANTD/test-antd";
 
 export const courseRoutes: RouteItem[] = [
   {
@@ -45,5 +46,13 @@ export const courseRoutes: RouteItem[] = [
     mainMenuKey: "cart",
     permissionCode: "",
     getPageElement: () => <CartPage />,
+  },
+  {
+    key: "test",
+    path: "/testAntd",
+    mainMenuTitle: "",
+    mainMenuKey: "",
+    permissionCode: "",
+    getPageElement: () => <App />,
   },
 ];

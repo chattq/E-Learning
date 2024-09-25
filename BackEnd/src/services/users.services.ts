@@ -80,6 +80,13 @@ class UserService {
   async logout(user_id: string) {
     // return await userModel.logoutQuery(user_id)
   }
+  async getProfile(user_id: string) {
+    return await user.findOne({
+      where: {
+        user_id: user_id.toUpperCase()
+      }
+    })
+  }
 }
 const userService = new UserService()
 export default userService

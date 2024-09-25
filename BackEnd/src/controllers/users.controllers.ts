@@ -82,7 +82,21 @@ class UserController {
     // })
   }
   async getMeController(req: Request, res: Response, next: NextFunction) {
-    // console.log(req.decoded_authorization as TokenPayload)
+    const userId = (req.decoded_authorization as TokenPayload).user_id
+    const result = await userService.getProfile(userId)
+
+    return res.json(
+      new ResultsReturned({
+        isSuccess: true,
+        message: 'Get profile successfully',
+        data: {
+          id: result?.dataValues.user_id,
+          email: result?.dataValues.user_email,
+          name: result?.dataValues.user_name,
+          avatar: result?.dataValues.user_avatar
+        }
+      })
+    )
   }
 }
 const userController = new UserController()

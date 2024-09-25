@@ -5,6 +5,7 @@ import {
   Cascader,
   CascaderProps,
   Form,
+  FormInstance,
   Input,
   InputNumber,
   Radio,
@@ -100,7 +101,11 @@ export const InforBaseCourse = forwardRef(
             { required: true, message: "Ảnh khóa học không được để trống!" },
           ]}>
           <Space size={30} align="center">
-            <UploadFileCustom />
+            <UploadFileCustom
+              getDataFile={(data) => {
+                ref.current.setFieldValue("ImageCourse", data?.FileUrl);
+              }}
+            />
             <div>
               <ul className="list-disc text-[#999] text-[12px]">
                 <li>{`Tải lên hình ảnh 1:1.`}</li>
