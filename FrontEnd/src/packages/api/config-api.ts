@@ -43,7 +43,7 @@ export const createApiBase = () => {
           // console.log(data);
           setAccessTokenToLS(data.data.Access_token);
 
-          localStorage.setItem("profile", JSON.stringify(data.data.InforUse));
+          localStorage.setItem("profile", JSON.stringify(data.data.InforUser));
         }
         return result;
       } else {

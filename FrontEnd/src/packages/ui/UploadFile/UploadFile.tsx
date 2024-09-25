@@ -1,20 +1,20 @@
-import { forwardRef, ReactNode, useState } from "react";
-import {
-  LoadingOutlined,
-  PlusOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
-import { Button, Modal, Spin, Upload } from "antd";
+import { forwardRef, ReactNode, useImperativeHandle, useState } from "react";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Modal, Spin, Upload } from "antd";
 import type { UploadFile, UploadProps } from "antd";
 import "./UploadFile.scss";
 import { useConfigAPI } from "../../api/config-api";
 import { UploadListType } from "antd/es/upload/interface";
+import { UploadedFile } from "../../types/api.types";
+import { nanoid } from "nanoid";
 
 type UploadFileCustomProps = {
   multiple?: boolean;
   maxFileUpload?: number;
   listType?: UploadListType;
   customButtonUpload?: ReactNode;
+  FileList?: UploadedFile[];
+  getDataFile?: ((data?: UploadedFile) => void) | undefined;
 };
 export const UploadFileCustom = forwardRef(
   (
@@ -23,21 +23,30 @@ export const UploadFileCustom = forwardRef(
       maxFileUpload = 1,
       listType = "picture-card",
       customButtonUpload,
+      FileList = [],
+      getDataFile,
     }: UploadFileCustomProps,
     ref: any
   ) => {
     const api = useConfigAPI();
     const [loading, setLoading] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
-    const [fileList, setFileList] = useState<UploadFile[] | any>([]);
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [previewVisible, setPreviewVisible] = useState(false);
     const [previewTitle, setPreviewTitle] = useState("");
     const [previewType, setPreviewType] = useState("");
     const [previewUrl, setPreviewUrl] = useState("");
+    const [dataFile, setDataFile] = useState<UploadedFile | any>({});
 
     const handleCancel = () => setPreviewOpen(false);
+    useImperativeHandle(ref, () => ({
+      getValue: () => {
+        return dataFile;
+      },
+    }));
 
-    const handlePreview = async (file) => {
+    const handlePreview = async (file: any) => {
+      console.log(76, file);
       if (!file.url && !file.preview) {
         file.preview = URL.createObjectURL(file.originFileObj);
       }
@@ -50,10 +59,26 @@ export const UploadFileCustom = forwardRef(
       setPreviewVisible(true);
     };
 
-    const handleChange: UploadProps["onChange"] = ({
+    const handleChange: UploadProps["onChange"] = async ({
       fileList: newFileList,
     }) => {
-      setFileList(newFileList);
+      setLoading(true);
+      const respone = await api.File_Upload(
+        newFileList[0].originFileObj as File
+      );
+      if (respone.isSuccess) {
+        const newFile = {
+          uid: nanoid(), // UID của file mới upload
+          name: respone.data?.FileName, // Tên file mới
+          status: "done", // Trạng thái file
+          url: respone.data?.FileUrl, // URL trả về từ API sau khi upload
+        };
+
+        setFileList((prevList: any) => [...prevList, newFile]);
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
     };
 
     const uploadButton = (
@@ -62,6 +87,8 @@ export const UploadFileCustom = forwardRef(
         <div style={{ marginTop: 8 }}>Upload</div>
       </button>
     );
+
+    console.log(75, fileList);
 
     return (
       <>
@@ -73,18 +100,27 @@ export const UploadFileCustom = forwardRef(
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             "Content-Type": "multipart/form-data",
           }}
-          customRequest={async ({ file, onSuccess, onError }: any) => {
-            setLoading(true);
-            // Xử lý việc upload file bằng axios
-            const respone = await api.File_Upload(file as File);
-            console.log(80, respone);
-            if (respone.isSuccess) {
-              setLoading(false);
-              onSuccess(respone.data);
-            } else {
-              setLoading(false);
-            }
-          }}
+          // customRequest={async ({ file, onSuccess, onError }: any) => {
+          //   setLoading(true);
+          //   const respone = await api.File_Upload(file as File);
+
+          //   if (respone.isSuccess) {
+          //     const newFile = {
+          //       uid: nanoid(), // UID của file mới upload
+          //       name: respone.data?.FileName, // Tên file mới
+          //       status: "done", // Trạng thái file
+          //       url: respone.data?.FileUrl, // URL trả về từ API sau khi upload
+          //     };
+
+          //     setFileList((prevList: any) => [...prevList, newFile]);
+          //     setLoading(false);
+          //     getDataFile?.(respone.data);
+          //     setDataFile(respone.data);
+          //     onSuccess(respone.data?.FileUrl);
+          //   } else {
+          //     setLoading(false);
+          //   }
+          // }}
           multiple={multiple}
           onPreview={handlePreview}
           showUploadList={!loading}

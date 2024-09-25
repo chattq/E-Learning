@@ -13,6 +13,7 @@ import { useCallback, useRef, useState } from "react";
 export default function CourseCreate() {
   const [CourseType, setCourseType] = useState("");
   const InforBaseCourseRef = useRef<FormInstance>();
+  const InforContentCourseRef = useRef<FormInstance>();
   const onChangeCourseType = useCallback(
     (value: any) => {
       setCourseType(value);
@@ -21,13 +22,13 @@ export default function CourseCreate() {
   );
   const hanldeSaveActive = async () => {
     try {
-      const valuesA = await InforBaseCourseRef.current?.validateFields();
-      // const valuesB = await formRefB.current?.validateFields();
+      // const valuesA = await InforBaseCourseRef.current?.validateFields();
+      const valuesB = await InforContentCourseRef.current?.validateFields();
 
       // Gộp dữ liệu từ Form A và Form B
       const combinedData = {
-        ...valuesA,
-        // ...valuesB,
+        // ...valuesA,
+        ...valuesB,
       };
 
       console.log("Combined Data:", combinedData);
@@ -61,7 +62,9 @@ export default function CourseCreate() {
           visible={CourseType === "online" ? true : false}
           title={"Nội dung khóa học"}
           textNoChild={"Có thể điều chỉnh sau khi chọn mô hình khóa học"}>
-          {CourseType !== "" && <InforContentCourse />}
+          {CourseType !== "" && (
+            <InforContentCourse ref={InforContentCourseRef} />
+          )}
         </CardLayout>
 
         <div className="h-[63px]"></div>
