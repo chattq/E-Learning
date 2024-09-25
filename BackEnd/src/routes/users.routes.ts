@@ -5,7 +5,8 @@ import {
   emailVerifyTokenValidator,
   loginValidator,
   refreshTokenValidator,
-  registerValidator
+  registerValidator,
+  sendEmailValidator
 } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -19,6 +20,7 @@ usersRouter.post(
   refreshTokenValidator,
   wrapRequestHandler(userController.logoutController)
 )
+usersRouter.post('/sendEmail', sendEmailValidator, wrapRequestHandler(userController.sendEmail))
 /**
  * Description:
  * Path: /verify-email
