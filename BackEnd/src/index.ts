@@ -15,7 +15,7 @@ const app = express()
 const httpServer = createServer(app)
 
 const port = process.env.PORT
-initFolder()
+// initFolder()
 
 app.use(express.urlencoded({ extended: true }))
 

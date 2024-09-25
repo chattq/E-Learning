@@ -7,6 +7,8 @@ import { ResultsReturned } from '~/utils/results-api'
 import user from '~/models/user.models'
 import { TokenType } from '~/constants/enums'
 import { JwtPayload } from 'jsonwebtoken'
+import nodemailer from 'nodemailer'
+require('dotenv').config()
 
 export interface RegisterReqBody {
   name?: string
@@ -80,6 +82,34 @@ class UserController {
     //   message: USERS_MESSAGES.EMAIL_VERIFY_TOKEN_IS_REQUIRED,
     //   data: result
     // })
+  }
+  async sendEmail(req: Request, res: Response) {
+    const { subject, html, text, MailTo } = req.body
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // true for port 465, false for other ports
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    })
+
+    const info = await transporter.sendMail({
+      from: '"Hệ thống E-Learning" <baotuyet927@gmail.com>', // người gửi và email người gửi
+      to: MailTo, // // người nhận
+      subject: subject, // tiêu đề
+      text: text, // plain text body
+      html: html, // nội dung
+      attachments: []
+    })
+    return res.json(
+      new ResultsReturned({
+        isSuccess: true,
+        message: 'Gửi mail thành công',
+        data: info.messageId
+      })
+    )
   }
   async getMeController(req: Request, res: Response, next: NextFunction) {
     const userId = (req.decoded_authorization as TokenPayload).user_id

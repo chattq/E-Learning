@@ -252,6 +252,21 @@ export const emailVerifyTokenValidator = validate(
     ['body']
   )
 )
+export const sendEmailValidator = validate(
+  checkSchema(
+    {
+      MailTo: {
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED
+        },
+        in: ['body'],
+        isEmail: true,
+        trim: true
+      }
+    },
+    ['body']
+  )
+)
 
 // export const forgotPasswordValidator = validate(
 //   checkSchema(
