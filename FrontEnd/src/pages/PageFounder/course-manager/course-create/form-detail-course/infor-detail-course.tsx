@@ -3,8 +3,9 @@ import { Button, Card, Form, Input, Space, Typography } from "antd";
 import { useWindowSize } from "../../../../../packages/hooks/useWindowSize";
 import TextArea from "antd/es/input/TextArea";
 import "./infor-detail-course.scss";
+import { forwardRef } from "react";
 
-export default function InforDetailCourse() {
+export const InforDetailCourse = forwardRef(({}, ref: any) => {
   const [form] = Form.useForm();
   const windowSize = useWindowSize();
   return (
@@ -13,11 +14,12 @@ export default function InforDetailCourse() {
         Kiến thức mà học viên sẽ đạt được
       </div>
       <Form
+        ref={ref}
         form={form}
         name="dynamic_form_complex"
         autoComplete="off"
-        initialValues={{ items: [{}] }}>
-        <Form.List name="items">
+        initialValues={{ Knowledge: [{}] }}>
+        <Form.List name="Knowledge">
           {(fields, { add, remove }) => (
             <>
               <div>
@@ -67,4 +69,4 @@ export default function InforDetailCourse() {
       </Form>
     </div>
   );
-}
+});

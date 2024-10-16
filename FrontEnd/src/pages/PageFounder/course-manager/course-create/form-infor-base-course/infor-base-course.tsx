@@ -27,6 +27,7 @@ type InforBaseCourseProps = {
 export const InforBaseCourse = forwardRef(
   ({ onChangeCourseType }: InforBaseCourseProps, ref: any) => {
     const api = useConfigAPI();
+    const [form] = Form.useForm();
     const { data: Categories_GetAllActive, isLoading } = useQuery({
       queryKey: ["Categories_GetAllActive"],
       queryFn: async () => {
@@ -102,8 +103,9 @@ export const InforBaseCourse = forwardRef(
           ]}>
           <Space size={30} align="center">
             <UploadFileCustom
+              accept="image/*"
               getDataFile={(data) => {
-                ref.current.setFieldValue("ImageCourse", data?.FileUrl);
+                ref.current.setFieldValue("ImageCourse", data?.url);
               }}
             />
             <div>
@@ -119,7 +121,12 @@ export const InforBaseCourse = forwardRef(
           label="Video intro"
           className="labelCustom">
           <Space size={30} align="center">
-            <UploadFileCustom />
+            <UploadFileCustom
+              accept="video/*"
+              getDataFile={(data) => {
+                ref.current.setFieldValue("VideoIntroCourse", data?.url);
+              }}
+            />
             <div>
               <ul className="list-disc text-[#999] text-[12px]">
                 <li>Kích thước: Tối đa 30Mb</li>
@@ -202,11 +209,11 @@ export const InforBaseCourse = forwardRef(
               message: "Tổng quan khóa học không được để trống",
             },
           ]}>
-          <ReactQuill
-            modules={modules}
-            theme="snow"
-            value={value}
-            onChange={setValue}
+          <TextArea
+            style={{
+              width: "100%",
+              height: 100,
+            }}
           />
         </Form.Item>
       </Form>
