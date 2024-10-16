@@ -1,6 +1,11 @@
 import { forwardRef, ReactNode, useImperativeHandle, useState } from "react";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Modal, Spin, Upload } from "antd";
+import {
+  DeleteOutlined,
+  EyeOutlined,
+  LoadingOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { message, Modal, Spin, Upload } from "antd";
 import type { UploadFile, UploadProps } from "antd";
 import "./UploadFile.scss";
 import { useConfigAPI } from "../../api/config-api";
@@ -13,8 +18,9 @@ type UploadFileCustomProps = {
   maxFileUpload?: number;
   listType?: UploadListType;
   customButtonUpload?: ReactNode;
+  accept?: string;
   FileList?: UploadedFile[];
-  getDataFile?: ((data?: UploadedFile) => void) | undefined;
+  getDataFile: (data: { url: string | any }) => void;
 };
 export const UploadFileCustom = forwardRef(
   (
@@ -25,6 +31,7 @@ export const UploadFileCustom = forwardRef(
       customButtonUpload,
       FileList = [],
       getDataFile,
+      accept,
     }: UploadFileCustomProps,
     ref: any
   ) => {
@@ -32,40 +39,29 @@ export const UploadFileCustom = forwardRef(
     const [loading, setLoading] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [fileList, setFileList] = useState<UploadFile[]>([]);
-    const [previewVisible, setPreviewVisible] = useState(false);
-    const [previewTitle, setPreviewTitle] = useState("");
     const [previewType, setPreviewType] = useState("");
     const [previewUrl, setPreviewUrl] = useState("");
-    const [dataFile, setDataFile] = useState<UploadedFile | any>({});
+    const [messageApi, contextHolder] = message.useMessage();
 
     const handleCancel = () => setPreviewOpen(false);
     useImperativeHandle(ref, () => ({
       getValue: () => {
-        return dataFile;
+        return fileList;
       },
     }));
 
     const handlePreview = async (file: any) => {
-      console.log(76, file);
-      if (!file.url && !file.preview) {
-        file.preview = URL.createObjectURL(file.originFileObj);
+      setPreviewOpen(true);
+      const type = file.name.includes(".mp4");
+      setPreviewUrl(file.url);
+      if (type) {
+        setPreviewType("video");
       }
-
-      setPreviewType(file.type.startsWith("video") ? "video" : "image");
-      setPreviewUrl(file.url || file.preview);
-      setPreviewTitle(
-        file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-      );
-      setPreviewVisible(true);
     };
 
-    const handleChange: UploadProps["onChange"] = async ({
-      fileList: newFileList,
-    }) => {
+    const handleUpload = async (file: any) => {
       setLoading(true);
-      const respone = await api.File_Upload(
-        newFileList[0].originFileObj as File
-      );
+      const respone = await api.File_Upload(file);
       if (respone.isSuccess) {
         const newFile = {
           uid: nanoid(), // UID của file mới upload
@@ -73,7 +69,8 @@ export const UploadFileCustom = forwardRef(
           status: "done", // Trạng thái file
           url: respone.data?.FileUrl, // URL trả về từ API sau khi upload
         };
-
+        message.success(`${respone.data?.FileName} uploaded successfully.`);
+        getDataFile({ url: respone.data?.FileUrl });
         setFileList((prevList: any) => [...prevList, newFile]);
         setLoading(false);
       } else {
@@ -87,47 +84,35 @@ export const UploadFileCustom = forwardRef(
         <div style={{ marginTop: 8 }}>Upload</div>
       </button>
     );
-
-    console.log(75, fileList);
+    const handleRemove = (file: UploadFile) => {
+      setFileList((prevList) =>
+        prevList.filter((item) => item.uid !== file.uid)
+      );
+    };
 
     return (
       <>
         <Upload
           action={`${import.meta.env.VITE_API_DOMAIN}/medias/upload-images`}
           listType={listType}
+          accept={accept}
           fileList={fileList}
           headers={{
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             "Content-Type": "multipart/form-data",
           }}
-          // customRequest={async ({ file, onSuccess, onError }: any) => {
-          //   setLoading(true);
-          //   const respone = await api.File_Upload(file as File);
-
-          //   if (respone.isSuccess) {
-          //     const newFile = {
-          //       uid: nanoid(), // UID của file mới upload
-          //       name: respone.data?.FileName, // Tên file mới
-          //       status: "done", // Trạng thái file
-          //       url: respone.data?.FileUrl, // URL trả về từ API sau khi upload
-          //     };
-
-          //     setFileList((prevList: any) => [...prevList, newFile]);
-          //     setLoading(false);
-          //     getDataFile?.(respone.data);
-          //     setDataFile(respone.data);
-          //     onSuccess(respone.data?.FileUrl);
-          //   } else {
-          //     setLoading(false);
-          //   }
-          // }}
           multiple={multiple}
           onPreview={handlePreview}
-          showUploadList={!loading}
-          // itemRender={() => {
-          //   return <div>a</div>;
-          // }}
-          onChange={handleChange}>
+          beforeUpload={(file) => {
+            handleUpload(file); // Cập nhật tham số
+          }}
+          onRemove={handleRemove}
+          showUploadList={{
+            showRemoveIcon: true, // Hiện icon xóa
+            showPreviewIcon: true, // Hiện icon xem trước
+            previewIcon: <EyeOutlined />, // Icon xem trước
+            removeIcon: <DeleteOutlined />, // Icon xóa
+          }}>
           {loading ? (
             <Spin indicator={<LoadingOutlined spin />} />
           ) : fileList.length >= maxFileUpload ? null : customButtonUpload ? (
@@ -139,7 +124,7 @@ export const UploadFileCustom = forwardRef(
 
         <Modal
           open={previewOpen}
-          title={previewTitle}
+          title={"Xem ảnh"}
           footer={null}
           onCancel={handleCancel}>
           {previewType === "video" ? (
@@ -151,6 +136,7 @@ export const UploadFileCustom = forwardRef(
             <img alt="preview" style={{ width: "100%" }} src={previewUrl} />
           )}
         </Modal>
+        {contextHolder}
       </>
     );
   }

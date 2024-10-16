@@ -1,5 +1,5 @@
 function generateRandomChars(length: any) {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.'
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-'
   let randomChars = ''
   for (let i = 0; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * chars.length)
@@ -25,7 +25,7 @@ export const useAutoCodeGen = () => {
     const timeArray = [month, day, hours, minutes, seconds, randomChars]
     timeArray.sort(() => Math.random() - 0.5)
     const randomizedTime = timeArray.join('')
-    const code = `${year}${businessCode}${randomizedTime}`
+    const code = `${year}${seconds}${businessCode}${randomizedTime}`
     return code
   }
   return {

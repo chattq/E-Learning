@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import "./course-description.scss";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 // import ReactQuill from "react-quill";
 
-export default function CourseDescription() {
+export const CourseDescription = forwardRef(({}, ref: any) => {
   const [value, setValue] = useState("");
   const modules = {
     toolbar: [
@@ -27,6 +27,13 @@ export default function CourseDescription() {
       matchVisual: false, // Giữ nguyên định dạng của nội dung được dán
     },
   };
+  useImperativeHandle(ref, () => ({
+    getValueDescription: () => {
+      return {
+        Description: value,
+      };
+    },
+  }));
   return (
     <div className="mt-3">
       <div className="flex justify-center font-semibold mb-4 underline">
@@ -42,4 +49,4 @@ export default function CourseDescription() {
       </div>
     </div>
   );
-}
+});

@@ -15,6 +15,9 @@ import user from './user.models'
 import promotion_combo from './promotionCombo.models'
 import combo_product from './comboCourse.models'
 import buyer_course from './buyer.models'
+import course_requirement from './courseRequirment.models'
+import course_knowledge from './courseKnowledge.models'
+import course_chapter from './courseChapter.models'
 
 @Table
 class course extends Model {
@@ -46,10 +49,21 @@ class course extends Model {
   })
   course_name!: string
   @Column({
-    type: DataType.STRING(500),
-    unique: true
+    type: DataType.STRING(500)
   })
   course_desc!: string
+  @Column({
+    type: DataType.STRING(20)
+  })
+  course_type!: string
+  @Column({
+    type: DataType.STRING(20)
+  })
+  course_model!: string
+  @Column({
+    type: DataType.STRING(500)
+  })
+  course_over_view!: string
   @Column({
     type: DataType.DECIMAL(10, 1)
   })
@@ -60,12 +74,11 @@ class course extends Model {
   course_number_buyers!: number
   @Column({
     type: DataType.STRING(50),
-    defaultValue: '0'
+    defaultValue: '1'
   })
   course_active!: string
   @Column({
     type: DataType.SMALLINT,
-    allowNull: false,
     defaultValue: 1
   })
   course_comming_soon!: string
@@ -74,9 +87,17 @@ class course extends Model {
   })
   course_intro_video!: string
   @Column({
+    type: DataType.STRING
+  })
+  course_image!: string
+  @Column({
     type: DataType.STRING(100)
   })
   course_create_by!: string
+  @Column({
+    type: DataType.STRING(100)
+  })
+  course_update_by!: string
   @Column({
     type: DataType.STRING(100)
   })
@@ -92,6 +113,12 @@ class course extends Model {
   declare promotion_combos: promotion_combo[]
   @HasMany(() => buyer_course)
   buyer_courses!: buyer_course[]
+  @HasMany(() => course_requirement)
+  course_requirement!: course_requirement[]
+  @HasMany(() => course_knowledge)
+  course_knowledge!: course_knowledge[]
+  @HasMany(() => course_chapter)
+  course_chapter!: course_chapter[]
 }
 
 export default course

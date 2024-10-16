@@ -88,6 +88,14 @@ export const adminRoutes: RouteItem[] = [
         permissionCode: "",
         getPageElement: () => <CourseCreate />,
       },
+      {
+        key: "CourseCombo",
+        path: "admin/CourseCombo",
+        subMenuTitle: "Combo khóa học",
+        mainMenuKey: "CourseCombo",
+        permissionCode: "",
+        getPageElement: () => <></>,
+      },
     ],
   },
   {
