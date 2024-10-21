@@ -1,4 +1,5 @@
 import { Request } from 'express'
+import { Op } from 'sequelize'
 import category from '~/models/category.models'
 import course_category from '~/models/categoryCourse.models'
 import course from '~/models/course.models'
@@ -100,7 +101,6 @@ class CoursesService {
         course_id: courseId
       }
     })
-    console.log(103, courseChapter)
 
     const formatData = (data: any) => {
       const result: any = []
@@ -149,6 +149,48 @@ class CoursesService {
   async getListCourse() {
     const result = await course.findAll()
     return result
+  }
+  async getCourseByCode(code: string) {
+    const InforCourse = await course.findOne({
+      where: { course_id: code },
+      include: [
+        {
+          model: course_chapter,
+          include: [course_lesson] // Bao gồm cả Lesson trong Chapter
+        },
+        {
+          model: course_requirement
+        },
+        {
+          model: course_knowledge
+        }
+      ]
+    })
+
+    return {
+      InforCourse: InforCourse
+    }
+  }
+  async deleteCourseByCode(code: string) {
+    // Xóa các lessons liên quan thông qua chapters
+    await course_lesson.destroy({
+      where: {
+        course_chapter_code: {
+          [Op.in]: (await course_chapter.findAll({ where: { course_id: code } })).map(
+            (chapter) => chapter.course_chapter_code
+          )
+          //SELECT * FROM "Courses" WHERE "id" IN (1, 2, 3);
+        }
+      }
+    })
+
+    // Xóa các chapters liên quan
+    await course_chapter.destroy({ where: { course_id: code } })
+
+    // Xóa khóa học
+    await course.destroy({ where: { course_id: code } })
+
+    return null
   }
 }
 
