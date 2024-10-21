@@ -23,6 +23,25 @@ class CourseController {
       data: results
     })
   }
+  async GetCourseByCode(req: Request, res: Response) {
+    const { CourseCode } = req.body
+    const results = await coursesService.getCourseByCode(CourseCode)
+    return res.json({
+      isSuccess: true,
+      message: 'Get courses successfully',
+      data: results
+    })
+  }
+  async DeleteCourseByCode(req: Request, res: Response) {
+    const { CourseCode } = req.body
+    await coursesService.deleteCourseByCode(CourseCode)
+
+    return res.json({
+      isSuccess: true,
+      message: 'Delete courses successfully',
+      data: null
+    })
+  }
 }
 const courseController = new CourseController()
 export default courseController
