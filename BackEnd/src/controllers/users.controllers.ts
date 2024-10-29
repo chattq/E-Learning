@@ -43,23 +43,20 @@ class UserController {
   async loginController(req: Request, res: Response) {
     const { email, password } = req.body
     const result = await userService.login(email)
-    const inforUser = await user.findOne({
-      where: {
-        user_email: email.toUpperCase()
-      }
-    })
+
     return res.json(
       new ResultsReturned({
         isSuccess: true,
         message: 'Login successful',
         data: {
           InforUser: {
-            id: inforUser?.dataValues.user_id,
-            email: inforUser?.dataValues.user_email,
-            name: inforUser?.dataValues.user_name,
-            avatar: inforUser?.dataValues.user_avatar
+            id: result.inforUser?.dataValues.user_id,
+            email: result.inforUser?.dataValues.user_email,
+            name: result.inforUser?.dataValues.user_name,
+            avatar: result.inforUser?.dataValues.user_avatar
           },
-          ...result
+          Access_token: result.Access_token,
+          Refresh_token: result.Refresh_token
         }
       })
     )
@@ -77,7 +74,6 @@ class UserController {
   }
   async emailVerifyController(req: Request, res: Response) {
     const userId = (req.decoded_authorization as TokenPayload).user_id
-    console.log(80, userId)
     const result = await userService.verifyEmail(userId)
     return res.json({
       isSuccess: true,
