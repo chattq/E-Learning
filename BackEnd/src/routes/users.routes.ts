@@ -28,7 +28,7 @@ usersRouter.post('/sendEmail', sendEmailValidator, wrapRequestHandler(userContro
  * Header:
  * Body: email_verify_token
  */
-usersRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(userController.logoutController))
+usersRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(userController.emailVerifyController))
 
 /**
  * Description: verify email when user client click on the link in email

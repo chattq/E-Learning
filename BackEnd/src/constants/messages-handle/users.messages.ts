@@ -20,5 +20,5 @@ export const USERS_MESSAGES = {
   ACCESS_TOKEN_IS_NOT_VALID: 'Access token is not valid',
   REFRESH_TOKEN_IS_NOT_EXIST: 'Refresh token is not exist',
   LOGOUT_SUCCESS: 'Logout successfully',
-  EMAIL_VERIFY_TOKEN_IS_REQUIRED: 'Email verify token is required'
+  EMAIL_VERIFY_TOKEN_IS_REQUIRED: 'Tài khoản chưa được xác thực, vui lòng kiểm tra email đã đăng ký!'
 } as const
