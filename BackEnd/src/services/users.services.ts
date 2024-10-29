@@ -94,10 +94,17 @@ class UserService {
     }
   }
   async login(user_id: string) {
+    const inforUser = await user.findOne({
+      where: {
+        user_email: user_id.toUpperCase()
+      }
+    })
+    console.log(102, inforUser)
     const [Access_token, Refresh_token] = await this.signAccessAndRefreshToken({
       user_id: user_id.toUpperCase(),
-      verify: UserVerifyStatus.Unverified
+      verify: inforUser?.dataValues.verify
     })
+
     await refresh_token.update(
       { token: Refresh_token },
       {
@@ -108,7 +115,8 @@ class UserService {
     )
     return {
       Access_token,
-      Refresh_token
+      Refresh_token,
+      inforUser
     }
   }
   async logout(user_id: string) {
@@ -133,7 +141,7 @@ class UserService {
     // Trả về user đã cập nhật
 
     const [token] = await Promise.all([
-      this.signAccessAndRefreshToken({ user_id, verify: UserVerifyStatus.Verified }),
+      this.signAccessAndRefreshToken({ user_id: user_id.toUpperCase(), verify: UserVerifyStatus.Verified }),
       await user.update(updatedData, {
         where: {
           user_id: user_id.toUpperCase()
