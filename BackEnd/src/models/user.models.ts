@@ -65,8 +65,7 @@ class user extends Model {
   })
   user_bio!: string
   @Column({
-    type: DataType.STRING(50),
-    defaultValue: '1'
+    type: DataType.ENUM('1', '0', '2')
   })
   user_role!: string
   @Column({

@@ -6,7 +6,6 @@ import refresh_token from '~/models/refreshToken.models'
 import user from '~/models/user.models'
 import { hasPassword } from '~/utils/crypto'
 import { sendVerifyRegisterEmail } from '~/utils/email'
-
 import { signToken, verifyToken } from '~/utils/jwt'
 import { useGetTime } from '~/utils/useGetTime'
 const { getTimeMoment } = useGetTime()
@@ -14,11 +13,12 @@ const { getTimeMoment } = useGetTime()
 config()
 
 class UserService {
-  private signAccessToken(user_id: string) {
+  private signAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     return signToken({
       payload: {
         user_id,
-        token_type: TokenType.AccessToken
+        token_type: TokenType.AccessToken,
+        verify
       },
       privateKey: process.env.JWT_SECRET_ACCESS_TOKEN as string,
       options: {
@@ -26,11 +26,12 @@ class UserService {
       }
     })
   }
-  private signRefreshToken(user_id: string) {
+  private signRefreshToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     return signToken({
       payload: {
         user_id,
-        token_type: TokenType.RefreshToken
+        token_type: TokenType.RefreshToken,
+        verify
       },
       privateKey: process.env.JWT_SECRET_REFRESH_TOKEN as string,
       options: {
@@ -58,11 +59,11 @@ class UserService {
     })
   }
 
-  private signAccessAndRefreshToken(user_id: string) {
-    return Promise.all([this.signAccessToken(user_id), this.signRefreshToken(user_id)])
+  private signAccessAndRefreshToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
+    return Promise.all([this.signAccessToken({ user_id, verify }), this.signRefreshToken({ user_id, verify })])
   }
   async registerUser(payload: RegisterReqBody) {
-    const { email, name, password } = payload
+    const { email, name, password, role } = payload
     const email_verify_token = await this.signEmailVerifyToken({
       user_id: email.toUpperCase(),
       verify: UserVerifyStatus.Unverified
@@ -73,23 +74,30 @@ class UserService {
       user_email: email.toUpperCase(),
       user_password: hasPassword(password),
       user_create_at: getTimeMoment(),
-      email_verify_token: email_verify_token
+      email_verify_token: email_verify_token,
+      user_role: role
     }
     await user.create(dataCreateUser)
-    const [Access_token, Refresh_tokens] = await this.signAccessAndRefreshToken(email)
+    const [Access_token, Refresh_tokens] = await this.signAccessAndRefreshToken({
+      user_id: email,
+      verify: UserVerifyStatus.Unverified
+    })
     await refresh_token.create({
       user_id: email.toUpperCase(),
       token: Refresh_tokens,
       create_at: getTimeMoment()
     })
-    // await sendVerifyRegisterEmail(payload.email, email_verify_token)
+    await sendVerifyRegisterEmail(payload.email, email_verify_token)
     return {
       Access_token,
       Refresh_tokens
     }
   }
   async login(user_id: string) {
-    const [Access_token, Refresh_token] = await this.signAccessAndRefreshToken(user_id.toUpperCase())
+    const [Access_token, Refresh_token] = await this.signAccessAndRefreshToken({
+      user_id: user_id.toUpperCase(),
+      verify: UserVerifyStatus.Unverified
+    })
     await refresh_token.update(
       { token: Refresh_token },
       {
@@ -114,29 +122,41 @@ class UserService {
     })
   }
   async verifyEmail(user_id: string) {
-    // // Tạo giá trị cập nhật
-    // // MongoDB cập nhật giá trị
-    // const [token] = await Promise.all([
-    //   this.signAccessAndRefreshToken({ user_id, verify: UserVerifyStatus.Verified }),
-    //   databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
-    //     {
-    //       $set: {
-    //         email_verify_token: '',
-    //         verify: UserVerifyStatus.Verified,
-    //         updated_at: '$$NOW'
-    //       }
-    //     }
-    //   ])
-    // ])
-    // const [access_token, refresh_token] = token
-    // const { iat, exp } = await this.decodeRefreshToken(refresh_token)
-    // await databaseService.refreshTokens.insertOne(
-    //   new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token, iat, exp })
-    // )
-    // return {
-    //   access_token,
-    //   refresh_token
-    // }
+    // Tìm user theo ID
+    const updatedData: Partial<user> = {
+      email_verify_token: '',
+      verify: UserVerifyStatus.Verified
+    }
+
+    // Cập nhật thông tin user
+
+    // Trả về user đã cập nhật
+
+    const [token] = await Promise.all([
+      this.signAccessAndRefreshToken({ user_id, verify: UserVerifyStatus.Verified }),
+      await user.update(updatedData, {
+        where: {
+          user_id: user_id.toUpperCase()
+        }
+      })
+    ])
+
+    const [access_token, refresh_tokens] = token
+    const { iat, exp } = await this.decodeRefreshToken(refresh_tokens)
+    await refresh_token.update(
+      {
+        token: refresh_tokens
+      },
+      {
+        where: {
+          user_id: user_id.toUpperCase()
+        }
+      }
+    )
+    return {
+      access_token,
+      refresh_tokens
+    }
   }
 }
 const userService = new UserService()

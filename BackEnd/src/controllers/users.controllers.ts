@@ -16,6 +16,7 @@ export interface RegisterReqBody {
   password: string
   confirm_password?: string
   date_of_birth?: string
+  role?: string
 }
 
 export interface TokenPayload extends JwtPayload {
@@ -25,9 +26,9 @@ export interface TokenPayload extends JwtPayload {
 
 class UserController {
   async registerController(req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) {
-    const { name, email, password } = req.body
+    const { name, email, password, role } = req.body
 
-    const result = await userService.registerUser({ name, email, password })
+    const result = await userService.registerUser({ name, email, password, role })
     return res.json(
       new ResultsReturned({
         isSuccess: true,
@@ -75,13 +76,14 @@ class UserController {
     )
   }
   async emailVerifyController(req: Request, res: Response) {
-    const { email_verify_token } = req.body
-    // const result = await userService.emailVerify(token)
-    // return res.json({
-    //   isSuccess: true,
-    //   message: USERS_MESSAGES.EMAIL_VERIFY_TOKEN_IS_REQUIRED,
-    //   data: result
-    // })
+    const userId = (req.decoded_authorization as TokenPayload).user_id
+    console.log(80, userId)
+    const result = await userService.verifyEmail(userId)
+    return res.json({
+      isSuccess: true,
+      message: 'Xác thực thành công!',
+      data: result
+    })
   }
   async sendEmail(req: Request, res: Response) {
     const { subject, html, text, MailTo } = req.body
