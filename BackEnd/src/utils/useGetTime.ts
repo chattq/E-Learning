@@ -1,12 +1,15 @@
 export const useGetTime = () => {
   const today = new Date()
   const getTimeMoment = () => {
-    const day = today.getDate()
-    const month = today.getMonth() + 1 // Tháng bắt đầu từ 0
-    const year = today.getFullYear()
-    const hours = today.getHours() > 9 ? `${today.getHours()}` : `0${today.getHours()}`
-    const minutes = today.getMinutes() > 9 ? `${today.getMinutes()}` : `0${today.getMinutes()}`
-    const seconds = today.getSeconds() > 9 ? `${today.getSeconds()}` : `0${today.getSeconds()}`
+    const now = new Date()
+
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0') // Tháng 0-11
+    const day = String(now.getDate()).padStart(2, '0') // Ngày 1-31
+    const hours = String(now.getHours()).padStart(2, '0') // Giờ 0-23
+    const minutes = String(now.getMinutes()).padStart(2, '0') // Phút 0-59
+    const seconds = String(now.getSeconds()).padStart(2, '0') // Giây 0-59
+
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
   }
   const convertISO8601Full = (dateTime: string) => {

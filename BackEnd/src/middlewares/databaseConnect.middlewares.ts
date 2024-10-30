@@ -15,7 +15,7 @@ export const checkConnectionDB = async (req: Request, res: Response, next: NextF
     })
     return res.status(500).json({
       Success: false,
-      Data: {
+      data: {
         message: 'Error connecting to database',
         detail: error
       }

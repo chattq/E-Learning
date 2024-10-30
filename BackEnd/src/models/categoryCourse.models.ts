@@ -7,13 +7,15 @@ class course_category extends Model {
   @ForeignKey(() => category)
   @Column({
     type: DataType.STRING(100),
-    allowNull: false
+    allowNull: false,
+    onDelete: 'CASCADE'
   })
   category_id!: string
   @ForeignKey(() => course)
   @Column({
     type: DataType.STRING(100),
-    allowNull: false
+    allowNull: false,
+    onDelete: 'CASCADE'
   })
   course_id!: string
 }

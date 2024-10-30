@@ -1,11 +1,13 @@
 import { Router } from 'express'
 import userController from '~/controllers/users.controllers'
 import {
+  accessTokenNoVerifyValidator,
   accessTokenValidator,
   emailVerifyTokenValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator,
+  reSendEmailValidator,
   sendEmailValidator
 } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -37,7 +39,11 @@ usersRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(
  * Header: {Authorization: 'Bearer ' + <accessToken>}
  * Body: {}
  */
-usersRouter.post('/resent-verify-email', accessTokenValidator, wrapRequestHandler(userController.logoutController))
+usersRouter.post(
+  '/resent-verify-email',
+  reSendEmailValidator,
+  wrapRequestHandler(userController.reSendEmailVerifyController)
+)
 
 /**
  * Description: get my profile
@@ -46,5 +52,6 @@ usersRouter.post('/resent-verify-email', accessTokenValidator, wrapRequestHandle
  * Header: {Authorization: 'Bearer ' + <accessToken>}
  */
 usersRouter.post('/me', accessTokenValidator, wrapRequestHandler(userController.getMeController))
+usersRouter.post('/getOTPtime', accessTokenNoVerifyValidator, wrapRequestHandler(userController.getTimeOTPController))
 
 export default usersRouter

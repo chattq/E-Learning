@@ -4,11 +4,8 @@ import { checkSchema } from 'express-validator'
 import { JsonWebTokenError } from 'jsonwebtoken'
 import { capitalize } from 'lodash'
 import { ErrorWithStatus } from '~/utils/Errors'
-
-import { httpStatus } from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
 import user from '~/models/user.models'
-import userService from '~/services/users.services'
 import { hasPassword } from '~/utils/crypto'
 import { verifyToken } from '~/utils/jwt'
 import { validate } from '~/utils/validation'
@@ -215,6 +212,41 @@ export const accessTokenValidator = validate(
     ['headers']
   )
 )
+export const accessTokenNoVerifyValidator = validate(
+  checkSchema(
+    {
+      Authorization: {
+        custom: {
+          options: async (value: string, { req }) => {
+            const access_token = (value || '').split(' ')[1]
+            if (!access_token) {
+              throw new ErrorWithStatus({ message: USERS_MESSAGES.ACCESS_TOKEN_IS_REQUIRED, status: 200 })
+            }
+            try {
+              const decoded_authorization = await verifyToken({
+                token: access_token,
+                secretOrPublickey: process.env.JWT_SECRET_ACCESS_TOKEN as string
+              })
+              ;(req as Request).decoded_authorization = decoded_authorization
+              const inforUser = await user.findOne({
+                where: {
+                  user_id: decoded_authorization.user_id.toUpperCase()
+                }
+              })
+              if (!inforUser) {
+                throw new ErrorWithStatus({ message: 'Không tìm thấy tài khoản này', status: 200 })
+              }
+            } catch (error) {
+              throw new ErrorWithStatus({ message: capitalize((error as JsonWebTokenError).message), status: 200 })
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['headers']
+  )
+)
 export const refreshTokenValidator = validate(
   checkSchema(
     {
@@ -256,34 +288,58 @@ export const refreshTokenValidator = validate(
 export const emailVerifyTokenValidator = validate(
   checkSchema(
     {
-      Authorization: {
+      verification_code: {
         trim: true,
+        notEmpty: true,
+        custom: {
+          options: async (value: string, { req }) => {
+            const decode = req.decoded_authorization
+            const inforUser = await user.findOne({
+              where: {
+                user_id: decode.user_id.toUpperCase()
+              }
+            })
+            const currentTime: any = new Date()
+            const inputDate: any = new Date(inforUser?.dataValues.expiresAt) // Chuyển đổi chuỗi thành Date
+
+            // Tính khoảng thời gian giữa hai thời điểm (millisecond)
+            const timeDifference = currentTime - inputDate // Kết quả là millisecond
+
+            // Chuyển đổi 1 phút thành millisecond
+            const oneMinute = 60 * 1000
+            if (inforUser) {
+              if (!inforUser?.dataValues.verify_cation_code) {
+                throw new ErrorWithStatus({ message: 'Bạn đã xác thực tài khoản này rồi!', status: 200 })
+              }
+
+              if (value !== inforUser?.dataValues.verify_cation_code) {
+                throw new ErrorWithStatus({ message: 'Mã xác thực không hợp lệ', status: 200 })
+              } else {
+                // Kiểm tra xem thời điểm đầu vào có lớn hơn 1 phút so với thời điểm hiện tại không
+                if (timeDifference > oneMinute) {
+                  throw new ErrorWithStatus({ message: 'Mã xác thực đã hết hiệu lực', status: 200 })
+                }
+              }
+            } else {
+              throw new ErrorWithStatus({ message: 'Không tìm thấy tài khoản này', status: 200 })
+            }
+
+            return true
+          }
+        }
+      },
+      Authorization: {
         custom: {
           options: async (value: string, { req }) => {
             const access_token = (value || '').split(' ')[1]
             if (!access_token) {
-              throw new ErrorWithStatus({
-                message: 'Vui lòng đăng nhập',
-                status: httpStatus.UNAUTHORIZED
-              })
+              throw new ErrorWithStatus({ message: USERS_MESSAGES.ACCESS_TOKEN_IS_REQUIRED, status: 401 })
             }
-
             try {
               const decoded_authorization = await verifyToken({
                 token: access_token,
                 secretOrPublickey: process.env.JWT_SECRET_ACCESS_TOKEN as string
               })
-
-              const isExist = await user.findAll({
-                where: {
-                  user_email: decoded_authorization.user_id.toUpperCase()
-                }
-              })
-              if (isExist.length > 0) {
-                if (isExist[0].dataValues.verify === UserVerifyStatus.Verified) {
-                  throw new ErrorWithStatus({ message: 'Tài khoản của bạn đã được xác thực', status: 200 })
-                }
-              }
               ;(req as Request).decoded_authorization = decoded_authorization
             } catch (error) {
               throw new ErrorWithStatus({ message: capitalize((error as JsonWebTokenError).message), status: 401 })
@@ -293,7 +349,7 @@ export const emailVerifyTokenValidator = validate(
         }
       }
     },
-    ['headers']
+    ['body', 'headers']
   )
 )
 export const sendEmailValidator = validate(
@@ -309,6 +365,33 @@ export const sendEmailValidator = validate(
       }
     },
     ['body']
+  )
+)
+export const reSendEmailValidator = validate(
+  checkSchema(
+    {
+      Authorization: {
+        custom: {
+          options: async (value: string, { req }) => {
+            const access_token = (value || '').split(' ')[1]
+            if (!access_token) {
+              throw new ErrorWithStatus({ message: USERS_MESSAGES.ACCESS_TOKEN_IS_REQUIRED, status: 401 })
+            }
+            try {
+              const decoded_authorization = await verifyToken({
+                token: access_token,
+                secretOrPublickey: process.env.JWT_SECRET_ACCESS_TOKEN as string
+              })
+              ;(req as Request).decoded_authorization = decoded_authorization
+            } catch (error) {
+              throw new ErrorWithStatus({ message: capitalize((error as JsonWebTokenError).message), status: 401 })
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['headers']
   )
 )
 

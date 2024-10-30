@@ -27,7 +27,7 @@ class refresh_token extends Model {
   })
   user_id!: string
   // mối liên hệ với bảng
-  @BelongsTo(() => user, { foreignKey: 'user_id' })
+  @BelongsTo(() => user, { foreignKey: 'user_id', onDelete: 'CASCADE' })
   user!: user // tham chiếu đến bảng
 }
 

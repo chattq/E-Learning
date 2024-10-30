@@ -15,12 +15,9 @@ const sendVerifyEmail = (toAddress: string, subject: string, body: string) => {
   // return sesClient.send(sendEmailCommand)
 }
 
-export const sendVerifyRegisterEmail = async (toAddress: string, email_verify_token: string) => {
+export const sendVerifyRegisterEmail = async (toAddress: string, OTP: string) => {
   let verifyEmailTemplate = fs.readFileSync(path.resolve('src/template/verify-email.html'), 'utf8')
-  verifyEmailTemplate = verifyEmailTemplate.replace(
-    '{{link}}',
-    `http://localhost:5000/verify?token=${email_verify_token}`
-  )
+  verifyEmailTemplate = verifyEmailTemplate.replace('{{OTP}}', `${OTP}`)
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -32,7 +29,7 @@ export const sendVerifyRegisterEmail = async (toAddress: string, email_verify_to
   })
 
   const info = await transporter.sendMail({
-    from: '"Hệ thống E-Learning" <baotuyet927@gmail.com>', // người gửi và email người gửi
+    from: `"Hệ thống E-Learning" <${process.env.EMAIL_USERNAME}>`, // người gửi và email người gửi
     to: toAddress, // // người nhận
     subject: 'Xác thực tài khoản tài khoản', // tiêu đề
     text: 'Xác thực tài khoản tài khoản', // plain text body

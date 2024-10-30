@@ -16,7 +16,7 @@ class promotion_combo extends Model {
     type: DataType.STRING(100)
   })
   course_id!: string
-  @BelongsTo(() => combo_product, { foreignKey: 'course_id' })
+  @BelongsTo(() => combo_product, { foreignKey: 'course_id', onDelete: 'CASCADE' })
   combo_products!: combo_product
 
   @Column({
