@@ -34,8 +34,10 @@ class UserController {
         isSuccess: true,
         message: 'Register successful',
         data: {
-          user_id: email.toUpperCase(),
-          result
+          InforUser: {
+            user_id: email.toUpperCase()
+          },
+          ...result
         }
       })
     )
@@ -73,12 +75,22 @@ class UserController {
     )
   }
   async emailVerifyController(req: Request, res: Response) {
-    const userId = (req.decoded_authorization as TokenPayload).user_id
-    const result = await userService.verifyEmail(userId)
+    const { verification_code } = req.body
+    const user_id = req.decoded_authorization?.user_id
+    const result = await userService.verifyEmail(verification_code, user_id as string)
     return res.json({
       isSuccess: true,
       message: 'Xác thực thành công!',
       data: result
+    })
+  }
+  async reSendEmailVerifyController(req: Request, res: Response) {
+    const user_id = req.decoded_authorization?.user_id
+    await userService.reSendVerifyEmail(user_id as string)
+    return res.json({
+      isSuccess: true,
+      message: 'Đã gửi lại mã thành công, vui lòng kiểm tra email',
+      data: null
     })
   }
   async sendEmail(req: Request, res: Response) {
@@ -122,6 +134,31 @@ class UserController {
           email: result?.dataValues.user_email,
           name: result?.dataValues.user_name,
           avatar: result?.dataValues.user_avatar
+        }
+      })
+    )
+  }
+  async getTimeOTPController(req: Request, res: Response, next: NextFunction) {
+    const userId = (req.decoded_authorization as TokenPayload).user_id
+    const result = await userService.getProfile(userId)
+    const expiresAt = result?.dataValues.expiresAt
+    const currentTime: any = new Date()
+    const inputDate: any = new Date(expiresAt) // Chuyển đổi chuỗi thành Date
+    // Tính khoảng thời gian giữa hai thời điểm (millisecond)
+    const timeDifference = currentTime - inputDate // Kết quả là millisecond
+
+    // Chuyển đổi 1 phút thành millisecond
+    const oneMinute = 60 * 1000
+
+    // Chuyển đổi timeDifference từ millisecond sang giây
+    const timeDifferenceInSeconds = Math.floor(timeDifference / 1000)
+
+    return res.json(
+      new ResultsReturned({
+        isSuccess: true,
+        message: 'Get time OTP',
+        data: {
+          expires_at: timeDifference > oneMinute ? 0 : 60 - timeDifferenceInSeconds
         }
       })
     )

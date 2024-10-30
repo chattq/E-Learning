@@ -13,7 +13,7 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/register/verify-email" element={<VerifyEmail />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/test" element={<Test />} />
       <Route path="/" element={<UserDasboard />} />
       {protectedRoutes.map((route) => {
@@ -21,8 +21,7 @@ function App() {
           <Route
             key={nanoid()}
             path={`${route.path}`}
-            element={route.getPageElement?.()}
-          >
+            element={route.getPageElement?.()}>
             {route.children &&
               route.children.length > 0 &&
               route.children.map((child) => {

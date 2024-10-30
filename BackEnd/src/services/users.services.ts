@@ -8,7 +8,9 @@ import { hasPassword } from '~/utils/crypto'
 import { sendVerifyRegisterEmail } from '~/utils/email'
 import { signToken, verifyToken } from '~/utils/jwt'
 import { useGetTime } from '~/utils/useGetTime'
+import { useRandomOTP } from '~/utils/useRandomOTP'
 const { getTimeMoment } = useGetTime()
+const { generateRandomOTP } = useRandomOTP()
 
 config()
 
@@ -39,19 +41,7 @@ class UserService {
       }
     })
   }
-  private signEmailVerifyToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
-    return signToken({
-      payload: {
-        user_id,
-        token_type: TokenType.EmailVerifyToken,
-        verify
-      },
-      privateKey: process.env.JWT_SECRET_EMAIL_VERIFY_TOKEN as string,
-      options: {
-        expiresIn: process.env.EMAIL_VERIFY_TOKEN_EXPIRES_IN
-      }
-    })
-  }
+
   private decodeRefreshToken(refresh_token: string) {
     return verifyToken({
       token: refresh_token,
@@ -64,17 +54,16 @@ class UserService {
   }
   async registerUser(payload: RegisterReqBody) {
     const { email, name, password, role } = payload
-    const email_verify_token = await this.signEmailVerifyToken({
-      user_id: email.toUpperCase(),
-      verify: UserVerifyStatus.Unverified
-    })
+    const OTP = generateRandomOTP()
+    const timeMoment = getTimeMoment()
     const dataCreateUser = {
       user_id: email.toUpperCase(),
       user_name: name,
       user_email: email.toUpperCase(),
       user_password: hasPassword(password),
-      user_create_at: getTimeMoment(),
-      email_verify_token: email_verify_token,
+      user_create_at: timeMoment,
+      verify_cation_code: OTP,
+      expiresAt: timeMoment,
       user_role: role
     }
     await user.create(dataCreateUser)
@@ -85,9 +74,9 @@ class UserService {
     await refresh_token.create({
       user_id: email.toUpperCase(),
       token: Refresh_tokens,
-      create_at: getTimeMoment()
+      create_at: timeMoment
     })
-    await sendVerifyRegisterEmail(payload.email, email_verify_token)
+    await sendVerifyRegisterEmail(payload.email, OTP)
     return {
       Access_token,
       Refresh_tokens
@@ -99,7 +88,6 @@ class UserService {
         user_email: user_id.toUpperCase()
       }
     })
-    console.log(102, inforUser)
     const [Access_token, Refresh_token] = await this.signAccessAndRefreshToken({
       user_id: user_id.toUpperCase(),
       verify: inforUser?.dataValues.verify
@@ -129,11 +117,12 @@ class UserService {
       }
     })
   }
-  async verifyEmail(user_id: string) {
+  async verifyEmail(verification_code: string, user_id: string) {
     // Tìm user theo ID
     const updatedData: Partial<user> = {
-      email_verify_token: '',
-      verify: UserVerifyStatus.Verified
+      verify_cation_code: '',
+      verify: UserVerifyStatus.Verified,
+      expiresAt: ''
     }
 
     // Cập nhật thông tin user
@@ -141,8 +130,11 @@ class UserService {
     // Trả về user đã cập nhật
 
     const [token] = await Promise.all([
-      this.signAccessAndRefreshToken({ user_id: user_id.toUpperCase(), verify: UserVerifyStatus.Verified }),
-      await user.update(updatedData, {
+      this.signAccessAndRefreshToken({
+        user_id: user_id.toUpperCase(),
+        verify: UserVerifyStatus.Verified
+      }),
+      user.update(updatedData, {
         where: {
           user_id: user_id.toUpperCase()
         }
@@ -150,7 +142,6 @@ class UserService {
     ])
 
     const [access_token, refresh_tokens] = token
-    const { iat, exp } = await this.decodeRefreshToken(refresh_tokens)
     await refresh_token.update(
       {
         token: refresh_tokens
@@ -165,6 +156,25 @@ class UserService {
       access_token,
       refresh_tokens
     }
+  }
+  async reSendVerifyEmail(user_id: string) {
+    const OTP = generateRandomOTP()
+    const timeMoment = getTimeMoment()
+    const updatedData: Partial<user> = {
+      verify_cation_code: OTP,
+      expiresAt: timeMoment
+    }
+
+    await Promise.all([
+      user.update(updatedData, {
+        where: {
+          user_id: user_id.toUpperCase()
+        }
+      }),
+      sendVerifyRegisterEmail(user_id, OTP)
+    ])
+
+    return null
   }
 }
 const userService = new UserService()

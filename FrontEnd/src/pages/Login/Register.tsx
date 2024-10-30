@@ -8,12 +8,16 @@ import {
   Form,
   type FormProps,
   Input,
+  message,
   Row,
   Tabs,
   TabsProps,
 } from "antd";
 import { useState } from "react";
 import useQueryParams from "../../packages/hooks/useQueryParams";
+import { showErrorAtom } from "../../packages/ui/Error/error-store";
+import { useSetAtom } from "jotai";
+import { LoadingAtom } from "../../packages/store/loading.store";
 
 type FieldType = {
   email: string;
@@ -26,9 +30,23 @@ export default function Register() {
   const api = useConfigAPI();
   const navigate = useNavigate();
   const queryParams = useQueryParams();
+  const setShowError = useSetAtom(showErrorAtom);
+  const setLoad = useSetAtom(LoadingAtom);
+  const [messageApi, contextHolder] = message.useMessage();
+  const success = () => {
+    messageApi.open({
+      type: "success",
+      content: "Đăng ký thành công",
+      onClose: () => {
+        navigate("/verify-email");
+      },
+      duration: 1,
+    });
+  };
   const onFinish: FormProps<FieldType>["onFinish"] = async (
     values: FieldType
   ) => {
+    setLoad(true);
     const response = await api.User_register(
       values.email,
       values.password,
@@ -37,7 +55,17 @@ export default function Register() {
       (queryParams as any).user_click
     );
     if (response.isSuccess) {
-      navigate("/");
+      setLoad(false);
+      success();
+    } else {
+      setLoad(false);
+      setShowError({
+        isSuccess: false,
+        message: response.data.message,
+        data: {
+          message: response.message,
+        },
+      });
     }
   };
 
@@ -171,6 +199,12 @@ export default function Register() {
               layout="vertical"
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
+              initialValues={{
+                username: "Quang",
+                email: "chat.tq050902@gmail.com",
+                password: "123456@tQ",
+                confirmPassword: "123456@tQ",
+              }}
               autoComplete="off">
               <Form.Item<FieldType>
                 label="Họ và tên"
@@ -249,6 +283,7 @@ export default function Register() {
           )}
         </Col>
       </Row>
+      {contextHolder}
     </>
   );
 }

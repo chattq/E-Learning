@@ -39,9 +39,13 @@ class user extends Model {
   })
   user_avatar!: string
   @Column({
-    type: DataType.STRING(300)
+    type: DataType.STRING(25)
   })
-  email_verify_token!: string
+  verify_cation_code!: string
+  @Column({
+    type: DataType.STRING(200)
+  })
+  expiresAt!: string
   @Column({
     type: DataType.STRING(300)
   })
@@ -85,14 +89,14 @@ class user extends Model {
   user_time_zone!: string
 
   // thực hiện mối quan hệ
-  @HasOne(() => refresh_token)
+  @HasOne(() => refresh_token, { onDelete: 'CASCADE' })
   declare refresh_tokens: refresh_token
   //Từ khóa declare được sử dụng trong TypeScript để thông báo cho trình biên dịch biết rằng thuộc tính này sẽ được cung cấp bởi Sequelize và không được khởi tạo rõ ràng trong constructor.
-  @HasMany(() => course)
+  @HasMany(() => course, { onDelete: 'CASCADE' })
   courses!: course[]
 
   // mối quan hệ 1 nhiều
-  @HasMany(() => account_bank)
+  @HasMany(() => account_bank, { onDelete: 'CASCADE' })
   account_banks!: account_bank[]
 }
 

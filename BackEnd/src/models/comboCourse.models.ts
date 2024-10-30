@@ -8,13 +8,15 @@ class combo_product extends Model {
   @ForeignKey(() => course)
   @Column({
     type: DataType.STRING(100),
-    allowNull: false
+    allowNull: false,
+    onDelete: 'CASCADE'
   })
   course_id!: string
   @ForeignKey(() => promotion_combo)
   @Column({
     type: DataType.STRING(100),
-    allowNull: false
+    allowNull: false,
+    onDelete: 'CASCADE'
   })
   promotion_combo_id!: string
 }

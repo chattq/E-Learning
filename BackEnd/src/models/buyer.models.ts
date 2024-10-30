@@ -28,7 +28,7 @@ class buyer_course extends Model {
   })
   course_id!: string
   // mối liên hệ với bảng
-  @BelongsTo(() => course, { foreignKey: 'course_id' })
+  @BelongsTo(() => course, { foreignKey: 'course_id', onDelete: 'CASCADE' })
   course!: course // tham chiếu đến bảng
 }
 

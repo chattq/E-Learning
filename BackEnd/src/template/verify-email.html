@@ -41,14 +41,24 @@
       .button:hover {
         background-color: #45a049;
       }
+      .NumberOTP {
+        font-weight: bold;
+        border-radius: 5px;
+        background-color: #4caf50;
+        color: white;
+        padding: 8px 18px;
+        font-size: 20px;
+        transition: background-color 0.3s;
+        letter-spacing: 2px;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <h1>Xác Thực Email Của Bạn</h1>
-      <p>Cảm ơn bạn đã đăng ký! Hãy nhấn vào nút bên dưới để xác thực địa chỉ email của bạn:</p>
-      <a href="{{link}}" class="button">Xác Thực Email</a>
-      <p>Nếu bạn không yêu cầu xác thực email này, vui lòng bỏ qua email này.</p>
+      <p>Nếu bạn đã yêu cầu xác thực, hãy sử dụng mã bên dưới.</p>
+      <span class="NumberOTP">{{OTP}}</span>
+      <p>Nếu bạn không yêu cầu xác thực email này, bạn có thể yên tâm bỏ qua email này.</p>
     </div>
   </body>
 </html>

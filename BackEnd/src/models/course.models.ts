@@ -32,7 +32,7 @@ class course extends Model {
     type: DataType.STRING(100)
   })
   user_id!: string
-  @BelongsTo(() => user, { foreignKey: 'user_id' })
+  @BelongsTo(() => user, { foreignKey: 'user_id', onDelete: 'CASCADE' })
   users!: user // declare user: Users: Khai báo thuộc tính users sẽ chứa đối tượng User liên quan.
 
   @Column({
@@ -111,13 +111,13 @@ class course extends Model {
   declare categories: category[]
   @BelongsToMany(() => promotion_combo, () => combo_product)
   declare promotion_combos: promotion_combo[]
-  @HasMany(() => buyer_course)
+  @HasMany(() => buyer_course, { onDelete: 'CASCADE' })
   buyer_courses!: buyer_course[]
-  @HasMany(() => course_requirement)
+  @HasMany(() => course_requirement, { onDelete: 'CASCADE' })
   course_requirement!: course_requirement[]
-  @HasMany(() => course_knowledge)
+  @HasMany(() => course_knowledge, { onDelete: 'CASCADE' })
   course_knowledge!: course_knowledge[]
-  @HasMany(() => course_chapter)
+  @HasMany(() => course_chapter, { onDelete: 'CASCADE' })
   course_chapter!: course_chapter[]
 }
 
