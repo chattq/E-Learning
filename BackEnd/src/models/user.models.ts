@@ -2,6 +2,7 @@ import { Table, Column, Model, DataType, HasOne, HasMany } from 'sequelize-types
 import refresh_token from './refreshToken.models'
 import course from './course.models'
 import account_bank from './accountBank.models'
+import blog from './blogs.models'
 
 @Table
 class user extends Model {
@@ -95,6 +96,9 @@ class user extends Model {
   // mối quan hệ 1 nhiều
   @HasMany(() => account_bank)
   account_banks!: account_bank[]
+
+  @HasMany(() => blog)
+  blog!: blog[]
 }
 
 export default user
