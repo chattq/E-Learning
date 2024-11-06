@@ -31,18 +31,18 @@ app.use(cors(corsOptions))
 
 const startServer = async () => {
   try {
-    // await connectDbSequelize.authenticate()
-    // // console.log(`Kết nối database thành công`)
-    // await connectDbSequelize.sync({ alter: true, force: false })
+    await connectDbSequelize.authenticate()
+    // console.log(`Kết nối database thành công`)
+    await connectDbSequelize.sync({ alter: true, force: false })
     //alter: true điều này làm giảm hiệu xuất do phải thay đổi các cấu trúc của bảng, nếu chạy thật thì alter: false
     //alter: true: Cập nhật cấu trúc bảng để phù hợp với mô hình mà không phá hủy dữ liệu hiện tại.
     //Điều này an toàn hơn so với force.
 
     app.use('/', router)
 
-    // app.use(checkConnectionDB)
+    app.use(checkConnectionDB)
 
-    // app.use(defaultErrorHandler)
+    app.use(defaultErrorHandler)
 
     const io = new Server(httpServer, {
       cors: {
