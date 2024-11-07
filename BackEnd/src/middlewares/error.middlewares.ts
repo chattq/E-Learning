@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import { omit } from 'lodash'
-import { ErrorWithStatus } from '~/utils/Errors'
 
 export const defaultErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
-  if (err instanceof ErrorWithStatus) {
+  if (err) {
     return res.status(err.status).json({
       isSuccess: false,
       data: omit(err, ['status'])

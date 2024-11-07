@@ -1,5 +1,4 @@
 import { checkSchema } from 'express-validator'
-import { json } from 'sequelize'
 import category from '~/models/category.models'
 import { CategoryReqBody } from '~/services/categories.services'
 import { isNullOrUndefined } from '~/utils/CheckCondition'
