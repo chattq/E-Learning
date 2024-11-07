@@ -3,7 +3,7 @@
     "module": "NodeNext", // Quy định output module được sử dụng
     "moduleResolution": "NodeNext",
     "target": "ES2022", // Target output cho code
-    "outDir": "dist", // Đường dẫn output cho thư mục build
+    "outDir": "./dist", // Đường dẫn output cho thư mục build
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -24,5 +24,6 @@
   "include": ["src"],
   "dependencies": {
     "@types/cors": "^2.8.12"
-  }
+  },
+  "exclude": ["node_modules"]
 }
