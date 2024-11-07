@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import formidable from 'formidable'
 import path from 'path'
+import { MEDIAS_MESSAGES } from 'src/constants/messages-handle/media.messages'
+import mediasService from 'src/services/media.services'
 const cloudinary = require('cloudinary').v2
-import { MEDIAS_MESSAGES } from '~/constants/messages-handle/media.messages'
-import mediasService from '~/services/media.services'
 
 export const uploadSingleImageController = async (req: Request, res: Response, next: NextFunction) => {
   const result = await mediasService.handleUploadSingleImage(req)

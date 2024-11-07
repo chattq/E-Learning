@@ -11,9 +11,7 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "baseUrl": ".", // Đặt thư mục gốc của dự án
-    "paths": {
-      "~/*": ["./src/*"] // Alias ~ trỏ tới thư mục src
-    },
+    "paths": {},
     "types": ["node", "express", "@types/cors"]
   },
   "ts-node": {

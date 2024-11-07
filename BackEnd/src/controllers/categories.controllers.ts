@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import category from '~/models/category.models'
-import categoriesService from '~/services/categories.services'
+import category from 'src/models/category.models'
+import categoriesService from 'src/services/categories.services'
 
 export interface CategoryModel {
   category_id?: string

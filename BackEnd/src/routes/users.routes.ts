@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import userController from '~/controllers/users.controllers'
+import userController from 'src/controllers/users.controllers'
 import {
   accessTokenNoVerifyValidator,
   accessTokenValidator,
@@ -9,8 +9,8 @@ import {
   registerValidator,
   reSendEmailValidator,
   sendEmailValidator
-} from '~/middlewares/users.middlewares'
-import { wrapRequestHandler } from '~/utils/handlers'
+} from 'src/middlewares/users.middlewares'
+import { wrapRequestHandler } from 'src/utils/handlers'
 
 const usersRouter = Router()
 
