@@ -18,6 +18,12 @@ export const connectDbSequelize = new Sequelize({
     min: 0, // Số kết nối tối thiểu trong pool
     acquire: 30000, // Thời gian tối đa (ms) để cố gắng lấy một kết nối trước khi throw error
     idle: 10000 // Thời gian tối đa (ms) mà một kết nối có thể ở trạng thái nhàn rỗi trước khi bị đóng
+  },
+  dialectOptions: {
+    ssl: {
+      require: true, // Enforces SSL connection
+      rejectUnauthorized: false // Allows self-signed certificates (optional, for local testing)
+    }
   }
 })
 
