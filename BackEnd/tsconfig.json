@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
     "module": "commonjs", // Quy định output module được sử dụng
-    "target": "ES2022", // Target output cho code
+    "target": "es6", // Target output cho code
     "outDir": "dist", // Đường dẫn output cho thư mục build
+    "sourceMap": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strict": true,
