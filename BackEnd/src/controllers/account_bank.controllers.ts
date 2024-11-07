@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express'
 import accountBankServices from 'src/services/account_bank.services'
-import { ResultsReturned } from 'src/utils/results-api'
+import { ResultsReturned } from '../utils/results-api'
 
 class AccountBankController {
   //Thêm blog mới
