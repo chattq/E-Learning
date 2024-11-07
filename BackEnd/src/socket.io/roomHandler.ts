@@ -1,5 +1,4 @@
-import { DefaultEventsMap } from 'node_modules/socket.io/dist/typed-events'
-import { Server, Socket } from 'socket.io'
+import { DefaultEventsMap, Server, Socket } from 'socket.io'
 
 interface IRoomParams {
   roomId: string
