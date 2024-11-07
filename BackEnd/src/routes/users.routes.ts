@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import userController from 'src/controllers/users.controllers'
+import userController from '../controllers/users.controllers'
 import {
   accessTokenNoVerifyValidator,
   accessTokenValidator,
