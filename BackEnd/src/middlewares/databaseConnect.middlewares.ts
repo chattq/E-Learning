@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { connectDbSequelize } from '~/config/connection-database'
+import { connectDbSequelize } from '../config/connection-database'
 
 export const checkConnectionDB = async (req: Request, res: Response, next: NextFunction) => {
   try {
