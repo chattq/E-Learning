@@ -1,6 +1,6 @@
 import { config } from 'dotenv'
 import { TokenType, UserVerifyStatus } from 'src/constants/enums'
-import { RegisterReqBody } from 'src/controllers/users.controllers'
+import { RegisterReqBody } from '../controllers/users.controllers'
 import refresh_token from 'src/models/refreshToken.models'
 import user from 'src/models/user.models'
 import { hasPassword } from 'src/utils/crypto'
