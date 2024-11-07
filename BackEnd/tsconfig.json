@@ -9,7 +9,6 @@
     "emitDecoratorMetadata": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
 
     // "paths": {
@@ -21,7 +20,7 @@
     "require": ["tsconfig-paths/register"]
   },
   "files": ["src/type.d.ts", "src/vietqr.d.ts"], // Các file dùng để defined global type cho dự án
-  "include": ["src"],
+  "include": ["src/**/*"],
   "dependencies": {
     "@types/cors": "^2.8.12"
   },
