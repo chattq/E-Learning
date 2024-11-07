@@ -11,7 +11,7 @@
     "forceConsistentCasingInFileNames": true,
 
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
-    "baseUrl": ".", // Đặt thư mục gốc của dự án
+
     // "paths": {
     //   "~/*": ["./src/*"] // Alias ~ trỏ tới thư mục src
     // },
@@ -21,7 +21,7 @@
     "require": ["tsconfig-paths/register"]
   },
   "files": ["src/type.d.ts", "src/vietqr.d.ts"], // Các file dùng để defined global type cho dự án
-  "include": ["src/**/*"], // Đường dẫn include cho các file cần build
+  "include": ["src"],
   "dependencies": {
     "@types/cors": "^2.8.12"
   }
