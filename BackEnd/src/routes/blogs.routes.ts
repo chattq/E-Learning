@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import blogController from 'src/controllers/blogs.controllers'
-import { addNewBlogValidator, deleteBlogValidator } from 'src/middlewares/blogs.middlewares'
-import { accessTokenValidator } from 'src/middlewares/users.middlewares'
-import { wrapRequestHandler } from 'src/utils/handlers'
+import blogController from '../controllers/blogs.controllers'
+import { addNewBlogValidator, deleteBlogValidator } from '../middlewares/blogs.middlewares'
+import { accessTokenValidator } from '../middlewares/users.middlewares'
+import { wrapRequestHandler } from '../utils/handlers'
 
 const blogsRouter = Router()
 

@@ -3,9 +3,9 @@ import { ParamsDictionary } from 'express-serve-static-core'
 import { USERS_MESSAGES } from '../constants/messages-handle/users.messages'
 import { JwtPayload } from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
-import { TokenType } from 'src/constants/enums'
+import { TokenType } from '../constants/enums'
 import { ResultsReturned } from '../utils/results-api'
-import userService from 'src/services/users.services'
+import userService from '../services/users.services'
 require('dotenv').config()
 
 export interface RegisterReqBody {

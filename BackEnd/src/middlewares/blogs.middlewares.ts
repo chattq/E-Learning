@@ -1,7 +1,7 @@
 import { checkSchema } from 'express-validator'
-import { BLOGS_MESSAGES } from 'src/constants/messages-handle/blogs.messages'
-import blog from 'src/models/blogs.models'
-import { validate } from 'src/utils/validation'
+import { BLOGS_MESSAGES } from '../constants/messages-handle/blogs.messages'
+import blog from '../models/blogs.models'
+import { validate } from '../utils/validation'
 
 export const addNewBlogValidator = validate(
   checkSchema(

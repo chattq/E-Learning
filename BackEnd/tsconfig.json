@@ -18,7 +18,7 @@
     "require": ["tsconfig-paths/register"]
   },
   "files": ["src/type.d.ts", "src/vietqr.d.ts"], // Các file dùng để defined global type cho dự án
-  "include": ["src/**/*"], // Đường dẫn include cho các file cần build
+  "include": ["./**/*"], // Đường dẫn include cho các file cần build
   "dependencies": {
     "@types/cors": "^2.8.12"
   }
