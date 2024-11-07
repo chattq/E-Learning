@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
 import { omit } from 'lodash'
+import { httpStatus } from '../constants/httpStatus'
+import { ErrorWithStatus } from '../utils/Errors'
 
 export const defaultErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
-  if (err) {
+  if (err instanceof ErrorWithStatus) {
     return res.status(err.status).json({
       isSuccess: false,
       data: omit(err, ['status'])
@@ -12,7 +14,7 @@ export const defaultErrorHandler = (err: any, req: Request, res: Response, next:
     Object.defineProperty(err, key, { enumerable: true })
   })
 
-  res.status(500).json({
+  res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
     isSuccess: false,
     data: omit(err, ['stack'])
   })
