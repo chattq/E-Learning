@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "npx nodemon",
-    "build": "rimraf ./dist && tsc && tsc-alias",
+    "build": "tsc",
     "start": "node dist/index.js",
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write ."
@@ -58,6 +58,7 @@
     "socket.io": "^4.7.4",
     "strip-ansi": "6.0.1",
     "ts-pattern": "^5.1.1",
+    "vercel": "^37.14.0",
     "vietqr": "^1.1.9"
   },
   "optionalDependencies": {
