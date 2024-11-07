@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express'
-import accountBankServices from 'src/services/account_bank.services'
+import accountBankServices from '../services/account_bank.services'
 import { ResultsReturned } from '../utils/results-api'
 
 class AccountBankController {

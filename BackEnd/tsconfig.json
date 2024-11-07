@@ -9,16 +9,19 @@
     "emitDecoratorMetadata": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
+
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "baseUrl": ".", // Đặt thư mục gốc của dự án
-    "paths": {},
+    // "paths": {
+    //   "~/*": ["./src/*"] // Alias ~ trỏ tới thư mục src
+    // },
     "types": ["node", "express", "@types/cors"]
   },
   "ts-node": {
     "require": ["tsconfig-paths/register"]
   },
   "files": ["src/type.d.ts", "src/vietqr.d.ts"], // Các file dùng để defined global type cho dự án
-  "include": ["./**/*"], // Đường dẫn include cho các file cần build
+  "include": ["src/**/*"], // Đường dẫn include cho các file cần build
   "dependencies": {
     "@types/cors": "^2.8.12"
   }
