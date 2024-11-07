@@ -1,7 +1,6 @@
 import { Router } from 'express'
-import mediasController from '~/controllers/medias.controllers'
-import { accessTokenValidator } from '~/middlewares/users.middlewares'
-import { wrapRequestHandler } from '~/utils/handlers'
+import mediasController from 'src/controllers/medias.controllers'
+import { wrapRequestHandler } from 'src/utils/handlers'
 
 const mediasRouter = Router()
 

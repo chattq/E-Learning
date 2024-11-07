@@ -1,13 +1,11 @@
 import express, { Request, Response, NextFunction } from 'express'
-import userService from '~/services/users.services'
 import { ParamsDictionary } from 'express-serve-static-core'
-import { pick } from 'lodash'
-import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
-import { ResultsReturned } from '~/utils/results-api'
-import user from '~/models/user.models'
-import { TokenType } from '~/constants/enums'
+import { USERS_MESSAGES } from '../constants/messages-handle/users.messages'
 import { JwtPayload } from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
+import { TokenType } from 'src/constants/enums'
+import { ResultsReturned } from 'src/utils/results-api'
+import userService from 'src/services/users.services'
 require('dotenv').config()
 
 export interface RegisterReqBody {

@@ -1,5 +1,5 @@
 import { httpStatus } from '../constants/httpStatus'
-import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
+import { USERS_MESSAGES } from '../constants/messages-handle/users.messages'
 
 export class ErrorWithStatus {
   message: string

@@ -1,9 +1,9 @@
 import { checkSchema } from 'express-validator'
-import category from '~/models/category.models'
-import { CategoryReqBody } from '~/services/categories.services'
-import { isNullOrUndefined } from '~/utils/CheckCondition'
-import { ErrorWithStatus } from '~/utils/Errors'
-import { validate } from '~/utils/validation'
+import category from 'src/models/category.models'
+import { CategoryReqBody } from 'src/services/categories.services'
+import { isNullOrUndefined } from 'src/utils/CheckCondition'
+import { ErrorWithStatus } from 'src/utils/Errors'
+import { validate } from 'src/utils/validation'
 
 export const categoriesValidator = validate(
   checkSchema(

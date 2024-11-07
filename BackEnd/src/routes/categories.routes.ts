@@ -1,9 +1,8 @@
 import { Router } from 'express'
-import categoryController from '~/controllers/categories.controllers'
-import userController from '~/controllers/users.controllers'
-import { categoriesValidator } from '~/middlewares/categories.middlewares'
-import { accessTokenValidator } from '~/middlewares/users.middlewares'
-import { wrapRequestHandler } from '~/utils/handlers'
+import categoryController from 'src/controllers/categories.controllers'
+import { categoriesValidator } from 'src/middlewares/categories.middlewares'
+import { accessTokenValidator } from 'src/middlewares/users.middlewares'
+import { wrapRequestHandler } from 'src/utils/handlers'
 
 const categoriesRouter = Router()
 

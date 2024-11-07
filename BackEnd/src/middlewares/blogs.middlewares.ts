@@ -1,7 +1,7 @@
 import { checkSchema } from 'express-validator'
-import { validate } from '~/utils/validation'
-import { BLOGS_MESSAGES } from '~/constants/messages-handle/blogs.messages'
-import Blog from '~/models/blogs.models'
+import { BLOGS_MESSAGES } from 'src/constants/messages-handle/blogs.messages'
+import blog from 'src/models/blogs.models'
+import { validate } from 'src/utils/validation'
 
 export const addNewBlogValidator = validate(
   checkSchema(
@@ -62,9 +62,9 @@ export const deleteBlogValidator = validate(
         },
         custom: {
           options: async (value: number) => {
-            const blog = await Blog.findOne({ where: { blog_id: '1' } })
+            const blogs = await blog.findOne({ where: { blog_id: '1' } })
             console.log(value)
-            if (!blog) {
+            if (!blogs) {
               throw new Error(BLOGS_MESSAGES.BLOG_NOT_FOUND)
             }
             return true

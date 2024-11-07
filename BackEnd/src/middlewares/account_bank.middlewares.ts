@@ -1,5 +1,5 @@
 import { checkSchema } from 'express-validator'
-import { validate } from '~/utils/validation'
+import { validate } from 'src/utils/validation'
 
 export const createAccountValidator = validate(
   checkSchema(
