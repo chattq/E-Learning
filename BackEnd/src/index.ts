@@ -4,7 +4,6 @@ import { createServer } from 'http'
 import { Server } from 'socket.io'
 import { checkConnectionDB } from './middlewares/databaseConnect.middlewares'
 import { initFolder } from './utils/file'
-import 'module-alias/register'
 import cors from 'cors'
 import { roomHandler } from './socket.io/roomHandler'
 
