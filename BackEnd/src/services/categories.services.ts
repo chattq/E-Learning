@@ -1,5 +1,5 @@
-import category from 'src/models/category.models'
-import { useAutoCodeGen } from 'src/utils/auto-code-gent'
+import category from '../models/category.models'
+import { useAutoCodeGen } from '../utils/auto-code-gent'
 
 export interface CategoryReqBody {
   CategoryCode?: string

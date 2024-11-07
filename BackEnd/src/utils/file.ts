@@ -4,7 +4,7 @@ import fs from 'fs'
 
 import { v2 as cloudinary } from 'cloudinary'
 import { Storage } from 'megajs'
-import { UPLOAD_TEMP_DIR } from 'src/constants/dir'
+import { UPLOAD_TEMP_DIR } from '../constants/dir'
 
 cloudinary.config({
   cloud_name: 'dkqyptupf',

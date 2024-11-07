@@ -9,8 +9,8 @@ import {
   registerValidator,
   reSendEmailValidator,
   sendEmailValidator
-} from 'src/middlewares/users.middlewares'
-import { wrapRequestHandler } from 'src/utils/handlers'
+} from '../middlewares/users.middlewares'
+import { wrapRequestHandler } from '../utils/handlers'
 
 const usersRouter = Router()
 

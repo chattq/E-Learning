@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express'
-import blog from 'src/models/blogs.models'
-import blogService from 'src/services/blogs.services'
+import blog from '../models/blogs.models'
+import blogService from '../services/blogs.services'
 import { ResultsReturned } from '../utils/results-api'
 
 class BlogController {

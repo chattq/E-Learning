@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import mediasController from 'src/controllers/medias.controllers'
-import { wrapRequestHandler } from 'src/utils/handlers'
+import mediasController from '../controllers/medias.controllers'
+import { wrapRequestHandler } from '../utils/handlers'
 
 const mediasRouter = Router()
 

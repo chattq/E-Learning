@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import courseController from 'src/controllers/course.controllers'
-import { accessTokenValidator } from 'src/middlewares/users.middlewares'
-import { wrapRequestHandler } from 'src/utils/handlers'
+import courseController from '../controllers/course.controllers'
+import { accessTokenValidator } from '../middlewares/users.middlewares'
+import { wrapRequestHandler } from '../utils/handlers'
 
 const coursesRouter = Router()
 

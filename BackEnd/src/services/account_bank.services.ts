@@ -1,5 +1,5 @@
 import { config } from 'dotenv'
-import { vietQR } from 'src/config/vietQr.config'
+import { vietQR } from '../config/vietQr.config'
 
 config()
 

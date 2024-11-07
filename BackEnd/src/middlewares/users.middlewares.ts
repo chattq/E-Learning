@@ -4,12 +4,12 @@ import { checkSchema } from 'express-validator'
 import { JsonWebTokenError } from 'jsonwebtoken'
 import { capitalize } from 'lodash'
 import { USERS_MESSAGES } from '../constants/messages-handle/users.messages'
-import { validate } from 'src/utils/validation'
-import user from 'src/models/user.models'
-import { hasPassword } from 'src/utils/crypto'
-import { UserVerifyStatus } from 'src/constants/enums'
-import { ErrorWithStatus } from 'src/utils/Errors'
-import { verifyToken } from 'src/utils/jwt'
+import { validate } from '../utils/validation'
+import user from '../models/user.models'
+import { hasPassword } from '../utils/crypto'
+import { UserVerifyStatus } from '../constants/enums'
+import { ErrorWithStatus } from '../utils/Errors'
+import { verifyToken } from '../utils/jwt'
 
 config()
 

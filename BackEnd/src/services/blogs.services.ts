@@ -1,6 +1,6 @@
 import { config } from 'dotenv'
-import blog from 'src/models/blogs.models'
-import { useGetTime } from 'src/utils/useGetTime'
+import blog from '../models/blogs.models'
+import { useGetTime } from '../utils/useGetTime'
 
 const { getTimeMoment } = useGetTime()
 
