@@ -4,7 +4,7 @@ import { USERS_MESSAGES } from '../constants/messages-handle/users.messages'
 import { JwtPayload } from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
 import { TokenType } from 'src/constants/enums'
-import { ResultsReturned } from 'src/utils/results-api'
+import { ResultsReturned } from '../utils/results-api'
 import userService from 'src/services/users.services'
 require('dotenv').config()
 
