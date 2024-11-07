@@ -7,6 +7,7 @@ require('dotenv').config()
 export const connectDbSequelize = new Sequelize({
   database: process.env.DB_NAME_DATABASE as string,
   dialect: 'postgres',
+  protocol: 'postgres',
   logging: false, // Tắt toàn bộ logging
   username: process.env.DB_USERNAME as string,
   password: process.env.DB_PASSWORD,
