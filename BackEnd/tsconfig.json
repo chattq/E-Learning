@@ -2,7 +2,8 @@
   "compilerOptions": {
     "module": "commonjs", // Quy định output module được sử dụng
     "target": "es6", // Target output cho code
-    "outDir": "dist", // Đường dẫn output cho thư mục build
+    "outDir": "./dist", // Đường dẫn output cho thư mục build
+    "rootDir": "./src",
     "sourceMap": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
