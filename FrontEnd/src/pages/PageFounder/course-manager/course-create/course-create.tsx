@@ -1,4 +1,4 @@
-import { Button, FormInstance } from "antd";
+import { Button, FormInstance, message } from "antd";
 import AdminPageLayout from "../../../../packages/layouts/admin-page-layout/admin-page-layout";
 import { CardLayout } from "../../../../packages/ui/CardLayout/card-layout";
 import { InforBaseCourse } from "./form-infor-base-course/infor-base-course";
@@ -9,6 +9,9 @@ import { useCallback, useRef, useState } from "react";
 import { InforDetailCourse } from "./form-detail-course/infor-detail-course";
 import { CourseRequirements } from "./course-requirements/course-requirements";
 import { CourseDescription } from "./course-description/course-description";
+import { useSetAtom } from "jotai";
+import { showErrorAtom } from "../../../../packages/ui/Error/error-store";
+import { useConfigAPI } from "../../../../packages/api/config-api";
 
 export default function CourseCreate() {
   const [CourseType, setCourseType] = useState("");
@@ -17,14 +20,26 @@ export default function CourseCreate() {
   const InforDetailCourseRef = useRef<FormInstance>();
   const CourseRequirementsRef = useRef<FormInstance>();
   const CourseDescriptionRef = useRef<any>();
+  const setShowError = useSetAtom(showErrorAtom);
+  const api = useConfigAPI();
   const onChangeCourseType = useCallback(
     (value: any) => {
       setCourseType(value);
     },
     [CourseType]
   );
-  const hanldeSaveActive = async () => {
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const success = () => {
+    messageApi.open({
+      type: "success",
+      content: "Tạo khóa học thành công!",
+    });
+  };
+
+  const hanldeSaveActive = useCallback(async () => {
     try {
+      console.log(42, "a");
       // const valuesA = await InforBaseCourseRef.current?.validateFields();
       Promise.all([
         InforContentCourseRef.current?.validateFields(),
@@ -32,7 +47,7 @@ export default function CourseCreate() {
         CourseRequirementsRef.current?.validateFields(),
         InforDetailCourseRef.current?.validateFields(),
         CourseDescriptionRef.current.getValueDescription(),
-      ]).then((values) => {
+      ]).then(async (values) => {
         const data = {
           InforContent: values[0] ?? null,
           InforBase: values[1] ?? null,
@@ -41,13 +56,25 @@ export default function CourseCreate() {
           CourseDescription: values[4] ?? null,
         };
         console.log("data", data);
+        const response: any = await api.Coursess_Create(data);
+        if (response.isSuccess) {
+          success();
+        } else {
+          setShowError({
+            isSuccess: false,
+            message: response.message,
+            data: {
+              message: response.message,
+            },
+          });
+        }
       });
 
       // Thực hiện lưu dữ liệu gộp ở đây
     } catch (errorInfo) {
       console.log("Validation Failed:", errorInfo);
     }
-  };
+  }, []);
   return (
     <AdminPageLayout>
       <div className="px-4 pt-[14px] w-full">
@@ -91,6 +118,7 @@ export default function CourseCreate() {
           </div>
         </CardLayout>
       </div>
+      {contextHolder}
     </AdminPageLayout>
   );
 }
