@@ -37,8 +37,9 @@ export default function CourseCreate() {
     });
   };
 
-  const hanldeSaveActive = async () => {
+  const hanldeSaveActive = useCallback(async () => {
     try {
+      console.log(42, "a");
       // const valuesA = await InforBaseCourseRef.current?.validateFields();
       Promise.all([
         InforContentCourseRef.current?.validateFields(),
@@ -73,7 +74,7 @@ export default function CourseCreate() {
     } catch (errorInfo) {
       console.log("Validation Failed:", errorInfo);
     }
-  };
+  }, []);
   return (
     <AdminPageLayout>
       <div className="px-4 pt-[14px] w-full">

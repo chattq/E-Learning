@@ -93,14 +93,14 @@ export const UploadFileCustom = forwardRef(
     return (
       <>
         <Upload
-          action={`${import.meta.env.VITE_API_DOMAIN}/medias/upload-images`}
+          // action={`${import.meta.env.VITE_API_DOMAIN}/medias/upload-images`}
           listType={listType}
           accept={accept}
           fileList={fileList}
-          headers={{
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            "Content-Type": "multipart/form-data",
-          }}
+          // headers={{
+          //   Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          //   "Content-Type": "multipart/form-data",
+          // }}
           multiple={multiple}
           onPreview={handlePreview}
           beforeUpload={(file) => {
