@@ -122,7 +122,7 @@ class UserController {
   async getMeController(req: Request, res: Response, next: NextFunction) {
     const userId = (req.decoded_authorization as TokenPayload).user_id
     const result = await userService.getProfile(userId)
-
+    console.log('dataValues', result?.dataValues)
     return res.json(
       new ResultsReturned({
         isSuccess: true,
@@ -131,7 +131,17 @@ class UserController {
           id: result?.dataValues.user_id,
           email: result?.dataValues.user_email,
           name: result?.dataValues.user_name,
-          avatar: result?.dataValues.user_avatar
+          avatar: result?.dataValues.user_avatar,
+          phone: result?.dataValues.user_phone,
+          address: result?.dataValues.user_address,
+          dateOfBirth: result?.dataValues.user_date_of_birth,
+          role: result?.dataValues.user_role,
+          createdAt: result?.dataValues.createdAt,
+          updatedAt: result?.dataValues.updatedAt,
+          active: result?.dataValues.user_active,
+          bio: result?.dataValues.user_bio,
+          website: result?.dataValues.user_website,
+          verify: result?.dataValues.verify
         }
       })
     )

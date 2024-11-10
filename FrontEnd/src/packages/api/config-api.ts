@@ -9,6 +9,7 @@ import { useBlogsApi } from "./API/blogs.api";
 import { useSetAtom } from "jotai";
 import { showErrorAtom } from "../ui/Error/error-store";
 import { useVerifyEmailApi } from "./API/verify_email.api";
+import { useUserApi } from "./API/user.api";
 
 export const createApiBase = () => {
   const accessToken = localStorage.getItem("access_token");
@@ -106,6 +107,7 @@ export const createClientGateApi = () => {
   const categoriesApi = useCategoriesApi(apiBase);
   const accountBankApi = useAccountBankApi(apiBase);
   const blogsApi = useBlogsApi(apiBase);
+  const userApi = useUserApi(apiBase);
   const verifyApi = useVerifyEmailApi(apiBase);
   return {
     ...verifyApi,
@@ -114,6 +116,7 @@ export const createClientGateApi = () => {
     ...authAPI,
     ...categoriesApi,
     ...blogsApi,
+    ...userApi,
   };
 };
 export const useConfigAPI = () => {

@@ -37,8 +37,6 @@ export default function BlogList() {
     },
   });
 
-  console.log("Blogs_GetAllActive", Blogs_GetAllActive?.blogs);
-
   return (
     <UserPageLayout>
       {isLoading && <LoadPanel />}
@@ -46,7 +44,8 @@ export default function BlogList() {
       <div
         dangerouslySetInnerHTML={{
           __html: Blogs_GetAllActive?.blogs[6].blog_content,
-        }}></div>
+        }}
+      ></div>
 
       <div className="px-4 py-4">
         <Button onClick={() => handleClickCreateBlog()}>
@@ -54,12 +53,14 @@ export default function BlogList() {
         </Button>
         <div
           className="bg-[#bb0000] rounded-md border-[0.5px] "
-          style={{ borderRadius: "20px" }}>
+          style={{ borderRadius: "20px" }}
+        >
           <Row>
             <Col
               span={12}
               className="NameLeft"
-              style={{ width: "30%", padding: "60px 40px" }}>
+              style={{ width: "30%", padding: "60px 40px" }}
+            >
               <h4>
                 {
                   Blogs_GetAllActive?.blogs[
@@ -73,7 +74,8 @@ export default function BlogList() {
                   WebkitLineClamp: 3,
                   overflow: "hidden",
                   WebkitBoxOrient: "vertical",
-                }}>
+                }}
+              >
                 {
                   Blogs_GetAllActive?.blogs[
                     Blogs_GetAllActive?.blogs.length - 1
@@ -87,7 +89,8 @@ export default function BlogList() {
                       Blogs_GetAllActive?.blogs.length - 1
                     ]?.blog_id
                   )
-                }>
+                }
+              >
                 Xem thêm
               </Button>
             </Col>
@@ -112,7 +115,8 @@ export default function BlogList() {
         </div>
         <div
           className="bg-[#fff] rounded-md border-[0.5px]"
-          style={{ marginTop: "40px" }}>
+          style={{ marginTop: "40px" }}
+        >
           <div className="flex justify-between items-center py-2 border-b-[0.5px] px-5">
             <div className="text-[18px] uppercase font-semibold">
               Bài viết mới nhất
@@ -138,14 +142,16 @@ export default function BlogList() {
                           "https://i.pinimg.com/564x/77/f2/e4/77f2e4caf563e06b6fe9efb542ee76fc.jpg"
                         }
                       />
-                    }>
+                    }
+                  >
                     <div>
                       <div className="font-bold text-[16px] line-clamp-2 leading-[20px]">
                         {item?.blog_title ?? ""}
                       </div>
                       <div
                         className="flex items-center"
-                        style={{ width: "100%" }}>
+                        style={{ width: "100%" }}
+                      >
                         <img
                           src="https://i.pinimg.com/originals/24/97/87/2497878b60f4c362bb26333b778e4dc0.jpg"
                           style={{
@@ -165,13 +171,15 @@ export default function BlogList() {
                             whiteSpace: "nowrap",
                             overflow: "hidden",
                             textOverflow: "ellipsis",
-                          }}>
+                          }}
+                        >
                           {item?.blog_content ?? ""}
                         </div>
                       </div>
                       <div
                         className="flex items-center justify-between text-[12px]  "
-                        style={{ marginTop: "10px" }}>
+                        style={{ marginTop: "10px" }}
+                      >
                         <div className="text-[12px] px-1">
                           {" "}
                           <EyeOutlined /> <span>2200</span>
