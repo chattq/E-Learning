@@ -1,13 +1,11 @@
-import { Request } from 'express'
 import { Op } from 'sequelize'
-import category from '~/models/category.models'
-import course_category from '~/models/categoryCourse.models'
-import course from '~/models/course.models'
-import course_chapter from '~/models/courseChapter.models'
-import course_knowledge from '~/models/courseKnowledge.models'
-import course_lesson from '~/models/courseLesson.models'
-import course_requirement from '~/models/courseRequirment.models'
-import { useAutoCodeGen } from '~/utils/auto-code-gent'
+import course_category from '../models/categoryCourse.models'
+import course from '../models/course.models'
+import course_chapter from '../models/courseChapter.models'
+import course_knowledge from '../models/courseKnowledge.models'
+import course_lesson from '../models/courseLesson.models'
+import course_requirement from '../models/courseRequirment.models'
+import { useAutoCodeGen } from '../utils/auto-code-gent'
 
 export interface CategoryReqBody {
   InforBase: CourseInforBase

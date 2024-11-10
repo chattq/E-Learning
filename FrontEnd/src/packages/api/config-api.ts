@@ -6,9 +6,18 @@ import { setAccessTokenToLS } from "../../utils/localStorageHandler";
 import { notification } from "antd";
 import { useAccountBankApi } from "./API/account_bank.api";
 import { useBlogsApi } from "./API/blogs.api";
+import { useSetAtom } from "jotai";
+import { showErrorAtom } from "../ui/Error/error-store";
+import { useVerifyEmailApi } from "./API/verify_email.api";
+<<<<<<< HEAD
+import { useUserApi } from "./API/user.api";
+=======
+import { useCoursesApi } from "./API/course.api";
+>>>>>>> 3855333d7094a41160ce67b7eab3e2146754d17f
 
 export const createApiBase = () => {
   const accessToken = localStorage.getItem("access_token");
+  const setShowError = useSetAtom(showErrorAtom);
   const api = axios.create({
     baseURL: `${import.meta.env.VITE_API_DOMAIN}`,
     headers: {
@@ -24,7 +33,14 @@ export const createApiBase = () => {
       return config;
     },
     (error) => {
-      return Promise.reject(error);
+      setShowError({
+        isSuccess: false,
+        message: error.message,
+        data: {
+          message: error.message,
+        },
+      });
+      // return Promise.reject(error);
     }
   );
 
@@ -34,13 +50,13 @@ export const createApiBase = () => {
       const data = response.data;
       const result: any = {
         isSuccess: data.isSuccess,
-        message: data.message,
+        message: data.data?.message,
         data: data.data,
       };
       // console.log(39, url);
       if (url === "/users/login" || url === "/users/register") {
         if (data.isSuccess) {
-          // console.log(data);
+          console.log(data);
           setAccessTokenToLS(data.data.Access_token);
 
           localStorage.setItem("profile", JSON.stringify(data.data.InforUser));
@@ -53,16 +69,36 @@ export const createApiBase = () => {
     function (error: AxiosError) {
       if (error?.response?.status === 401) {
         // location.href = "/login";
+        setShowError({
+          isSuccess: false,
+          message: error.message,
+          data: {
+            message: error.message,
+          },
+        });
       } else {
         // alert(error.message);
         notification.error({
           message: "Error",
           description: error.message,
         });
-
+        setShowError({
+          isSuccess: false,
+          message: error.message,
+          data: {
+            message: error.message,
+          },
+        });
         return null;
       }
-      return Promise.reject(error);
+      setShowError({
+        isSuccess: false,
+        message: error.message,
+        data: {
+          message: error.message,
+        },
+      });
+      return null;
     }
   );
   return api;
@@ -75,12 +111,18 @@ export const createClientGateApi = () => {
   const categoriesApi = useCategoriesApi(apiBase);
   const accountBankApi = useAccountBankApi(apiBase);
   const blogsApi = useBlogsApi(apiBase);
+  const userApi = useUserApi(apiBase);
+  const verifyApi = useVerifyEmailApi(apiBase);
+  const coursesApi = useCoursesApi(apiBase);
   return {
+    ...coursesApi,
+    ...verifyApi,
     ...accountBankApi,
     ...useUploadFile,
     ...authAPI,
     ...categoriesApi,
     ...blogsApi,
+    ...userApi,
   };
 };
 export const useConfigAPI = () => {

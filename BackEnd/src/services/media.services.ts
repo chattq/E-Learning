@@ -1,6 +1,5 @@
 import { Request } from 'express'
-
-import { getNameFormFullName, handleFileUpload } from '~/utils/file'
+import { handleFileUpload } from '../utils/file'
 
 interface IFile {
   created_at?: string

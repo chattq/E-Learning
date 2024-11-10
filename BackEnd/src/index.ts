@@ -6,8 +6,9 @@ import { checkConnectionDB } from './middlewares/databaseConnect.middlewares'
 import { initFolder } from './utils/file'
 import cors from 'cors'
 import { roomHandler } from './socket.io/roomHandler'
-import { connectDbSequelize } from './config/connection-database'
+
 import router from './use_router'
+import { connectDbSequelize } from './config/connection-database'
 
 require('dotenv').config()
 
@@ -68,3 +69,4 @@ const startServer = async () => {
 }
 
 startServer()
+export default app

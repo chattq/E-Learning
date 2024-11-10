@@ -1,24 +1,25 @@
 import { config } from 'dotenv'
-
-import { TokenType, UserVerifyStatus } from '~/constants/enums'
-import { RegisterReqBody } from '~/controllers/users.controllers'
-import refresh_token from '~/models/refreshToken.models'
-import user from '~/models/user.models'
-import { hasPassword } from '~/utils/crypto'
-import { sendVerifyRegisterEmail } from '~/utils/email'
-
-import { signToken, verifyToken } from '~/utils/jwt'
-import { useGetTime } from '~/utils/useGetTime'
+import { TokenType, UserVerifyStatus } from '../constants/enums'
+import { RegisterReqBody } from '../controllers/users.controllers'
+import refresh_token from '../models/refreshToken.models'
+import user from '../models/user.models'
+import { hasPassword } from '../utils/crypto'
+import { sendVerifyRegisterEmail } from '../utils/email'
+import { signToken, verifyToken } from '../utils/jwt'
+import { useGetTime } from '../utils/useGetTime'
+import { useRandomOTP } from '../utils/useRandomOTP'
 const { getTimeMoment } = useGetTime()
+const { generateRandomOTP } = useRandomOTP()
 
 config()
 
 class UserService {
-  private signAccessToken(user_id: string) {
+  private signAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     return signToken({
       payload: {
         user_id,
-        token_type: TokenType.AccessToken
+        token_type: TokenType.AccessToken,
+        verify
       },
       privateKey: process.env.JWT_SECRET_ACCESS_TOKEN as string,
       options: {
@@ -26,11 +27,12 @@ class UserService {
       }
     })
   }
-  private signRefreshToken(user_id: string) {
+  private signRefreshToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     return signToken({
       payload: {
         user_id,
-        token_type: TokenType.RefreshToken
+        token_type: TokenType.RefreshToken,
+        verify
       },
       privateKey: process.env.JWT_SECRET_REFRESH_TOKEN as string,
       options: {
@@ -38,19 +40,7 @@ class UserService {
       }
     })
   }
-  private signEmailVerifyToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
-    return signToken({
-      payload: {
-        user_id,
-        token_type: TokenType.EmailVerifyToken,
-        verify
-      },
-      privateKey: process.env.JWT_SECRET_EMAIL_VERIFY_TOKEN as string,
-      options: {
-        expiresIn: process.env.EMAIL_VERIFY_TOKEN_EXPIRES_IN
-      }
-    })
-  }
+
   private decodeRefreshToken(refresh_token: string) {
     return verifyToken({
       token: refresh_token,
@@ -58,38 +48,50 @@ class UserService {
     })
   }
 
-  private signAccessAndRefreshToken(user_id: string) {
-    return Promise.all([this.signAccessToken(user_id), this.signRefreshToken(user_id)])
+  private signAccessAndRefreshToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
+    return Promise.all([this.signAccessToken({ user_id, verify }), this.signRefreshToken({ user_id, verify })])
   }
   async registerUser(payload: RegisterReqBody) {
-    const { email, name, password } = payload
-    const email_verify_token = await this.signEmailVerifyToken({
-      user_id: email.toUpperCase(),
-      verify: UserVerifyStatus.Unverified
-    })
+    const { email, name, password, role } = payload
+    const OTP = generateRandomOTP()
+    const timeMoment = getTimeMoment()
     const dataCreateUser = {
       user_id: email.toUpperCase(),
       user_name: name,
       user_email: email.toUpperCase(),
       user_password: hasPassword(password),
-      user_create_at: getTimeMoment(),
-      email_verify_token: email_verify_token
+      user_create_at: timeMoment,
+      verify_cation_code: OTP,
+      expiresAt: timeMoment,
+      user_role: role
     }
     await user.create(dataCreateUser)
-    const [Access_token, Refresh_tokens] = await this.signAccessAndRefreshToken(email)
+    const [Access_token, Refresh_tokens] = await this.signAccessAndRefreshToken({
+      user_id: email,
+      verify: UserVerifyStatus.Unverified
+    })
     await refresh_token.create({
       user_id: email.toUpperCase(),
       token: Refresh_tokens,
-      create_at: getTimeMoment()
+      create_at: timeMoment
     })
-    // await sendVerifyRegisterEmail(payload.email, email_verify_token)
+    await sendVerifyRegisterEmail(payload.email, OTP)
     return {
       Access_token,
       Refresh_tokens
     }
   }
   async login(user_id: string) {
-    const [Access_token, Refresh_token] = await this.signAccessAndRefreshToken(user_id.toUpperCase())
+    const inforUser = await user.findOne({
+      where: {
+        user_email: user_id.toUpperCase()
+      }
+    })
+    const [Access_token, Refresh_token] = await this.signAccessAndRefreshToken({
+      user_id: user_id.toUpperCase(),
+      verify: inforUser?.dataValues.verify
+    })
+
     await refresh_token.update(
       { token: Refresh_token },
       {
@@ -100,7 +102,8 @@ class UserService {
     )
     return {
       Access_token,
-      Refresh_token
+      Refresh_token,
+      inforUser
     }
   }
   async logout(user_id: string) {
@@ -113,30 +116,64 @@ class UserService {
       }
     })
   }
-  async verifyEmail(user_id: string) {
-    // // Tạo giá trị cập nhật
-    // // MongoDB cập nhật giá trị
-    // const [token] = await Promise.all([
-    //   this.signAccessAndRefreshToken({ user_id, verify: UserVerifyStatus.Verified }),
-    //   databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
-    //     {
-    //       $set: {
-    //         email_verify_token: '',
-    //         verify: UserVerifyStatus.Verified,
-    //         updated_at: '$$NOW'
-    //       }
-    //     }
-    //   ])
-    // ])
-    // const [access_token, refresh_token] = token
-    // const { iat, exp } = await this.decodeRefreshToken(refresh_token)
-    // await databaseService.refreshTokens.insertOne(
-    //   new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token, iat, exp })
-    // )
-    // return {
-    //   access_token,
-    //   refresh_token
-    // }
+  async verifyEmail(verification_code: string, user_id: string) {
+    // Tìm user theo ID
+    const updatedData: Partial<user> = {
+      verify_cation_code: '',
+      verify: UserVerifyStatus.Verified,
+      expiresAt: ''
+    }
+
+    // Cập nhật thông tin user
+
+    // Trả về user đã cập nhật
+
+    const [token] = await Promise.all([
+      this.signAccessAndRefreshToken({
+        user_id: user_id.toUpperCase(),
+        verify: UserVerifyStatus.Verified
+      }),
+      user.update(updatedData, {
+        where: {
+          user_id: user_id.toUpperCase()
+        }
+      })
+    ])
+
+    const [access_token, refresh_tokens] = token
+    await refresh_token.update(
+      {
+        token: refresh_tokens
+      },
+      {
+        where: {
+          user_id: user_id.toUpperCase()
+        }
+      }
+    )
+    return {
+      access_token,
+      refresh_tokens
+    }
+  }
+  async reSendVerifyEmail(user_id: string) {
+    const OTP = generateRandomOTP()
+    const timeMoment = getTimeMoment()
+    const updatedData: Partial<user> = {
+      verify_cation_code: OTP,
+      expiresAt: timeMoment
+    }
+
+    await Promise.all([
+      user.update(updatedData, {
+        where: {
+          user_id: user_id.toUpperCase()
+        }
+      }),
+      sendVerifyRegisterEmail(user_id, OTP)
+    ])
+
+    return null
   }
 }
 const userService = new UserService()

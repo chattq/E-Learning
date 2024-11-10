@@ -1,10 +1,9 @@
 import { checkSchema } from 'express-validator'
-import { json } from 'sequelize'
-import category from '~/models/category.models'
-import { CategoryReqBody } from '~/services/categories.services'
-import { isNullOrUndefined } from '~/utils/CheckCondition'
-import { ErrorWithStatus } from '~/utils/Errors'
-import { validate } from '~/utils/validation'
+import category from '../models/category.models'
+import { CategoryReqBody } from '../services/categories.services'
+import { isNullOrUndefined } from '../utils/CheckCondition'
+import { ErrorWithStatus } from '../utils/Errors'
+import { validate } from '../utils/validation'
 
 export const categoriesValidator = validate(
   checkSchema(

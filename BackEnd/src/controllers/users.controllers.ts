@@ -1,13 +1,11 @@
 import express, { Request, Response, NextFunction } from 'express'
-import userService from '~/services/users.services'
 import { ParamsDictionary } from 'express-serve-static-core'
-import { pick } from 'lodash'
-import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
-import { ResultsReturned } from '~/utils/results-api'
-import user from '~/models/user.models'
-import { TokenType } from '~/constants/enums'
+import { USERS_MESSAGES } from '../constants/messages-handle/users.messages'
 import { JwtPayload } from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
+import { TokenType } from '../constants/enums'
+import { ResultsReturned } from '../utils/results-api'
+import userService from '../services/users.services'
 require('dotenv').config()
 
 export interface RegisterReqBody {
@@ -16,6 +14,7 @@ export interface RegisterReqBody {
   password: string
   confirm_password?: string
   date_of_birth?: string
+  role?: string
 }
 
 export interface TokenPayload extends JwtPayload {
@@ -25,16 +24,18 @@ export interface TokenPayload extends JwtPayload {
 
 class UserController {
   async registerController(req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) {
-    const { name, email, password } = req.body
+    const { name, email, password, role } = req.body
 
-    const result = await userService.registerUser({ name, email, password })
+    const result = await userService.registerUser({ name, email, password, role })
     return res.json(
       new ResultsReturned({
         isSuccess: true,
         message: 'Register successful',
         data: {
-          user_id: email.toUpperCase(),
-          result
+          InforUser: {
+            user_id: email.toUpperCase()
+          },
+          ...result
         }
       })
     )
@@ -42,23 +43,20 @@ class UserController {
   async loginController(req: Request, res: Response) {
     const { email, password } = req.body
     const result = await userService.login(email)
-    const inforUser = await user.findOne({
-      where: {
-        user_email: email.toUpperCase()
-      }
-    })
+
     return res.json(
       new ResultsReturned({
         isSuccess: true,
         message: 'Login successful',
         data: {
           InforUser: {
-            id: inforUser?.dataValues.user_id,
-            email: inforUser?.dataValues.user_email,
-            name: inforUser?.dataValues.user_name,
-            avatar: inforUser?.dataValues.user_avatar
+            id: result.inforUser?.dataValues.user_id,
+            email: result.inforUser?.dataValues.user_email,
+            name: result.inforUser?.dataValues.user_name,
+            avatar: result.inforUser?.dataValues.user_avatar
           },
-          ...result
+          Access_token: result.Access_token,
+          Refresh_token: result.Refresh_token
         }
       })
     )
@@ -75,13 +73,23 @@ class UserController {
     )
   }
   async emailVerifyController(req: Request, res: Response) {
-    const { email_verify_token } = req.body
-    // const result = await userService.emailVerify(token)
-    // return res.json({
-    //   isSuccess: true,
-    //   message: USERS_MESSAGES.EMAIL_VERIFY_TOKEN_IS_REQUIRED,
-    //   data: result
-    // })
+    const { verification_code } = req.body
+    const user_id = req.decoded_authorization?.user_id
+    const result = await userService.verifyEmail(verification_code, user_id as string)
+    return res.json({
+      isSuccess: true,
+      message: 'Xác thực thành công!',
+      data: result
+    })
+  }
+  async reSendEmailVerifyController(req: Request, res: Response) {
+    const user_id = req.decoded_authorization?.user_id
+    await userService.reSendVerifyEmail(user_id as string)
+    return res.json({
+      isSuccess: true,
+      message: 'Đã gửi lại mã thành công, vui lòng kiểm tra email',
+      data: null
+    })
   }
   async sendEmail(req: Request, res: Response) {
     const { subject, html, text, MailTo } = req.body
@@ -114,7 +122,7 @@ class UserController {
   async getMeController(req: Request, res: Response, next: NextFunction) {
     const userId = (req.decoded_authorization as TokenPayload).user_id
     const result = await userService.getProfile(userId)
-
+    console.log('dataValues', result?.dataValues)
     return res.json(
       new ResultsReturned({
         isSuccess: true,
@@ -123,7 +131,42 @@ class UserController {
           id: result?.dataValues.user_id,
           email: result?.dataValues.user_email,
           name: result?.dataValues.user_name,
-          avatar: result?.dataValues.user_avatar
+          avatar: result?.dataValues.user_avatar,
+          phone: result?.dataValues.user_phone,
+          address: result?.dataValues.user_address,
+          dateOfBirth: result?.dataValues.user_date_of_birth,
+          role: result?.dataValues.user_role,
+          createdAt: result?.dataValues.createdAt,
+          updatedAt: result?.dataValues.updatedAt,
+          active: result?.dataValues.user_active,
+          bio: result?.dataValues.user_bio,
+          website: result?.dataValues.user_website,
+          verify: result?.dataValues.verify
+        }
+      })
+    )
+  }
+  async getTimeOTPController(req: Request, res: Response, next: NextFunction) {
+    const userId = (req.decoded_authorization as TokenPayload).user_id
+    const result = await userService.getProfile(userId)
+    const expiresAt = result?.dataValues.expiresAt
+    const currentTime: any = new Date()
+    const inputDate: any = new Date(expiresAt) // Chuyển đổi chuỗi thành Date
+    // Tính khoảng thời gian giữa hai thời điểm (millisecond)
+    const timeDifference = currentTime - inputDate // Kết quả là millisecond
+
+    // Chuyển đổi 1 phút thành millisecond
+    const oneMinute = 60 * 1000
+
+    // Chuyển đổi timeDifference từ millisecond sang giây
+    const timeDifferenceInSeconds = Math.floor(timeDifference / 1000)
+
+    return res.json(
+      new ResultsReturned({
+        isSuccess: true,
+        message: 'Get time OTP',
+        data: {
+          expires_at: timeDifference > oneMinute ? 0 : 60 - timeDifferenceInSeconds
         }
       })
     )

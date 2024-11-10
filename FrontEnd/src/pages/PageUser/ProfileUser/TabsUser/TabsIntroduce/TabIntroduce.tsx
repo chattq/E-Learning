@@ -3,11 +3,11 @@ import React, { forwardRef, useState } from "react";
 import Overview from "./componentItem/Overview";
 import { ButtonEdit } from "./componentItem/styleComponentItem/overViewStyle";
 import ModalEditInfo from "./componentItem/ModalEditInfo";
+import { useConfigAPI } from "../../../../../packages/api/config-api";
+import { useQuery } from "@tanstack/react-query";
 
 export const TabIntroduce = forwardRef(() => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-
 
   const showModal = () => {
     setIsModalOpen(true);

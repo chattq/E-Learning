@@ -1,9 +1,10 @@
 import { Request } from 'express'
 import formidable from 'formidable'
 import fs from 'fs'
-import { UPLOAD_TEMP_DIR } from '~/constants/dir'
+
 import { v2 as cloudinary } from 'cloudinary'
 import { Storage } from 'megajs'
+import { UPLOAD_TEMP_DIR } from '../constants/dir'
 
 cloudinary.config({
   cloud_name: 'dkqyptupf',

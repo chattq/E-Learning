@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { connectDbSequelize } from '~/config/connection-database'
+import { connectDbSequelize } from '../config/connection-database'
 
 export const checkConnectionDB = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -15,7 +15,7 @@ export const checkConnectionDB = async (req: Request, res: Response, next: NextF
     })
     return res.status(500).json({
       Success: false,
-      Data: {
+      data: {
         message: 'Error connecting to database',
         detail: error
       }

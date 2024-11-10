@@ -37,16 +37,15 @@ export default function BlogList() {
     },
   });
 
-  console.log("Blogs_GetAllActive", Blogs_GetAllActive?.blogs);
-
   return (
     <UserPageLayout>
       {isLoading && <LoadPanel />}
 
-      {/* <div
+      <div
         dangerouslySetInnerHTML={{
           __html: Blogs_GetAllActive?.blogs[6].blog_content,
-        }}></div> */}
+        }}
+      ></div>
 
       <div className="px-4 py-4">
         <Button onClick={() => handleClickCreateBlog()}>
@@ -69,21 +68,7 @@ export default function BlogList() {
                   ]?.blog_title
                 }
               </h4>
-              <div
-                style={{
-                  display: "-webkit-box",
-                  WebkitLineClamp: 3,
-                  overflow: "hidden",
-                  WebkitBoxOrient: "vertical",
-                }}
-                dangerouslySetInnerHTML={{
-                  __html:
-                    Blogs_GetAllActive?.blogs[
-                      Blogs_GetAllActive?.blogs.length - 1
-                    ]?.blog_content,
-                }}
-              ></div>
-              {/* <p
+              <p
                 style={{
                   display: "-webkit-box",
                   WebkitLineClamp: 3,
@@ -96,7 +81,7 @@ export default function BlogList() {
                     Blogs_GetAllActive?.blogs.length - 1
                   ]?.blog_content
                 }
-              </p> */}
+              </p>
               <Button
                 onClick={() =>
                   handleClickCourse(

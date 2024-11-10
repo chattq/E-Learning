@@ -1,12 +1,15 @@
 import { Sequelize } from 'sequelize-typescript'
 import * as path from 'path'
 import * as fs from 'fs'
+import * as pg from 'pg'
 
 require('dotenv').config()
 
 export const connectDbSequelize = new Sequelize({
   database: process.env.DB_NAME_DATABASE as string,
   dialect: 'postgres',
+  protocol: 'postgres',
+  dialectModule: pg,
   logging: false, // Tắt toàn bộ logging
   username: process.env.DB_USERNAME as string,
   password: process.env.DB_PASSWORD,
@@ -19,6 +22,12 @@ export const connectDbSequelize = new Sequelize({
     acquire: 30000, // Thời gian tối đa (ms) để cố gắng lấy một kết nối trước khi throw error
     idle: 10000 // Thời gian tối đa (ms) mà một kết nối có thể ở trạng thái nhàn rỗi trước khi bị đóng
   }
+  // dialectOptions: {
+  //   ssl: {
+  //     require: true, // Enforces SSL connection
+  //     rejectUnauthorized: false // Allows self-signed certificates (optional, for local testing)
+  //   }
+  // }
 })
 
 // Load all models from the models directory

@@ -1,14 +1,16 @@
 import { Router } from 'express'
-import userController from '~/controllers/users.controllers'
+import userController from '../controllers/users.controllers'
 import {
+  accessTokenNoVerifyValidator,
   accessTokenValidator,
   emailVerifyTokenValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator,
+  reSendEmailValidator,
   sendEmailValidator
-} from '~/middlewares/users.middlewares'
-import { wrapRequestHandler } from '~/utils/handlers'
+} from '../middlewares/users.middlewares'
+import { wrapRequestHandler } from '../utils/handlers'
 
 const usersRouter = Router()
 
@@ -28,7 +30,7 @@ usersRouter.post('/sendEmail', sendEmailValidator, wrapRequestHandler(userContro
  * Header:
  * Body: email_verify_token
  */
-usersRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(userController.logoutController))
+usersRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(userController.emailVerifyController))
 
 /**
  * Description: verify email when user client click on the link in email
@@ -37,7 +39,11 @@ usersRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(
  * Header: {Authorization: 'Bearer ' + <accessToken>}
  * Body: {}
  */
-usersRouter.post('/resent-verify-email', accessTokenValidator, wrapRequestHandler(userController.logoutController))
+usersRouter.post(
+  '/resent-verify-email',
+  reSendEmailValidator,
+  wrapRequestHandler(userController.reSendEmailVerifyController)
+)
 
 /**
  * Description: get my profile
@@ -46,5 +52,6 @@ usersRouter.post('/resent-verify-email', accessTokenValidator, wrapRequestHandle
  * Header: {Authorization: 'Bearer ' + <accessToken>}
  */
 usersRouter.post('/me', accessTokenValidator, wrapRequestHandler(userController.getMeController))
+usersRouter.post('/getOTPtime', accessTokenNoVerifyValidator, wrapRequestHandler(userController.getTimeOTPController))
 
 export default usersRouter

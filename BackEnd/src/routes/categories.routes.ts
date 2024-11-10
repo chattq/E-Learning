@@ -1,15 +1,8 @@
 import { Router } from 'express'
-import categoryController from '~/controllers/categories.controllers'
-import userController from '~/controllers/users.controllers'
-import { categoriesValidator } from '~/middlewares/categories.middlewares'
-import {
-  accessTokenValidator,
-  emailVerifyTokenValidator,
-  loginValidator,
-  refreshTokenValidator,
-  registerValidator
-} from '~/middlewares/users.middlewares'
-import { wrapRequestHandler } from '~/utils/handlers'
+import categoryController from '../controllers/categories.controllers'
+import { categoriesValidator } from '../middlewares/categories.middlewares'
+import { accessTokenValidator } from '../middlewares/users.middlewares'
+import { wrapRequestHandler } from '../utils/handlers'
 
 const categoriesRouter = Router()
 

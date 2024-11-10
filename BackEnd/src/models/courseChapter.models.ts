@@ -23,10 +23,10 @@ class course_chapter extends Model {
   })
   course_id!: string
 
-  @BelongsTo(() => course, { foreignKey: 'course_id' })
+  @BelongsTo(() => course, { foreignKey: 'course_id', onDelete: 'CASCADE' })
   course!: course
 
-  @HasMany(() => course_lesson)
+  @HasMany(() => course_lesson, { onDelete: 'CASCADE' })
   course_lesson!: course_lesson[]
   // khóa ngoại
 }

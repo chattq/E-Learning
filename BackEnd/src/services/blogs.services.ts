@@ -1,13 +1,7 @@
 import { config } from 'dotenv'
+import blog from '../models/blogs.models'
+import { useGetTime } from '../utils/useGetTime'
 
-import { TokenType } from '~/constants/enums'
-import blog from '~/models/blogs.models'
-import refresh_token from '~/models/refreshToken.models'
-import user from '~/models/user.models'
-import { hasPassword } from '~/utils/crypto'
-
-import { signToken } from '~/utils/jwt'
-import { useGetTime } from '~/utils/useGetTime'
 const { getTimeMoment } = useGetTime()
 
 config()

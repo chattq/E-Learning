@@ -1,21 +1,13 @@
 import express, { Request, Response, NextFunction } from 'express'
-
-import userService from '~/services/users.services'
-import { ParamsDictionary } from 'express-serve-static-core'
-import { pick } from 'lodash'
-
-import { USERS_MESSAGES } from '~/constants/messages-handle/users.messages'
-
-import { ResultsReturned } from '~/utils/results-api'
-
-import Blog from '~/models/blogs.models'
-import blogService from '~/services/blogs.services'
+import blog from '../models/blogs.models'
+import blogService from '../services/blogs.services'
+import { ResultsReturned } from '../utils/results-api'
 
 class BlogController {
   // Lấy tất cả các bài blog
   async getAllBlogs(req: Request, res: Response) {
     try {
-      const blogs = await Blog.findAll()
+      const blogs = await blog.findAll()
       return res.status(200).json({
         isSuccess: true,
         message: 'Blog get all successful',

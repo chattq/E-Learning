@@ -1,8 +1,5 @@
-import { Request } from 'express'
-import category from '~/models/category.models'
-import { useAutoCodeGen } from '~/utils/auto-code-gent'
-
-import { getNameFormFullName, handleFileUpload } from '~/utils/file'
+import category from '../models/category.models'
+import { useAutoCodeGen } from '../utils/auto-code-gent'
 
 export interface CategoryReqBody {
   CategoryCode?: string
