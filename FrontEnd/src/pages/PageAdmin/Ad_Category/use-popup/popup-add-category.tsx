@@ -52,7 +52,7 @@ export const PopupAddCategory = forwardRef(
       <Modal
         width={700}
         open={open}
-        title="Thêm ngành hàng"
+        title="Thêm danh mục"
         centered
         className="popup-custom"
         onCancel={handleCancel}
@@ -63,7 +63,8 @@ export const PopupAddCategory = forwardRef(
               <Button onClick={handleCancel}>Cancel</Button>
             </Space>
           </>
-        )}>
+        )}
+      >
         <Form
           ref={formRef}
           initialValues={{
@@ -74,14 +75,16 @@ export const PopupAddCategory = forwardRef(
           }}
           name="validate_other"
           {...formItemLayout}
-          style={{ width: "100%" }}>
+          style={{ width: "100%" }}
+        >
           <Form.Item
             name="CategoryName"
-            label="Tên ngành hàng"
-            rules={[{ required: true, message: "Không được để trống ô" }]}>
+            label="Tên danh mục"
+            rules={[{ required: true, message: "Không được để trống ô" }]}
+          >
             <Input showCount maxLength={150} placeholder="Nhập vào" />
           </Form.Item>
-          <Form.Item name="CategoryParentCode" label="Ngành hàng cha">
+          <Form.Item name="CategoryParentCode" label="Danh mục cha">
             <Select
               showSearch={true}
               filterOption={(input: string, option: any) =>

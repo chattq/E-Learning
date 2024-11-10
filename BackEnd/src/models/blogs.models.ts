@@ -44,6 +44,16 @@ class blog extends Model {
   })
   updated_at!: Date
 
+  // khóa ngoại
+  @ForeignKey(() => user)
+  @Column({
+    type: DataType.STRING(100)
+  })
+  user_id!: string
+  // mối liên hệ với bảng
+  @BelongsTo(() => user, { foreignKey: 'user_id' })
+  user!: user // tham chiếu đến bảng
+
   // Thiết lập mối quan hệ với bảng User
   // @ForeignKey(() => user)
   // @Column({
