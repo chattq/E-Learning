@@ -6,7 +6,6 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { RouteItem } from "../types";
-import BlogDetail from "../pages/Blog/BlogDetail";
 import ProfileUser from "../pages/PageUser/ProfileUser/ProfileUser";
 import { MyCourses } from "../pages/PageUser/MyCourses/MyCourses";
 import BlogList from "../pages/Blog/BlogList";

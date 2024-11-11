@@ -6,7 +6,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { message, Modal, Spin, Upload } from "antd";
-import type { UploadFile, UploadProps } from "antd";
+import type { UploadFile } from "antd";
 import "./UploadFile.scss";
 import { useConfigAPI } from "../../api/config-api";
 import { UploadListType } from "antd/es/upload/interface";
@@ -29,7 +29,6 @@ export const UploadFileCustom = forwardRef(
       maxFileUpload = 1,
       listType = "picture-card",
       customButtonUpload,
-      FileList = [],
       getDataFile,
       accept,
     }: UploadFileCustomProps,

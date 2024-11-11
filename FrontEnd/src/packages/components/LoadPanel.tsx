@@ -1,6 +1,5 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
-import React from "react";
 
 const LoadPanel = () => {
   return (
@@ -13,8 +12,7 @@ const LoadPanel = () => {
         height: "100vh",
         backgroundColor: "rgba(0, 0, 0, 0.3)",
         zIndex: 1000,
-      }}
-    >
+      }}>
       <Spin
         style={{
           position: "fixed",

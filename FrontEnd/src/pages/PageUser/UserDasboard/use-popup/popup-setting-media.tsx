@@ -6,12 +6,10 @@ import {
   useState,
 } from "react";
 import { Button, Modal, Switch } from "antd";
-import { nanoid } from "nanoid";
 import { useNavigate } from "react-router-dom";
-import { useHandlerRooms } from "../../Courses/course-online/components/useHandleRoom";
 import { useSetAtom } from "jotai";
 import { streamAtom } from "../store";
-import { ws } from "../../../../socketIO";
+
 // import { streamAtom } from "../store";
 
 export const PopupSettingMedia = forwardRef(({}, ref) => {
@@ -100,7 +98,7 @@ export const PopupSettingMedia = forwardRef(({}, ref) => {
                 onChange={(value) =>
                   streamRef?.current
                     ?.getAudioTracks()
-                    .forEach((track) => (track.enabled = false))
+                    .forEach((track: any) => (track.enabled = false))
                 }
               />
             </div>

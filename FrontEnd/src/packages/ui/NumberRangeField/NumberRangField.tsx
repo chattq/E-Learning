@@ -1,5 +1,5 @@
 import { InputNumber } from "antd";
-import React, { forwardRef, useState } from "react";
+import { forwardRef, useState } from "react";
 
 interface NumberRangFieldProps {
   value?: number;
