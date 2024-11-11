@@ -9,11 +9,8 @@ import { useBlogsApi } from "./API/blogs.api";
 import { useSetAtom } from "jotai";
 import { showErrorAtom } from "../ui/Error/error-store";
 import { useVerifyEmailApi } from "./API/verify_email.api";
-<<<<<<< HEAD
-import { useUserApi } from "./API/user.api";
-=======
 import { useCoursesApi } from "./API/course.api";
->>>>>>> 3855333d7094a41160ce67b7eab3e2146754d17f
+import { useUserApi } from "./API/user.api";
 
 export const createApiBase = () => {
   const accessToken = localStorage.getItem("access_token");
