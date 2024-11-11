@@ -1,4 +1,4 @@
-import { Button, Modal } from "antd";
+import { Modal } from "antd";
 import { useAtomValue, useSetAtom } from "jotai";
 import { clearErrorsAtom, showErrorAtom } from "./error-store";
 import { uniqBy } from "lodash";

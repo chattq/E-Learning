@@ -5,7 +5,6 @@ import Login from "./pages/Login/Login";
 import { nanoid } from "nanoid";
 import UserDasboard from "./pages/PageUser/UserDasboard/UserDasboard";
 import Register from "./pages/Login/Register";
-import Test from "./pages/Test/Test";
 import VerifyEmail from "./pages/Login/VerifyEmail";
 
 function App() {
@@ -14,7 +13,6 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
-      <Route path="/test" element={<Test />} />
       <Route path="/" element={<UserDasboard />} />
       {protectedRoutes.map((route) => {
         return (

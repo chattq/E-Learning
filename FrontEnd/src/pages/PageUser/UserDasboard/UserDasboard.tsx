@@ -1,5 +1,5 @@
 import UserPageLayout from "../../../packages/layouts/user-page-layout/user-page-layout";
-import { Card, Rate } from "antd";
+import { Card } from "antd";
 import "./UserDasboard.scss";
 import StarRatings from "react-star-ratings";
 import { useNavigate } from "react-router-dom";
@@ -7,26 +7,12 @@ import { useConvertNumber } from "../../../packages/hooks/useConvertNumber";
 import { nanoid } from "nanoid";
 import { match } from "ts-pattern";
 import { RightOutlined } from "@ant-design/icons";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
-import {
-  Button,
-  Modal,
-  Cascader,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
-  Switch,
-  TreeSelect,
-} from "antd";
-import { SizeType } from "antd/es/config-provider/SizeContext";
+import { Button } from "antd";
 import { PopupSettingMedia } from "./use-popup/popup-setting-media";
 import { Banner } from "./styleUserDasboard/styleUserDasboard";
 import banneritem from "../../../assets/img/banneritem.png";
-import Meta from "antd/es/card/Meta";
 
 export default function UserDasboard() {
   const popupSettingMediaRef = useRef<any>();
@@ -139,8 +125,7 @@ export default function UserDasboard() {
                         alt="example"
                         src={item.image}
                       />
-                    }
-                  >
+                    }>
                     <div>
                       <div className="font-bold text-[16px] line-clamp-2 leading-[20px]">
                         {item.title}
@@ -289,8 +274,7 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }
-        >
+          }>
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -302,8 +286,7 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }
-        >
+          }>
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>16 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -315,8 +298,7 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }
-        >
+          }>
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -328,8 +310,7 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }
-        >
+          }>
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>

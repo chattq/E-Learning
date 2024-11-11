@@ -1,5 +1,5 @@
 import { AxiosInstance } from "axios";
-import { ApiResponse, BlogResponse } from "../../types/api.types";
+import { ApiResponse } from "../../types/api.types";
 
 export const useCoursesApi = (apiBase: AxiosInstance) => {
   return {

@@ -1,33 +1,27 @@
-import { Avatar, Button, List, Skeleton } from "antd";
-import React, { useEffect, useState } from "react";
 import { MdMapsHomeWork } from "react-icons/md";
-import {
-  ButtonEdit,
-  ButtonReMove,
-  ListItem,
-} from "./styleComponentItem/overViewStyle";
-import { IoIosSchool, IoMdMail } from "react-icons/io";
-import { FaAddressBook, FaTransgender } from "react-icons/fa6";
+import { ListItem } from "./styleComponentItem/overViewStyle";
+import { IoMdMail } from "react-icons/io";
+import { FaAddressBook } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
 import { useConfigAPI } from "../../../../../../packages/api/config-api";
 import { useQuery } from "@tanstack/react-query";
 
-interface DataType {
-  gender?: string;
-  name: {
-    title?: string;
-    first?: string;
-    last?: string;
-  };
-  email?: string;
-  picture: {
-    large?: string;
-    medium?: string;
-    thumbnail?: string;
-  };
-  nat?: string;
-  loading: boolean;
-}
+// interface DataType {
+//   gender?: string;
+//   name: {
+//     title?: string;
+//     first?: string;
+//     last?: string;
+//   };
+//   email?: string;
+//   picture: {
+//     large?: string;
+//     medium?: string;
+//     thumbnail?: string;
+//   };
+//   nat?: string;
+//   loading: boolean;
+// }
 
 const count = 5;
 const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
