@@ -72,7 +72,7 @@ export default function AcountBank() {
       title: "Trạng thái",
       dataIndex: "name",
       key: "name",
-      render: (text) => (
+      render: (_text) => (
         <a>
           For long table，need to scroll to view the header and scroll bar，then
           you can now set the fixed header and scroll bar to follow the page.
@@ -83,7 +83,7 @@ export default function AcountBank() {
       title: "Action",
       key: "action",
       fixed: "right",
-      render: (_, record) => (
+      render: (_, _record) => (
         <Space size={10} wrap direction="vertical">
           <Button>Đặt làm mặc định</Button>
           <Button>Xóa</Button>

@@ -55,7 +55,7 @@ export default function TabAll() {
       title: "Trạng thái",
       dataIndex: "name",
       key: "name",
-      render: (text) => (
+      render: (_text) => (
         <a>
           For long table，need to scroll to view the header and scroll bar，then
           you can now set the fixed header and scroll bar to follow the page.

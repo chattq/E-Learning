@@ -11,12 +11,12 @@ interface PopupCategoryProps {
 }
 
 export const PopupAddCategory = forwardRef(
-  ({ dataCategory, tableRef }: PopupCategoryProps, ref) => {
+  ({ dataCategory }: PopupCategoryProps, _ref) => {
     const [open, setOpen] = useState(false);
     const api = useConfigAPI();
     const queryClient = useQueryClient();
 
-    useImperativeHandle(ref, () => ({
+    useImperativeHandle(_ref, () => ({
       showPopup() {
         setOpen(true);
       },
@@ -63,8 +63,7 @@ export const PopupAddCategory = forwardRef(
               <Button onClick={handleCancel}>Cancel</Button>
             </Space>
           </>
-        )}
-      >
+        )}>
         <Form
           ref={formRef}
           initialValues={{
@@ -75,13 +74,11 @@ export const PopupAddCategory = forwardRef(
           }}
           name="validate_other"
           {...formItemLayout}
-          style={{ width: "100%" }}
-        >
+          style={{ width: "100%" }}>
           <Form.Item
             name="CategoryName"
             label="Tên danh mục"
-            rules={[{ required: true, message: "Không được để trống ô" }]}
-          >
+            rules={[{ required: true, message: "Không được để trống ô" }]}>
             <Input showCount maxLength={150} placeholder="Nhập vào" />
           </Form.Item>
           <Form.Item name="CategoryParentCode" label="Danh mục cha">

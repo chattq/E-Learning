@@ -3,7 +3,7 @@ export const getAllUniqueUserCodes = (data: any) => {
   let addedUserCodes: any = [];
 
   data?.forEach((val: any) => {
-    val?.dataTask.forEach((user: any, index: any) => {
+    val?.dataTask.forEach((user: any, _index: any) => {
       if (!addedUserCodes.includes(user.UserCode)) {
         addedUserCodes.push(user.UserCode);
         dataUser.push({

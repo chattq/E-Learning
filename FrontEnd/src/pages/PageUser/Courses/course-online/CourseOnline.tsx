@@ -60,7 +60,7 @@ export default function CourseOnline() {
       videoRef.current &&
       videoRef.current !== document.pictureInPictureElement
     ) {
-      videoRef.current.requestPictureInPicture().catch((error) => {
+      videoRef.current.requestPictureInPicture().catch((error: any) => {
         console.error("Error entering Picture-in-Picture mode:", error);
       });
     }
@@ -74,15 +74,13 @@ export default function CourseOnline() {
             style={{
               height: windowSize.height - 61,
             }}
-            className="w-[350px] bg-slate-200"
-          ></div>
+            className="w-[350px] bg-slate-200"></div>
         </div>
         <div>
           <Layout
             style={{
               width: windowSize.width - 350,
-            }}
-          >
+            }}>
             <Header
               style={{
                 display: "flex",
@@ -92,8 +90,7 @@ export default function CourseOnline() {
                 backgroundColor: "#fff",
                 lineHeight: "56px",
               }}
-              className="box-shadow-header header-wrapper"
-            >
+              className="box-shadow-header header-wrapper">
               <Flex justify="">
                 <Button
                   style={{
@@ -145,8 +142,7 @@ export default function CourseOnline() {
                   <div
                     style={{
                       width: "100%",
-                    }}
-                  >
+                    }}>
                     <div>
                       <CardLayout>
                         <div>
