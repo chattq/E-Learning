@@ -92,7 +92,7 @@ export const UploadFileCustom = forwardRef(
     return (
       <>
         <Upload
-          // action={`${import.meta.env.VITE_API_DOMAIN}/medias/upload-images`}
+          // action={`${import.meta.env.VITE_API_DOMAINBE}/medias/upload-images`}
           listType={listType}
           accept={accept}
           fileList={fileList}
