@@ -6,7 +6,7 @@ interface ModalEditInfoProps {
   setIsModalOpen: (isOpen: boolean) => void;
 }
 
-const ModalEditInfo = (isModalOpen: any, setIsModalOpen: any) => {
+const ModalEditInfo = (isModalOpen: any) => {
   const [form] = Form.useForm();
 
   const handleOk = () => {
@@ -22,8 +22,7 @@ const ModalEditInfo = (isModalOpen: any, setIsModalOpen: any) => {
       title="Sửa thông tin cá nhân"
       open={isModalOpen?.isModalOpen}
       onOk={handleOk}
-      onCancel={handleCancel}
-    >
+      onCancel={handleCancel}>
       <Form
         form={form}
         name="register"
@@ -32,8 +31,7 @@ const ModalEditInfo = (isModalOpen: any, setIsModalOpen: any) => {
           prefix: "86",
         }}
         style={{ maxWidth: 600 }}
-        scrollToFirstError
-      >
+        scrollToFirstError>
         <Form.Item
           name="name"
           label="Họ tên"
@@ -43,8 +41,7 @@ const ModalEditInfo = (isModalOpen: any, setIsModalOpen: any) => {
               message: "Please input your nickname!",
               whitespace: true,
             },
-          ]}
-        >
+          ]}>
           <Input />
         </Form.Item>
         <Form.Item
@@ -98,8 +95,7 @@ const ModalEditInfo = (isModalOpen: any, setIsModalOpen: any) => {
               required: true,
               message: "Please input your E-mail!",
             },
-          ]}
-        >
+          ]}>
           <Input />
         </Form.Item>
 
@@ -108,22 +104,20 @@ const ModalEditInfo = (isModalOpen: any, setIsModalOpen: any) => {
           label="SĐT"
           rules={[
             { required: true, message: "Please input your phone number!" },
-          ]}
-        >
+          ]}>
           <Input style={{ width: "100%" }} />
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           name="gender"
           label="Giới tính"
-          rules={[{ required: true, message: "Please select gender!" }]}
-        >
+          rules={[{ required: true, message: "Please select gender!" }]}>
           <Select placeholder="select your gender">
             <Option value="male">Male</Option>
             <Option value="female">Female</Option>
             <Option value="other">Other</Option>
           </Select>
-        </Form.Item>
+        </Form.Item> */}
       </Form>
     </Modal>
   );
