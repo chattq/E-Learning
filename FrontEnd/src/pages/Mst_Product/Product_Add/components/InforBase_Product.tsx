@@ -77,7 +77,7 @@ export default function InforBaseProduct() {
             rules={[{ required: true, message: "Province is required" }]}>
             <div className="translate-y-7">
               <UploadFileCustom
-                getDataFile={function (data: { url: string | any }): void {
+                getDataFile={function (_data: { url: string | any }): void {
                   throw new Error("Function not implemented.");
                 }}
               />
@@ -91,7 +91,7 @@ export default function InforBaseProduct() {
               noStyle
               rules={[{ required: true, message: "Province is required" }]}>
               <UploadFileCustom
-                getDataFile={function (data: { url: string | any }): void {
+                getDataFile={function (_data: { url: string | any }): void {
                   throw new Error("Function not implemented.");
                 }}
               />

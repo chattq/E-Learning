@@ -14,7 +14,7 @@ export default function AdminPageLayout({ children }: any) {
 
   const itemsSideBar: MenuItem[] = adminRoutes
     .filter((val: any) => val.mainMenuTitle !== "")
-    .map((item, index: any) => {
+    .map((item, _index: any) => {
       return {
         key: item.key,
         icon: item.icon,
@@ -22,7 +22,7 @@ export default function AdminPageLayout({ children }: any) {
         onClick: item.path !== "" ? () => handleClickSubMenu(item) : () => {},
         children: item?.children
           ?.filter((val: any) => val.subMenuTitle !== "")
-          .map((child, index) => {
+          .map((child, _index) => {
             return {
               key: `${child.key}`,
               label: child.subMenuTitle,
