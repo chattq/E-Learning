@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 const corsOptions = {
-  origin: 'http://localhost:5000'
+  origin: process.env.CLIENT_DOMAIN
 }
 
 app.use(cors(corsOptions))
@@ -47,7 +47,7 @@ const startServer = async () => {
 
     const io = new Server(httpServer, {
       cors: {
-        origin: 'http://localhost:5000'
+        origin: process.env.CLIENT_DOMAIN
       }
     })
 
