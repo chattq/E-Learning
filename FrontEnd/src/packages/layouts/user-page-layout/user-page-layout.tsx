@@ -10,7 +10,7 @@ export default function UserPageLayout({ children }: any) {
   const { Header, Content, Sider } = Layout;
   const { pathname: currentPath } = useLocation();
 
-  const itemsSideBar: MenuItem[] = siderbarRouters.map((item, index: any) => {
+  const itemsSideBar: MenuItem[] = siderbarRouters.map((item, _index: any) => {
     return {
       key: `/${item.key}`,
       icon: item.icon,

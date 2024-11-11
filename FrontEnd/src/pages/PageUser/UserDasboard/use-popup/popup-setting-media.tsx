@@ -84,7 +84,7 @@ export const PopupSettingMedia = forwardRef(({}, ref) => {
               <label>Camera</label>
               <Switch
                 defaultValue={camera}
-                onChange={(value) =>
+                onChange={(_value) =>
                   streamRef?.current
                     .getTracks()
                     .forEach((track: any) => track.stop())
@@ -95,7 +95,7 @@ export const PopupSettingMedia = forwardRef(({}, ref) => {
               <label>Micro</label>
               <Switch
                 defaultValue={audio}
-                onChange={(value) =>
+                onChange={(_value) =>
                   streamRef?.current
                     ?.getAudioTracks()
                     .forEach((track: any) => (track.enabled = false))

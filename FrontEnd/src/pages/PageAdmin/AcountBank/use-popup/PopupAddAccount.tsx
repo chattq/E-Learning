@@ -176,7 +176,7 @@ export const PopupAddAccount = forwardRef<IPopupAddAccountRef | undefined>(
             rules={[
               { required: true, message: "Số tài khoản không được để trống!" },
               {
-                validator: async (_, value) => {
+                validator: async (_, _value) => {
                   const bankName = formRef.current?.getFieldValue("BankName");
                   if (!bankName) {
                     return Promise.reject(
