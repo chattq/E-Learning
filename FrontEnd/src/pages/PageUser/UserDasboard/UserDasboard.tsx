@@ -13,6 +13,9 @@ import { Button } from "antd";
 import { PopupSettingMedia } from "./use-popup/popup-setting-media";
 import { Banner } from "./styleUserDasboard/styleUserDasboard";
 import banneritem from "../../../assets/img/banneritem.png";
+import Meta from "antd/es/card/Meta";
+import { useQuery } from "@tanstack/react-query";
+import { useConfigAPI } from "../../../packages/api/config-api";
 
 export default function UserDasboard() {
   const popupSettingMediaRef = useRef<any>();
@@ -84,6 +87,21 @@ export default function UserDasboard() {
     },
   ];
 
+  const api = useConfigAPI();
+  const { data: Course_GetAllActive, isLoading } = useQuery({
+    queryKey: ["Blogs_GetAllActive"],
+    queryFn: async () => {
+      const response = await api.Course_GetAll();
+      if (response.isSuccess) {
+        return response.data;
+      } else {
+        console.log(response);
+      }
+    },
+  });
+
+  console.log("Course_GetAllActive", Course_GetAllActive);
+
   return (
     <UserPageLayout>
       <Banner className="grid grid-cols-2 gap-2">
@@ -113,7 +131,7 @@ export default function UserDasboard() {
             </div>
           </div>
           <div className="grid xl:grid-cols-5 lg:grid-cols-4 lg:gap-3 md:grid-cols-3 md:gap-4 md:px-4 md:py-4 sm:grid-cols-2 px-5 py-5 xl:gap-5 gap-5">
-            {dataCourse.map((item: any) => {
+            {Course_GetAllActive?.map((item: any) => {
               return (
                 <React.Fragment key={nanoid()}>
                   <Card
@@ -123,21 +141,24 @@ export default function UserDasboard() {
                       <img
                         className="h-[165px] object-cover"
                         alt="example"
-                        src={item.image}
+                        src={item.course_image}
                       />
-                    }>
+                    }
+                  >
                     <div>
                       <div className="font-bold text-[16px] line-clamp-2 leading-[20px]">
                         {item.title}
                       </div>
-                      <div className="text-[13px] py-[1px]">{item.author}</div>
+                      <div className="text-[13px] py-[1px]">
+                        {item.course_create_by}
+                      </div>
                       <div className="flex items-center gap-2 pt-[4px]">
                         <div className="text-[13px] rounded-sm font-bold bg-[#3eceb9] text-[#ffff] px-1">
-                          {item.courseType}
+                          {item.course_type}
                         </div>
-                        {item.status ? (
+                        {/* {item.course_active ? (
                           <>
-                            {match(item.status)
+                            {match(item.course_active)
                               .with("New", () => {
                                 return (
                                   <div className="text-[13px] line-clamp-1 rounded-sm font-bold bg-[#24e75b] px-2">
@@ -167,7 +188,7 @@ export default function UserDasboard() {
                                 );
                               })}
                           </>
-                        ) : null}
+                        ) : null} */}
                       </div>
                       <div className="flex items-center gap-3 py-[1px]">
                         <div>
@@ -185,10 +206,10 @@ export default function UserDasboard() {
                       </div>
                       <div className="flex items-center gap-2 text-[16px] ">
                         <div className="font-semibold text-[17px]">
-                          {convertMoneyVND(item.price ?? 0)}
+                          {convertMoneyVND(item.course_price ?? 0)}
                         </div>
                         <div className="line-through text-[12px] truncate">
-                          {convertMoneyVND(item.discount ?? 0)}
+                          {convertMoneyVND(item.course_discount ?? 0)}
                         </div>
                         <div className="text-[12px] rounded-sm bg-[#ec8f8f] text-[#ffff] px-1">
                           -20%
@@ -274,7 +295,8 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }>
+          }
+        >
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -286,7 +308,8 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }>
+          }
+        >
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>16 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -298,7 +321,8 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }>
+          }
+        >
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -310,7 +334,8 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }>
+          }
+        >
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
