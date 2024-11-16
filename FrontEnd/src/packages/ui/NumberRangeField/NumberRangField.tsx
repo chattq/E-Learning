@@ -1,5 +1,5 @@
 import { InputNumber } from "antd";
-import React, { forwardRef, useState } from "react";
+import { forwardRef, useState } from "react";
 
 interface NumberRangFieldProps {
   value?: number;
@@ -12,7 +12,7 @@ interface NumberRangFieldProps {
 export const NumberRangField = forwardRef(
   (
     { minFrom = 0, minTo = 0, maxTo, maxFrom }: NumberRangFieldProps,
-    ref: any
+    _ref: any
   ) => {
     const [minValue, setMinValue] = useState<number>(0);
     const [maxValue, setMaxValue] = useState<any>(null);

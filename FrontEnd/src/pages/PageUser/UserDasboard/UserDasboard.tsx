@@ -1,5 +1,5 @@
 import UserPageLayout from "../../../packages/layouts/user-page-layout/user-page-layout";
-import { Card, Rate } from "antd";
+import { Card } from "antd";
 import "./UserDasboard.scss";
 import StarRatings from "react-star-ratings";
 import { useNavigate } from "react-router-dom";
@@ -7,22 +7,9 @@ import { useConvertNumber } from "../../../packages/hooks/useConvertNumber";
 import { nanoid } from "nanoid";
 import { match } from "ts-pattern";
 import { RightOutlined } from "@ant-design/icons";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
-import {
-  Button,
-  Modal,
-  Cascader,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
-  Switch,
-  TreeSelect,
-} from "antd";
-import { SizeType } from "antd/es/config-provider/SizeContext";
+import { Button } from "antd";
 import { PopupSettingMedia } from "./use-popup/popup-setting-media";
 import { Banner } from "./styleUserDasboard/styleUserDasboard";
 import banneritem from "../../../assets/img/banneritem.png";

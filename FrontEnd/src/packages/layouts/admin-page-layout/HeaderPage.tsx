@@ -1,5 +1,4 @@
 import { Layout } from "antd";
-import React from "react";
 import LogoLayout from "./Logo-layout";
 import HeaderLayout from "../../ui/header-layout/HeaderLayout";
 

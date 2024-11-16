@@ -16,7 +16,7 @@ export const createApiBase = () => {
   const accessToken = localStorage.getItem("access_token");
   const setShowError = useSetAtom(showErrorAtom);
   const api = axios.create({
-    baseURL: `${import.meta.env.VITE_API_DOMAIN}`,
+    baseURL: `${import.meta.env.VITE_API_DOMAINBE}`,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },

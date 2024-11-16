@@ -16,7 +16,7 @@ export const CardLayout = forwardRef(
       textNoChild = "Vui lòng thêm content",
       visible = false,
     }: CardLayoutProps,
-    ref: any
+    _ref: any
   ) => {
     return (
       <>

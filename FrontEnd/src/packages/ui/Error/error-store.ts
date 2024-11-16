@@ -13,6 +13,6 @@ export const showErrorAtom = atom(
     }
   }
 );
-export const clearErrorsAtom = atom(null, (get, set) => {
+export const clearErrorsAtom = atom(null, (_get, set) => {
   set(showErrorAtom, null); // Đặt lại về mảng rỗng
 });

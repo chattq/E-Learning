@@ -29,6 +29,7 @@ export interface BlogResponse {
   updated_at: any;
   createdAt: any;
   updatedAt: any;
+  blogs?: any;
 }
 
 export interface UserProfileResponse {

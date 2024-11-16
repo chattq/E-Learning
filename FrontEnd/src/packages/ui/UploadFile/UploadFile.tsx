@@ -6,7 +6,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { message, Modal, Spin, Upload } from "antd";
-import type { UploadFile, UploadProps } from "antd";
+import type { UploadFile } from "antd";
 import "./UploadFile.scss";
 import { useConfigAPI } from "../../api/config-api";
 import { UploadListType } from "antd/es/upload/interface";
@@ -29,7 +29,6 @@ export const UploadFileCustom = forwardRef(
       maxFileUpload = 1,
       listType = "picture-card",
       customButtonUpload,
-      FileList = [],
       getDataFile,
       accept,
     }: UploadFileCustomProps,
@@ -93,7 +92,7 @@ export const UploadFileCustom = forwardRef(
     return (
       <>
         <Upload
-          // action={`${import.meta.env.VITE_API_DOMAIN}/medias/upload-images`}
+          // action={`${import.meta.env.VITE_API_DOMAINBE}/medias/upload-images`}
           listType={listType}
           accept={accept}
           fileList={fileList}

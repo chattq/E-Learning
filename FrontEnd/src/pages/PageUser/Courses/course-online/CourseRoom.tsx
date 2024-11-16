@@ -79,6 +79,7 @@ export default function CourseRoom() {
       peer.on("call", (call) => handleCall(call, initialStream));
 
       ws.on("user-joined", ({ peerId, userId }) => {
+        console.log(userId);
         const call = peer.call(peerId, initialStream);
         handleCall(call, initialStream);
       });
@@ -108,7 +109,7 @@ export default function CourseRoom() {
     return () => {
       ws.off("user-joined");
       ws.off("join-room");
-      ws.off("list_users_rooms_online", (data: any) => {});
+      ws.off("list_users_rooms_online", (data: any) => console.log(data));
       ws.off("new_user_join", (data: any) => {
         openNotification(data, "join");
       });

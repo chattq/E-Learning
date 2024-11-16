@@ -9,8 +9,8 @@ import {
   Select,
   Space,
 } from "antd";
-import UploadFileCustom from "../../../../packages/ui/UploadFile/UploadFile";
 import TextArea from "antd/es/input/TextArea";
+import { UploadFileCustom } from "../../../../packages/ui/UploadFile/UploadFile";
 
 export default function InforBaseProduct() {
   const { Option } = Select;
@@ -76,7 +76,11 @@ export default function InforBaseProduct() {
             noStyle
             rules={[{ required: true, message: "Province is required" }]}>
             <div className="translate-y-7">
-              <UploadFileCustom />
+              <UploadFileCustom
+                getDataFile={function (_data: { url: string | any }): void {
+                  throw new Error("Function not implemented.");
+                }}
+              />
             </div>
           </Form.Item>
         </Form.Item>
@@ -86,7 +90,11 @@ export default function InforBaseProduct() {
               name={["address", "province"]}
               noStyle
               rules={[{ required: true, message: "Province is required" }]}>
-              <UploadFileCustom />
+              <UploadFileCustom
+                getDataFile={function (_data: { url: string | any }): void {
+                  throw new Error("Function not implemented.");
+                }}
+              />
             </Form.Item>
             <Form.Item
               name={["address", "street"]}

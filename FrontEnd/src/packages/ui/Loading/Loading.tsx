@@ -1,4 +1,4 @@
-import { Flex, Spin } from "antd";
+import { Spin } from "antd";
 import { useAtomValue } from "jotai";
 import { LoadingAtom } from "../../store/loading.store";
 import { LoadingOutlined } from "@ant-design/icons";
