@@ -38,8 +38,6 @@ export default function ProfileUser() {
     },
   });
 
-  console.log("Get_Profile", Get_Profile);
-
   const onChange = (key: string) => {
     console.log(key);
   };
