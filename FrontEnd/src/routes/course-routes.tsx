@@ -17,8 +17,8 @@ export const courseRoutes: RouteItem[] = [
   },
   {
     key: "Course_online",
-    path: "/admin/Course_online/room/20241405COURSEONLINE",
-    // path: "/admin/Course_online/room/:idCourse",
+    // path: "/admin/Course_online/room/20241405COURSEONLINE",
+    path: "/admin/Course_online/room/:idCourse",
     mainMenuTitle: "",
     mainMenuKey: "course",
     permissionCode: "",
