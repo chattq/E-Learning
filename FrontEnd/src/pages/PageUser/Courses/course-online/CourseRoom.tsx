@@ -23,6 +23,7 @@ import LayoutSideBar from "./components/LayoutSideBar";
 import { PiRecordFill } from "react-icons/pi";
 import { getProfileFromLS } from "../../../../utils/localStorageHandler";
 import { HiDotsHorizontal } from "react-icons/hi";
+import { useGetProfile } from "../../../../packages/store/permission-store";
 interface IMessage {
   userId: string;
   message: string;
@@ -51,7 +52,9 @@ export default function CourseRoom() {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [isToggleShareScreen, setIsToggleShareScreen] = useState(true);
 
-  const userID = nanoid();
+  // console.log(55, profileUser);
+
+  // const userID = nanoid();
 
   useEffect(() => {
     const peer = new Peer(nanoid());
@@ -60,10 +63,10 @@ export default function CourseRoom() {
     peer.on("open", (id) => {
       setPeerId(id);
       ws.emit("join-room", {
-        roomId: "20241405COURSEONLINE",
-        // roomId: idCourse,
+        // roomId: "20241405COURSEONLINE",
+        roomId: idCourse,
         peerId: id,
-        userId: userID,
+        userId: profileUser?.id,
       });
     });
     const getMediaStream = () => {
@@ -143,7 +146,7 @@ export default function CourseRoom() {
       setIsCameraOn(false);
       nav(-1);
       ws.emit("toggle-camera", {
-        userID: userID,
+        userID: profileUser?.id,
         peerId: peerId,
         isCameraOn: false,
       });
@@ -217,7 +220,7 @@ export default function CourseRoom() {
         tracks[0].stop();
         setIsCameraOn(false);
         ws.emit("toggle-camera", {
-          userID: userID,
+          userID: profileUser?.id,
           peerId: peerId,
           isCameraOn: false,
         });
@@ -227,7 +230,7 @@ export default function CourseRoom() {
           .getUserMedia({ video: true, audio: true })
           .then((newStream) => {
             ws.emit("toggle-camera", {
-              userID: userID,
+              userID: profileUser?.id,
               peerId: peerId,
               isCameraOn: true,
             });
@@ -257,7 +260,7 @@ export default function CourseRoom() {
         tracks[0].stop();
         setIsMicrophoneOn(false);
         ws.emit("toggle-microphone", {
-          userID: userID,
+          userID: profileUser?.id,
           peerId: peerId,
           isMicroPhoneOn: false,
         });
@@ -266,7 +269,7 @@ export default function CourseRoom() {
           .getUserMedia({ audio: true })
           .then((newStream) => {
             ws.emit("toggle-microphone", {
-              userID: userID,
+              userID: profileUser?.id,
               peerId: peerId,
               isMicroPhoneOn: true,
             });
@@ -498,7 +501,7 @@ export default function CourseRoom() {
               <ListPeopleRoom
                 listUser={listUser}
                 peerId={peerId}
-                userID={userID}
+                userID={profileUser?.id as string}
               />
             </LayoutSideBar>
           ))
@@ -507,12 +510,13 @@ export default function CourseRoom() {
               title="Tin nhắn trong cuộc họp"
               onClick={() => handleSelectedDisableSidebar("disableChat")}>
               <ChatRoomCourse
-                roomId="20241405COURSEONLINE"
+                // roomId="20241405COURSEONLINE"
+                roomId={idCourse as string}
                 messages={messages}
                 sendMessage={sendMessage}
                 setInput={setInput}
                 input={input}
-                userID={userID}
+                userID={profileUser?.id as string}
               />
             </LayoutSideBar>
           ))
