@@ -19,18 +19,22 @@ export const PopupSettingMedia = forwardRef(({}, ref) => {
   const [camera, setCamera] = useState(true);
   const [audio, setAudio] = useState(true);
   const setStream = useSetAtom(streamAtom);
+  const [dataCourse, setDataCourse] = useState<any>({});
 
   const nav = useNavigate();
   const videoRef = useRef<any>();
   useImperativeHandle(ref, () => ({
-    showPopup() {
-      setOpen(true);
+    showPopup(item: any) {
+      if (item.course_id) {
+        setDataCourse(item);
+        setOpen(true);
+      }
     },
   }));
 
   const handleOk = () => {
     setLoading(true);
-    nav(`admin/Course_online/room/20241405COURSEONLINE`);
+    nav(`admin/Course_online/room/${dataCourse.course_id}`);
   };
 
   const handleCancel = () => {

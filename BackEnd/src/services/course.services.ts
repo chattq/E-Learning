@@ -44,13 +44,15 @@ class CoursesService {
     const courseId = autoCodeGen('COURSE')
 
     const dataCreate: CategoryReqBody = JSON.parse(req)
-    const InforBaseCourse = dataCreate.InforBase
-    const InforContent = dataCreate.InforContent.items.map((item: any) => {
-      return {
-        ...item,
-        ChapterCode: autoCodeGen('CHAPTER')
-      }
-    })
+    const InforBaseCourse = dataCreate.InforBase ?? {}
+    const InforContent = dataCreate.InforContent
+      ? dataCreate.InforContent.items.map((item: any) => {
+          return {
+            ...item,
+            ChapterCode: autoCodeGen('CHAPTER')
+          }
+        })
+      : []
     const courseDescription = dataCreate.CourseDescription
     const dataBaseCourse = {
       course_id: courseId,

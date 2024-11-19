@@ -11,7 +11,7 @@ import { IoMdMic } from "react-icons/io";
 import { BiSolidPhoneOff } from "react-icons/bi";
 import { BsChatText, BsChatTextFill } from "react-icons/bs";
 import { nanoid } from "nanoid";
-import { Button, Spin, notification } from "antd";
+import { Button, Dropdown, MenuProps, Spin, notification } from "antd";
 import Peer from "peerjs";
 import ListUserRoom from "./components/list-user-room";
 import { MdMicOff } from "react-icons/md";
@@ -21,6 +21,13 @@ import ListPeopleRoom from "./components/ListPeopleRoom/list-people-room";
 import { match } from "ts-pattern";
 import LayoutSideBar from "./components/LayoutSideBar";
 import { PiRecordFill } from "react-icons/pi";
+import { getProfileFromLS } from "../../../../utils/localStorageHandler";
+import { HiDotsHorizontal } from "react-icons/hi";
+interface IMessage {
+  userId: string;
+  message: string;
+  timestamp: number;
+}
 
 export const deleteKeyFromObject = (obj: any, key: any) => {
   delete obj[key];
@@ -28,8 +35,8 @@ export const deleteKeyFromObject = (obj: any, key: any) => {
 };
 
 export default function CourseRoom() {
-  const { id } = useParams();
-  const windowSize = useWindowSize();
+  const { idCourse } = useParams();
+
   const nav = useNavigate();
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isMicroPhoneOn, setIsMicrophoneOn] = useState(true);
@@ -40,6 +47,9 @@ export default function CourseRoom() {
   const peerRef = useRef<Peer | any>(null);
   const [peers, setPeers] = useState<any>({});
   const [screenSharingId, setScreenSharingId] = useState<string>("");
+  const profileUser = getProfileFromLS();
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [isToggleShareScreen, setIsToggleShareScreen] = useState(true);
 
   const userID = nanoid();
 
@@ -51,6 +61,7 @@ export default function CourseRoom() {
       setPeerId(id);
       ws.emit("join-room", {
         roomId: "20241405COURSEONLINE",
+        // roomId: idCourse,
         peerId: id,
         userId: userID,
       });
@@ -97,6 +108,9 @@ export default function CourseRoom() {
     ws.on("user_leave_room", (data: any) => {
       openNotification(data, "leave");
     });
+    ws.on("receive-message", (data: IMessage) => {
+      setMessages((prevMessages) => [...prevMessages, data]);
+    });
 
     // // Thêm sự kiện beforeunload để hiển thị thông báo khi người dùng rời trang
     // const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -116,6 +130,7 @@ export default function CourseRoom() {
       ws.on("user_leave_room", (data: any) => {
         openNotification(data, "leave");
       });
+      ws.off("receive-message");
       peer.destroy();
       // Xóa sự kiện beforeunload khi component unmount
       // window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -123,10 +138,10 @@ export default function CourseRoom() {
   }, []);
 
   const handleTogglePictureInPicture = () => {
-    nav(-1);
     if (stream && isCameraOn) {
       stream.getTracks().forEach((track) => track.stop());
       setIsCameraOn(false);
+      nav(-1);
       ws.emit("toggle-camera", {
         userID: userID,
         peerId: peerId,
@@ -281,6 +296,7 @@ export default function CourseRoom() {
 
   const switchStream = (stream: MediaStream) => {
     setScreenSharingId(peerRef.current?.id || "");
+    console.log(298, peerRef.current?.connections);
     Object.values(peerRef.current?.connections).forEach((connection: any) => {
       const videoTrack: any = stream
         ?.getTracks()
@@ -297,8 +313,14 @@ export default function CourseRoom() {
     if (screenSharingId) {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
-        .then(switchStream);
+        .then((stream) => {
+          switchStream(stream);
+          // setScreenStream(stream);
+          setStream(stream);
+        });
+      setIsToggleShareScreen(false);
     } else {
+      setIsToggleShareScreen(true);
       navigator.mediaDevices.getDisplayMedia({}).then((stream) => {
         switchStream(stream);
         // setScreenStream(stream);
@@ -318,6 +340,38 @@ export default function CourseRoom() {
       setSeletedOption(mode);
     },
     [seletedOption]
+  );
+  console.log(325, peers);
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: <div>Tắt toàn bộ camera</div>,
+      onClick: turnOffAllCameras,
+    },
+    {
+      key: "2",
+      label: <div>Tắt toàn bộ mic</div>,
+    },
+  ];
+  const [input, setInput] = useState("");
+
+  const sendMessage = useCallback(
+    ({ userID }: any) => {
+      if (input.trim() === "") {
+        alert("Message cannot be empty!");
+        return;
+      }
+      const newMessage: IMessage = {
+        userId: userID,
+        message: input,
+        timestamp: Date.now(),
+      };
+      console.log(368, userID);
+      ws.emit("send-message", newMessage); // Gửi message lên server
+      setMessages((prevMessages) => [...prevMessages, newMessage]); // Thêm vào danh sách cục bộ
+      setInput("");
+    },
+    [messages, input]
   );
 
   return (
@@ -378,6 +432,18 @@ export default function CourseRoom() {
                 <div className="text-[12px]">People</div>
               </div>
             )}
+            <Dropdown
+              menu={{ items }}
+              align={{
+                offset: [-100, 10],
+              }}>
+              <div className="cursor-pointer flex flex-col">
+                <div className="m-auto">
+                  <HiDotsHorizontal size={20} />
+                </div>
+                <div className="text-[12px]">More</div>
+              </div>
+            </Dropdown>
           </div>
           <div className="cursor-pointer flex flex-col" onClick={toggleCamera}>
             <div className="m-auto">
@@ -398,12 +464,12 @@ export default function CourseRoom() {
             <div className="text-[12px]">Mic</div>
           </div>
           {/* <button onClick={turnOffAllCameras}>turnOffAllCameras</button> */}
-          <div className="cursor-pointer flex flex-col">
+          <div className="cursor-pointer flex flex-col" onClick={shareScreen}>
             <div className="m-auto">
-              {!isMicroPhoneOn ? (
-                <MdStopScreenShare size={20} onClick={shareScreen} />
+              {!isToggleShareScreen ? (
+                <MdStopScreenShare size={20} />
               ) : (
-                <MdScreenShare size={20} onClick={shareScreen} />
+                <MdScreenShare size={20} />
               )}
             </div>
             <div className="text-[12px]">Share</div>
@@ -429,14 +495,25 @@ export default function CourseRoom() {
             <LayoutSideBar
               title="Mọi người"
               onClick={() => handleSelectedDisableSidebar("disablePeople")}>
-              <ListPeopleRoom listUser={listUser} peerId={peerId} />
+              <ListPeopleRoom
+                listUser={listUser}
+                peerId={peerId}
+                userID={userID}
+              />
             </LayoutSideBar>
           ))
           .with("chat", () => (
             <LayoutSideBar
               title="Tin nhắn trong cuộc họp"
               onClick={() => handleSelectedDisableSidebar("disableChat")}>
-              <ChatRoomCourse />
+              <ChatRoomCourse
+                roomId="20241405COURSEONLINE"
+                messages={messages}
+                sendMessage={sendMessage}
+                setInput={setInput}
+                input={input}
+                userID={userID}
+              />
             </LayoutSideBar>
           ))
           .otherwise(() => (
