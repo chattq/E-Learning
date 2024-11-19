@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import io from "socket.io-client";
 import "./style.scss";
 import { ws } from "../../../../../../socketIO";
+import { nanoid } from "nanoid";
 
 interface IMessage {
   userId: string;
@@ -9,37 +10,27 @@ interface IMessage {
   timestamp: number;
 }
 
-export default function ChatRoomCourse() {
-  const [messages, setMessages] = useState<IMessage[]>([]);
-  const [input, setInput] = useState("");
+interface ChatRoomProps {
+  messages: any; // Truyền userId qua props
+  sendMessage: any; // Truyền userId qua props
+  roomId: string; // Thêm roomId để tham gia đúng phòng
+  setInput: any; // Thêm roomId để tham gia đúng phòng
+  input: any; // Thêm roomId để tham gia đúng phòng
+  userID: any; // Thêm roomId để tham gia đúng phòng
+}
+
+export default function ChatRoomCourse({
+  messages,
+  userID,
+  sendMessage,
+  setInput,
+  input,
+}: ChatRoomProps) {
   const messageEndRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    ws.on("receive-message", (data: IMessage) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
-    });
-
-    return () => {
-      ws.off("receive-message");
-    };
-  }, []);
-
-  const sendMessage = () => {
-    if (input.trim() !== "") {
-      const newMessage: IMessage = {
-        userId: "yourUserId", // Thay bằng userId của bạn
-        message: input,
-        timestamp: Date.now(),
-      };
-      ws.emit("send-message", newMessage);
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-      setInput("");
-    }
-  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      sendMessage();
+      sendMessage({ userID });
     }
   };
 
@@ -49,11 +40,17 @@ export default function ChatRoomCourse() {
     }
   }, [messages]);
 
+  console.log(41, messages);
+  console.log("userID", userID);
   return (
     <div className="chat-room-course">
-      <div className="messages">
-        {messages.map((msg, index) => (
-          <div key={index} className="message">
+      <div className="chat-room-messages">
+        {messages.map((msg: any) => (
+          <div
+            key={nanoid()}
+            className={`message ${
+              msg.userId === userID ? "sent" : "received"
+            }`}>
             <span className="user-id">{msg.userId}:</span>{" "}
             <span>{msg.message}</span>
             <div className="timestamp">
@@ -63,7 +60,7 @@ export default function ChatRoomCourse() {
         ))}
         <div ref={messageEndRef} />
       </div>
-      <div className="input-container">
+      <div className="chat-room-input-container">
         <input
           type="text"
           value={input}

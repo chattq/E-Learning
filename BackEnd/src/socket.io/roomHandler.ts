@@ -18,13 +18,14 @@ interface IMicroPhoneParams extends IToggleCameraParams {
 }
 
 interface IChatMessage {
-  roomId: string
-  userId: string
-  message: string
-  timestamp: number
+  roomId: string // ID của phòng chat nơi tin nhắn được gửi
+  userId: string // ID của người gửi tin nhắn
+  message: string // Nội dung của tin nhắn
+  timestamp: number // Thời gian gửi tin nhắn (Unix timestamp)
 }
 
 const rooms: any[] = []
+const messages: Record<string, IChatMessage[]> = {}
 
 export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>) => {
   const joinRoom = ({ roomId, peerId, userId }: IJoinRoomParams) => {
@@ -36,6 +37,7 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
     rooms.push({ roomId: roomId, peerId: peerId, userId: userId })
 
     getListUsersRoom(roomId)
+    sendChatHistory(roomId)
 
     // thông báo đến tất cả người trong nhóm trừ user vào, là có người mới online
     notificationsNewUserJoin(roomId, peerId, userId)
@@ -56,9 +58,16 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
       socket.broadcast.to(roomId).emit('turn-off-camera')
     })
 
-    // Lắng nghe sự kiện gửi message từ client
     socket.on('send-message', (data: IChatMessage) => {
-      io.to(roomId).emit('receive-message', data)
+      if (!data.message.trim()) return // Bỏ qua tin nhắn rỗng
+      data.timestamp = Date.now()
+
+      // Lưu tin nhắn vào lịch sử
+      if (!messages[roomId]) messages[roomId] = []
+      messages[roomId].push(data)
+
+      // Phát tin nhắn đến mọi người
+      socket.broadcast.to(roomId).emit('receive-message', data)
     })
 
     socket.on('disconnect', () => {
@@ -82,6 +91,11 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
       'list_users_rooms_online',
       rooms.filter((user) => user.roomId === roomId)
     )
+  }
+
+  const sendChatHistory = (roomId: string) => {
+    const chatHistory = messages[roomId] || []
+    socket.emit('chat-history', chatHistory)
   }
 
   socket.on('join-room', joinRoom)

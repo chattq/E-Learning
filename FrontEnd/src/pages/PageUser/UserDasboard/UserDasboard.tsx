@@ -23,10 +23,10 @@ export default function UserDasboard() {
 
   const { convertMoneyVND } = useConvertNumber();
   const handleClickCourse = (item: any) => {
-    if (item.courseType === "Online") {
-      popupSettingMediaRef.current.showPopup();
+    if (item.course_model === "online") {
+      popupSettingMediaRef.current.showPopup(item);
     } else {
-      nav(`/course/detail/${item.id}`);
+      nav(`/course/detail/${item.course_id}`);
     }
   };
   const dataCourse = [
@@ -143,18 +143,17 @@ export default function UserDasboard() {
                         alt="example"
                         src={item.course_image}
                       />
-                    }
-                  >
+                    }>
                     <div>
                       <div className="font-bold text-[16px] line-clamp-2 leading-[20px]">
-                        {item.title}
+                        {item.course_name}
                       </div>
                       <div className="text-[13px] py-[1px]">
                         {item.course_create_by}
                       </div>
                       <div className="flex items-center gap-2 pt-[4px]">
                         <div className="text-[13px] rounded-sm font-bold bg-[#3eceb9] text-[#ffff] px-1">
-                          {item.course_type}
+                          {item.course_model}
                         </div>
                         {/* {item.course_active ? (
                           <>
@@ -295,8 +294,7 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }
-        >
+          }>
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -308,8 +306,7 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }
-        >
+          }>
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>16 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -321,8 +318,7 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }
-        >
+          }>
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -334,8 +330,7 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }
-        >
+          }>
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
