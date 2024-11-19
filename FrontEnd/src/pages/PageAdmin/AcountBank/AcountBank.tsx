@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import AdminPageLayout from "../../../packages/layouts/admin-page-layout/admin-page-layout";
 import { Button, Space, Table, TableProps } from "antd";
 import { useWindowSize } from "../../../packages/hooks/useWindowSize";
-import "./AcountBank.scss";
 import {
   IPopupAddAccountRef,
   PopupAddAccount,
