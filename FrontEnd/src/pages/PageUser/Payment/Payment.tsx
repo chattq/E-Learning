@@ -2,9 +2,15 @@ import { useNavigate } from "react-router-dom";
 import AdminPageLayoutNoSideBar from "../../../packages/layouts/admin-page-layout/admin-no-sidebar";
 
 import { AiOutlineClose } from "react-icons/ai";
+import { useAtomValue } from "jotai";
+import { inforCourseArray, totalPriceAtom } from "./storePayment";
 
 export default function Payment() {
   const nav = useNavigate();
+  const totalPriceValue = useAtomValue(totalPriceAtom);
+  const infoCourseValue = useAtomValue(inforCourseArray);
+  const linkPayment = `https://img.vietqr.io/image/MB-811200299999-compact.png?amount=${totalPriceValue}&addInfo=chuyenkhoan`;
+  console.log("infoCourseValue", infoCourseValue);
   return (
     <AdminPageLayoutNoSideBar>
       <div className="w-[60%] m-auto relative py-5 rounded-lg bg-white boxShadow-couses mt-7">
@@ -12,7 +18,7 @@ export default function Payment() {
           <div className="border-dashed border-r-[1px] border-[#494949] pr-4">
             <div className="h-[250px] w-[250px]">
               <img
-                src="https://apinganhang.com/wp-content/uploads/sites/10/2021/06/4128Nh_2021-06-15_Lu.jpeg"
+                src={linkPayment}
                 alt=""
                 className="h-full w-full object-cover"
               />
@@ -56,7 +62,8 @@ export default function Payment() {
         </div>
         <div
           className="absolute cursor-pointer top-[-8px] right-[-10px] h-[30px] w-[30px] border-[1px] flex justify-center items-center bg-[#ffff] rounded-full"
-          onClick={() => nav(-1)}>
+          onClick={() => nav(-1)}
+        >
           <AiOutlineClose size={18} />
         </div>
       </div>

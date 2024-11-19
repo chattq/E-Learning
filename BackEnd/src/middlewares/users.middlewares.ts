@@ -21,6 +21,7 @@ export const loginValidator = validate(
           errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED
         },
         in: ['body'],
+        escape: true,
         isEmail: true,
         trim: true,
         custom: {
