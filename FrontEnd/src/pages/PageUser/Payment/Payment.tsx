@@ -7,10 +7,16 @@ import { inforCourseArray, totalPriceAtom } from "./storePayment";
 
 export default function Payment() {
   const nav = useNavigate();
-  const totalPriceValue = useAtomValue(totalPriceAtom);
   const infoCourseValue = useAtomValue(inforCourseArray);
-  const linkPayment = `https://img.vietqr.io/image/MB-811200299999-compact.png?amount=${totalPriceValue}&addInfo=chuyenkhoan`;
+
+  const totalPrice = infoCourseValue.reduce(
+    (total, item) => total + Number(item.course_price),
+    0
+  );
+
+  const linkPayment = `https://img.vietqr.io/image/MB-811200299999-compact.png?amount=${totalPrice}&addInfo=chuyenkhoan`;
   console.log("infoCourseValue", infoCourseValue);
+  console.log("totalPrice", totalPrice);
   return (
     <AdminPageLayoutNoSideBar>
       <div className="w-[60%] m-auto relative py-5 rounded-lg bg-white boxShadow-couses mt-7">
@@ -31,32 +37,40 @@ export default function Payment() {
             <div className="text-center text-[20px] font-bold border-b-[1px] border-[#d0d0d0] pb-3">
               Thông tin sản phẩm
             </div>
-            <div className="flex justify-between gap-2 my-4 py-3 bg-[#857e7e] px-3 rounded-[6px]">
-              <div className="flex gap-2">
-                <div className="h-[65px] w-[65px] rounded overflow-hidden">
-                  <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo1gisKyspgqqqx7iDFDCDKyjZVpkYTCTRWw&s"
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div>
-                  <div className="line-clamp-2 font-bold w-[350px] h-[40px]">
-                    Backend RESTFul Server với Node.JS và Express (SQL/MongoDB)
+            {infoCourseValue.map((e) => {
+              return (
+                <div className="flex justify-between gap-2 my-4 py-3 bg-[#857e7e] px-3 rounded-[6px]">
+                  <div className="flex gap-2">
+                    <div className="h-[65px] w-[65px] rounded overflow-hidden">
+                      <img
+                        src={
+                          e.course_image
+                            ? e?.course_image
+                            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo1gisKyspgqqqx7iDFDCDKyjZVpkYTCTRWw&s"
+                        }
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <div className="line-clamp-2 font-bold w-[350px] h-[40px]">
+                        {e?.course_name}
+                      </div>
+                      <div className="text-[13px] mt-1 font-medium">
+                        Mã khóa học: {e.course_id}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-[13px] mt-1 font-medium">
-                    Mã khóa học: 88888ahsfalsfhasf
+                  <div>
+                    <div>{e.course_price}</div>
                   </div>
                 </div>
-              </div>
-              <div>
-                <div>8000000000đ</div>
-                <div>8000000000đ</div>
-              </div>
-            </div>
+              );
+            })}
+
             <div className="flex items-center border-t-[1px] border-[#d0d0d0] px-4 py-2 justify-between">
               <div className="">Tổng:</div>
-              <div>8000000</div>
+              <div>{totalPrice}</div>
             </div>
           </div>
         </div>

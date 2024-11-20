@@ -26,7 +26,7 @@ export default function CourseOfflineDetail() {
 
   console.log("paramss", param.courseId);
 
-  const { data: Course_Detail, isLoading } = useQuery({
+  const { data: Course_Detail = [], isLoading } = useQuery({
     queryKey: ["Course_Detail"],
     queryFn: async () => {
       const response = await api.Course_GetAll();
@@ -38,10 +38,12 @@ export default function CourseOfflineDetail() {
     },
   });
 
-  console.log("Course_Detail", Course_Detail);
+  const filteredData = Course_Detail.filter(
+    (item) => item.course_id == param.courseId
+  );
+
   const handlePayment = () => {
-    setInfoCoursePayment(Course_Detail ?? []);
-    setPrice(Course_Detail?.[0]?.course_price);
+    setInfoCoursePayment(filteredData ?? []);
     nav("/payment");
   };
   const handleAddCart = () => {
@@ -62,8 +64,8 @@ export default function CourseOfflineDetail() {
         <div className="bg-[#212121d2] h-[358px]">
           <img
             src={
-              Course_Detail?.[0]?.course_image
-                ? Course_Detail?.[0]?.course_image
+              filteredData?.[0]?.course_image
+                ? filteredData?.[0]?.course_image
                 : "https://iviet.vn/wp-content/uploads/2021/10/ElearningBooks.jpg"
             }
             alt=""
@@ -75,7 +77,7 @@ export default function CourseOfflineDetail() {
           <div className="w-[80%] m-auto pt-9">
             <div className="flex gap-[20px]">
               <div className="flex-1">
-                <h2>{Course_Detail?.[0]?.course_name}</h2>
+                <h2>{filteredData?.[0]?.course_name}</h2>
                 <div
                   id="course-objectives"
                   className="px-[24px] pb-[24px] pt-[15px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff] boxShadow-couses"
@@ -105,7 +107,7 @@ export default function CourseOfflineDetail() {
                       Thông tin khóa học
                     </div>
                     <div className="p-[24px] mb-[16px] rounded-[6px] boxShadow-couses bg-[#fff]">
-                      <div>{Course_Detail?.[0]?.course_over_view}</div>
+                      <div>{filteredData?.[0]?.course_over_view}</div>
                     </div>
                   </div>
                 </div>
@@ -125,9 +127,9 @@ export default function CourseOfflineDetail() {
           <div className="px-4">
             <div className="flex gap-2 items-center py-4">
               <div className="text-[1.85rem] font-bold text-[#3cb46e] truncate flex-1">
-                {Course_Detail?.[0]?.course_type == "free"
+                {filteredData?.[0]?.course_type == "free"
                   ? "0đ"
-                  : Course_Detail?.[0]?.course_price}
+                  : filteredData?.[0]?.course_price}
               </div>
               {/* <div className="flex flex-col gap-1">
                 <div className="text-[0.85rem] font-medium text-[#677788] flex items-center gap-1">
@@ -165,7 +167,7 @@ export default function CourseOfflineDetail() {
               <div className="flex flex-col gap-3 border-t-[1px] border-b-[1px] mt-4 py-3">
                 <div className="flex items-center gap-3">
                   <BiSolidUser size={20} />
-                  <p>{Course_Detail?.[0]?.course_create_by}</p>
+                  <p>{filteredData?.[0]?.course_create_by}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <BiFilm size={20} />

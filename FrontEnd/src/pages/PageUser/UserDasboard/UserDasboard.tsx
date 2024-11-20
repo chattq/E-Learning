@@ -20,8 +20,9 @@ import { useConfigAPI } from "../../../packages/api/config-api";
 export default function UserDasboard() {
   const popupSettingMediaRef = useRef<any>();
   const nav = useNavigate();
-
   const { convertMoneyVND } = useConvertNumber();
+  const api = useConfigAPI();
+
   const handleClickCourse = (item: any) => {
     if (item.course_model === "online") {
       popupSettingMediaRef.current.showPopup(item);
@@ -29,65 +30,9 @@ export default function UserDasboard() {
       nav(`/course/detail/${item.course_id}`);
     }
   };
-  const dataCourse = [
-    {
-      id: nanoid(),
-      image:
-        "https://scr.vn/wp-content/uploads/2020/10/Anh-meo-cute-dang-yeu-de-thuong.jpg",
-      title: "The Complete Python Bootcamp From Zero to Hero in Python",
-      author: "Quang",
-      price: 1000000,
-      status: "Best_Seller",
-      discount: 200000,
-      courseType: "Online",
-    },
-    {
-      id: nanoid(),
-      image:
-        "https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2020/03/hoa-sung-mua-nuoc-noi.jpg",
-      title: "The Complete Python Bootcamp From Zero to Hero in Python",
-      author: "Quang",
-      price: 1000000,
-      status: "New",
-      discount: 200000,
-      courseType: "Video",
-    },
-    {
-      id: nanoid(),
-      image:
-        "https://img1.kienthucvui.vn/uploads/2019/07/19/hinh-anh-lang-bac-ho-o-ha-noi_112812656.jpg",
-      title: "The Complete Python Bootcamp From Zero to Hero in Python",
-      author: "Quang",
-      price: 1000000,
-      status: "Highest_Rating",
-      discount: 200000,
-      courseType: "Video",
-    },
-    {
-      id: nanoid(),
-      image:
-        "https://img4.thuthuatphanmem.vn/uploads/2020/05/13/hinh-anh-4k-anime_062425625.jpg",
-      title: "The Complete Python Bootcamp From Zero to Hero in Python",
-      author: "Quang",
-      price: 1000000,
-      status: "Trending&New",
-      discount: 200000,
-      courseType: "Video",
-    },
-    {
-      id: nanoid(),
-      image:
-        "https://khoinguonsangtao.vn/wp-content/uploads/2022/08/anh-meme-meo-cute-de-thuong.jpg",
-      title: "The Complete Python Bootcamp From Zero to Hero in Python",
-      author: "Quang",
-      price: 1000000,
-      status: "Trending&New",
-      discount: 200000,
-      courseType: "Video",
-    },
-  ];
 
-  const api = useConfigAPI();
+
+
   const { data: Course_GetAllActive, isLoading } = useQuery({
     queryKey: ["Blogs_GetAllActive"],
     queryFn: async () => {
@@ -99,8 +44,6 @@ export default function UserDasboard() {
       }
     },
   });
-
-  console.log("Course_GetAllActive", Course_GetAllActive);
 
   return (
     <UserPageLayout>
@@ -135,7 +78,9 @@ export default function UserDasboard() {
               return (
                 <React.Fragment key={nanoid()}>
                   <Card
-                    onClick={() => handleClickCourse(item)}
+                    onClick={() => {
+                      handleClickCourse(item);
+                    }}
                     className="Card_Container cursor-pointer"
                     cover={
                       <img
@@ -143,7 +88,8 @@ export default function UserDasboard() {
                         alt="example"
                         src={item.course_image}
                       />
-                    }>
+                    }
+                  >
                     <div>
                       <div className="font-bold text-[16px] line-clamp-2 leading-[20px]">
                         {item.course_name}
@@ -294,7 +240,8 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }>
+          }
+        >
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -306,7 +253,8 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }>
+          }
+        >
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>16 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -318,7 +266,8 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }>
+          }
+        >
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -330,7 +279,8 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }>
+          }
+        >
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
