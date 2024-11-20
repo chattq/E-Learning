@@ -23,7 +23,9 @@ import LayoutSideBar from "./components/LayoutSideBar";
 import { PiRecordFill } from "react-icons/pi";
 import { getProfileFromLS } from "../../../../utils/localStorageHandler";
 import { HiDotsHorizontal } from "react-icons/hi";
-import { useGetProfile } from "../../../../packages/store/permission-store";
+import { profileStoreAtom } from "../../../../packages/store/permission-store";
+import { useAtomValue } from "jotai";
+import { mergeDataRoom } from "./components/useHandleRoom";
 interface IMessage {
   userId: string;
   message: string;
@@ -37,6 +39,7 @@ export const deleteKeyFromObject = (obj: any, key: any) => {
 
 export default function CourseRoom() {
   const { idCourse } = useParams();
+  const getProfile = useAtomValue(profileStoreAtom);
 
   const nav = useNavigate();
   const [isCameraOn, setIsCameraOn] = useState(true);
@@ -51,14 +54,12 @@ export default function CourseRoom() {
   const profileUser = getProfileFromLS();
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [isToggleShareScreen, setIsToggleShareScreen] = useState(true);
-
-  // console.log(55, profileUser);
+  console.log("peers", peers);
 
   // const userID = nanoid();
 
   useEffect(() => {
     const peer = new Peer(nanoid());
-
     peerRef.current = peer;
     peer.on("open", (id) => {
       setPeerId(id);
@@ -199,14 +200,21 @@ export default function CourseRoom() {
     });
 
     // tắt tất cả camera của users
-    ws.on("turn-off-camera", () => {
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
-        setIsCameraOn(false);
+    ws.on("turn-off-camera", (data) => {
+      console.log(204, data);
+      if (data.filter((item: any) => item.peerId === peerId)) {
+        turnOffCamera();
       }
     });
-
+    // tắt tất cả mic của users
+    ws.on("turn-off-mic", (data) => {
+      console.log(204, data);
+      if (data.filter((item: any) => item.peerId === peerId)) {
+        turnOffMic();
+      }
+    });
     return () => {
+      ws.off("turn-off-mic");
       ws.off("turn-off-camera");
       ws.off("update-microphone-status");
       ws.off("update-camera-status");
@@ -292,9 +300,32 @@ export default function CourseRoom() {
     }
   }, [isMicroPhoneOn, stream, peerId]);
 
-  // tắt tất cả camera của user trong nhóm (chỉ người nào có quyền thì mới được dùng)
-  const turnOffAllCameras = () => {
-    ws.emit("turn-off-all-cameras");
+  const turnOffCamera = () => {
+    if (stream) {
+      const tracks = stream.getVideoTracks();
+      tracks[0].stop();
+      setIsCameraOn(false);
+      ws.emit("toggle-camera", {
+        userID: profileUser?.id,
+        peerId: peerId,
+        isCameraOn: false,
+      });
+    }
+  };
+  const turnOffMic = () => {
+    if (stream) {
+      const tracks = stream.getAudioTracks();
+      tracks[0].stop();
+      setIsMicrophoneOn(false);
+      ws.emit("toggle-microphone", {
+        userID: profileUser?.id,
+        peerId: peerId,
+        isMicroPhoneOn: false,
+      });
+    }
+  };
+  const onTurnOffMicUser = (peerId: any) => {
+    ws.emit("turn-off-all-cameras", peerId);
   };
 
   const switchStream = (stream: MediaStream) => {
@@ -344,7 +375,14 @@ export default function CourseRoom() {
     },
     [seletedOption]
   );
-  console.log(325, peers);
+
+  // tắt tất cả camera của user trong nhóm (chỉ người nào có quyền thì mới được dùng)
+  const turnOffAllCameras = useCallback(() => {
+    ws.emit("turn-off-all-cameras", listUser);
+  }, [listUser]);
+  const turnOffAllMic = useCallback(() => {
+    ws.emit("turn-off-all-mic", listUser);
+  }, [listUser]);
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -354,6 +392,7 @@ export default function CourseRoom() {
     {
       key: "2",
       label: <div>Tắt toàn bộ mic</div>,
+      onClick: turnOffAllMic,
     },
   ];
   const [input, setInput] = useState("");
@@ -435,18 +474,24 @@ export default function CourseRoom() {
                 <div className="text-[12px]">People</div>
               </div>
             )}
-            <Dropdown
-              menu={{ items }}
-              align={{
-                offset: [-100, 10],
-              }}>
-              <div className="cursor-pointer flex flex-col">
-                <div className="m-auto">
-                  <HiDotsHorizontal size={20} />
-                </div>
-                <div className="text-[12px]">More</div>
-              </div>
-            </Dropdown>
+            <>
+              {getProfile?.role === "1" && (
+                <>
+                  <Dropdown
+                    menu={{ items }}
+                    align={{
+                      offset: [-100, 10],
+                    }}>
+                    <div className="cursor-pointer flex flex-col">
+                      <div className="m-auto">
+                        <HiDotsHorizontal size={20} />
+                      </div>
+                      <div className="text-[12px]">More</div>
+                    </div>
+                  </Dropdown>
+                </>
+              )}
+            </>
           </div>
           <div className="cursor-pointer flex flex-col" onClick={toggleCamera}>
             <div className="m-auto">
@@ -491,7 +536,15 @@ export default function CourseRoom() {
       </div>
       <div className="flex layout_room_video">
         <div className="flex-1">
-          <ListUserRoom peers={peers} peerId={peerId} />
+          <ListUserRoom
+            onTurnOffMicUser={onTurnOffMicUser}
+            peers={peers}
+            peerId={peerId}
+            listUser={mergeDataRoom(
+              listUser,
+              Object.values(deleteKeyFromObject(peers, peerId))
+            )}
+          />
         </div>
         {match(seletedOption)
           .with("people", () => (
