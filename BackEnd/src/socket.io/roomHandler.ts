@@ -44,7 +44,6 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
 
     // Lắng nghe sự kiện toggle-camera từ client và phát lại cho tất cả các client khác trong phòng
     socket.on('toggle-camera', (data: IToggleCameraParams) => {
-      console.log(46, data)
       socket.broadcast.to(roomId).emit('update-camera-status', data)
     })
 
@@ -54,8 +53,12 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
     })
 
     // tắt tất cả camera trong nhóm trừ mình ra (nâng cấp sau, chỉ user tạo khóa học mới có full quyền)
-    socket.on('turn-off-all-cameras', () => {
-      socket.broadcast.to(roomId).emit('turn-off-camera')
+    socket.on('turn-off-all-cameras', (data: any) => {
+      socket.broadcast.to(roomId).emit('turn-off-camera', data)
+    })
+    // tắt tất cả camera trong nhóm trừ mình ra (nâng cấp sau, chỉ user tạo khóa học mới có full quyền)
+    socket.on('turn-off-all-mic', (data: any) => {
+      socket.broadcast.to(roomId).emit('turn-off-mic', data)
     })
 
     socket.on('send-message', (data: IChatMessage) => {

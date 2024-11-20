@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import io from "socket.io-client";
-import { ws } from "../../../../../../socketIO";
+import "./style.scss";
 import { nanoid } from "nanoid";
 
 interface IMessage {
