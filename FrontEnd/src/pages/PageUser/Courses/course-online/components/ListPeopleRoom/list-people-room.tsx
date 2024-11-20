@@ -33,7 +33,7 @@ export default function ListPeopleRoom({
         onChange={onSearchChange}
         style={{ padding: 10 }}
       />
-      <div>Tôi:{userID}</div>
+      <div>Tôi:{peerId}</div>
       {filteredList.map((item: any) => (
         <div
           key={item.peerId}
