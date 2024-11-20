@@ -18,6 +18,8 @@ import buyer_course from './buyer.models'
 import course_requirement from './courseRequirment.models'
 import course_knowledge from './courseKnowledge.models'
 import course_chapter from './courseChapter.models'
+import purchased_course from './purchasedCourse.models'
+import cart from './cart.models'
 
 @Table
 class course extends Model {
@@ -119,6 +121,10 @@ class course extends Model {
   course_knowledge!: course_knowledge[]
   @HasMany(() => course_chapter, { onDelete: 'CASCADE' })
   course_chapter!: course_chapter[]
+  @HasMany(() => purchased_course, { onDelete: 'CASCADE' })
+  purchased_course!: purchased_course[]
+  @HasMany(() => cart, { onDelete: 'CASCADE' })
+  cart!: cart[] // Thêm quan hệ với bảng Cart
 }
 
 export default course
