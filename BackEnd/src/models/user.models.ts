@@ -3,6 +3,8 @@ import refresh_token from './refreshToken.models'
 import course from './course.models'
 import account_bank from './accountBank.models'
 import blog from './blogs.models'
+import purchased_course from './purchasedCourse.models'
+import cart from './cart.models'
 
 @Table
 class user extends Model {
@@ -102,6 +104,10 @@ class user extends Model {
 
   @HasMany(() => blog)
   blog!: blog[]
+  @HasMany(() => purchased_course, { onDelete: 'CASCADE' })
+  purchased_course!: purchased_course[]
+  @HasMany(() => cart, { onDelete: 'CASCADE' })
+  cart!: cart[] // Thêm quan hệ với bảng Cart
 }
 
 export default user
