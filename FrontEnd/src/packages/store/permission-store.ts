@@ -1,18 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
-import { createClientGateApi } from "../api/config-api";
+import { atom } from "jotai";
 
-export const useGetProfile = () => {
-  const api = createClientGateApi();
-  const { data: Get_Profile, isLoading } = useQuery({
-    queryKey: ["Get_Profile_User"],
-    queryFn: async () => {
-      const response = await api.Get_Profile_User();
-      if (response.isSuccess) {
-        return response.data;
-      } else {
-        console.log(response);
-      }
-    },
-  });
-  return Get_Profile;
-};
+interface IProfile {
+  id: string;
+  email: string;
+  name: string;
+  avatar: string;
+  phone: string;
+  address: string;
+  dateOfBirth: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  active: string;
+  bio: string;
+  website: string;
+  verify: string;
+}
+
+export const profileStoreAtom = atom<IProfile | unknown>({});

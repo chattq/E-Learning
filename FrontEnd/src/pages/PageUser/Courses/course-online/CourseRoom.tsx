@@ -23,7 +23,8 @@ import LayoutSideBar from "./components/LayoutSideBar";
 import { PiRecordFill } from "react-icons/pi";
 import { getProfileFromLS } from "../../../../utils/localStorageHandler";
 import { HiDotsHorizontal } from "react-icons/hi";
-import { useGetProfile } from "../../../../packages/store/permission-store";
+import { profileStoreAtom } from "../../../../packages/store/permission-store";
+import { useAtomValue } from "jotai";
 interface IMessage {
   userId: string;
   message: string;
@@ -37,6 +38,7 @@ export const deleteKeyFromObject = (obj: any, key: any) => {
 
 export default function CourseRoom() {
   const { idCourse } = useParams();
+  const getProfile = useAtomValue(profileStoreAtom);
 
   const nav = useNavigate();
   const [isCameraOn, setIsCameraOn] = useState(true);
@@ -51,14 +53,12 @@ export default function CourseRoom() {
   const profileUser = getProfileFromLS();
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [isToggleShareScreen, setIsToggleShareScreen] = useState(true);
-
-  // console.log(55, profileUser);
+  console.log(56, getProfile);
 
   // const userID = nanoid();
 
   useEffect(() => {
     const peer = new Peer(nanoid());
-
     peerRef.current = peer;
     peer.on("open", (id) => {
       setPeerId(id);

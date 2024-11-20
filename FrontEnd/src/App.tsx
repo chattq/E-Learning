@@ -6,8 +6,34 @@ import { nanoid } from "nanoid";
 import UserDasboard from "./pages/PageUser/UserDasboard/UserDasboard";
 import Register from "./pages/Login/Register";
 import VerifyEmail from "./pages/Login/VerifyEmail";
+import { useEffect, useLayoutEffect } from "react";
+import { useConfigAPI } from "./packages/api/config-api";
+import { useSetAtom } from "jotai";
+import { profileStoreAtom } from "./packages/store/permission-store";
+import { showErrorAtom } from "./packages/ui/Error/error-store";
 
 function App() {
+  const api = useConfigAPI();
+  const setProfile = useSetAtom(profileStoreAtom);
+  const setShowError = useSetAtom(showErrorAtom);
+  useLayoutEffect(() => {
+    const fetchData = async () => {
+      const response = await api.Get_Profile_User();
+      if (response.isSuccess) {
+        setProfile(response?.data);
+      } else {
+        setShowError({
+          isSuccess: false,
+          message: response.message,
+          data: {
+            message: response.message,
+          },
+        });
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
