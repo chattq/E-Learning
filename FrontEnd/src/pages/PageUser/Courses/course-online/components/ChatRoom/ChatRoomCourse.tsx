@@ -46,9 +46,8 @@ export default function ChatRoomCourse({
         {messages.map((msg: any) => (
           <div
             key={nanoid()}
-            className={`message ${
-              msg.userId === userID ? "sent" : "received"
-            }`}>
+            className={`message ${msg.userId === userID ? "sent" : "received"}`}
+          >
             <span className="user-id">{msg.userId}:</span>{" "}
             <span>{msg.message}</span>
             <div className="timestamp">
