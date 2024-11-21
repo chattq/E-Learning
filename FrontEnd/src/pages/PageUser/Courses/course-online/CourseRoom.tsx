@@ -26,6 +26,7 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { profileStoreAtom } from "../../../../packages/store/permission-store";
 import { useAtomValue } from "jotai";
 import { mergeDataRoom } from "./components/useHandleRoom";
+import { randowStoreAtom } from "../../../../packages/store/random-store";
 interface IMessage {
   userId: string;
   message: string;
@@ -55,11 +56,12 @@ export default function CourseRoom() {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [isToggleShareScreen, setIsToggleShareScreen] = useState(true);
   console.log("peers", peers);
+  const randomLoad = useAtomValue(randowStoreAtom);
 
   // const userID = nanoid();
 
   useEffect(() => {
-    const peer = new Peer(nanoid());
+    const peer = new Peer(randomLoad);
     peerRef.current = peer;
     peer.on("open", (id) => {
       setPeerId(id);
@@ -67,11 +69,14 @@ export default function CourseRoom() {
         // roomId: "20241405COURSEONLINE",
         roomId: idCourse,
         peerId: id,
-        userId: profileUser?.id,
+        userId: getProfile?.id,
       });
     });
     const getMediaStream = () => {
-      return navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      return navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
     };
 
     const handleCall = (call: any, stream: MediaStream) => {
@@ -139,7 +144,7 @@ export default function CourseRoom() {
       // Xóa sự kiện beforeunload khi component unmount
       // window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, []);
+  }, [randomLoad]);
 
   const handleTogglePictureInPicture = () => {
     if (stream && isCameraOn) {
