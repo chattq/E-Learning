@@ -8,16 +8,15 @@ export interface ReqBody {
 }
 
 class UserCoursesService {
-  async create(user_id: string | undefined, course_id: any) {
+  async create(user_id: any, course_id: any) {
     const { autoCodeGen } = useAutoCodeGen()
     const userCourseId = autoCodeGen('USERCOURSE')
 
     const dbUserCourse = {
-      id: userCourseId,
       user_id: user_id,
       course_id: course_id
     }
-
+    console.log('dbUserCourse', dbUserCourse)
     await purchased_course.create(dbUserCourse)
 
     return {
@@ -25,10 +24,10 @@ class UserCoursesService {
       message: 'create successfully'
     }
   }
-  // async getListCourse() {
-  //   const result = await course.findAll()
-  //   return result
-  // }
+  async getListUserCourse() {
+    const result = await purchased_course.findAll()
+    return result
+  }
   // async getCourseByCode(code: string) {
   //   const InforCourse = await course.findOne({
   //     where: { course_id: code },
