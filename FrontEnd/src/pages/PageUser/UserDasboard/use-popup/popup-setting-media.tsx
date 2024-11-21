@@ -9,6 +9,8 @@ import { Button, Modal, Switch } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSetAtom } from "jotai";
 import { streamAtom } from "../store";
+import { nanoid } from "nanoid";
+import { randowStoreAtom } from "../../../../packages/store/random-store";
 
 // import { streamAtom } from "../store";
 
@@ -19,6 +21,7 @@ export const PopupSettingMedia = forwardRef(({}, ref) => {
   const [camera, setCamera] = useState(true);
   const [audio, setAudio] = useState(true);
   const setStream = useSetAtom(streamAtom);
+  const setRandowStore = useSetAtom(randowStoreAtom);
   const [dataCourse, setDataCourse] = useState<any>({});
 
   const nav = useNavigate();
@@ -35,6 +38,7 @@ export const PopupSettingMedia = forwardRef(({}, ref) => {
   const handleOk = () => {
     setLoading(true);
     nav(`admin/Course_online/room/${dataCourse.course_id}`);
+    setRandowStore(nanoid());
   };
 
   const handleCancel = () => {
