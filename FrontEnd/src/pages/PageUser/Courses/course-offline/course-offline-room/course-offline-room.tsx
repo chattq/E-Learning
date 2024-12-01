@@ -11,6 +11,7 @@ import { useConfigAPI } from "../../../../../packages/api/config-api";
 import { useQuery } from "@tanstack/react-query";
 import {
   DownOutlined,
+  LeftOutlined,
   PlayCircleOutlined,
   RightOutlined,
 } from "@ant-design/icons";
@@ -43,8 +44,11 @@ export default function Course_Offline_Room() {
   });
 
   const handleVideo = (u: any) => {
-    console.log("uuuu", u);
     setInfoVideo(u);
+  };
+
+  const backHomePage = () => {
+    nav("/");
   };
 
   return (
@@ -53,15 +57,23 @@ export default function Course_Offline_Room() {
         height: windowSize.height - 50.1,
       }}
     >
-      <div className="h-[50px] bg-slate-400">
-        {Course_Detail?.InforCourse.course_name}
+      <div className="h-[50px] header-video-course ">
+        <LeftOutlined onClick={backHomePage} />
+        <div
+          style={{
+            paddingLeft: "15px",
+          }}
+        >
+          {" "}
+          {Course_Detail?.InforCourse.course_name}
+        </div>
       </div>
 
       <div className="flex h-full">
         <div className="w-[calc(100%-340px)] bg-[#fff] overflow-y-scroll">
           <ReactPlayer
             width={"100%"}
-            height={"550px"}
+            height={"750px"}
             url={
               infoVideo?.course_lesson_LinkVideo
                 ? infoVideo?.course_lesson_LinkVideo

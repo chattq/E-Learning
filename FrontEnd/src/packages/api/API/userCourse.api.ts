@@ -14,7 +14,7 @@ export const useUserCoursesApi = (apiBase: AxiosInstance) => {
       return await apiBase.post<any, ApiResponse<any[]>>(
         "/user-course/create",
         {
-          strJson: JSON.stringify(data),
+          ...data,
         }
       );
     },
