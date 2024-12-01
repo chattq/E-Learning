@@ -11,6 +11,7 @@ import { showErrorAtom } from "../ui/Error/error-store";
 import { useVerifyEmailApi } from "./API/verify_email.api";
 import { useCoursesApi } from "./API/course.api";
 import { useUserApi } from "./API/user.api";
+import { useUserCoursesApi } from "./API/userCourse.api";
 
 export const createApiBase = () => {
   const accessToken = localStorage.getItem("access_token");
@@ -111,6 +112,7 @@ export const createClientGateApi = () => {
   const userApi = useUserApi(apiBase);
   const verifyApi = useVerifyEmailApi(apiBase);
   const coursesApi = useCoursesApi(apiBase);
+  const userCoursesApi = useUserCoursesApi(apiBase);
   return {
     ...coursesApi,
     ...verifyApi,
@@ -120,6 +122,7 @@ export const createClientGateApi = () => {
     ...categoriesApi,
     ...blogsApi,
     ...userApi,
+    ...userCoursesApi,
   };
 };
 export const useConfigAPI = () => {

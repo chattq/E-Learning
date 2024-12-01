@@ -6,117 +6,92 @@ import "./course-offline-room.scss";
 import { useState } from "react";
 import TextArea from "antd/es/input/TextArea";
 import { IoSend } from "react-icons/io5";
+import { useNavigate, useParams } from "react-router-dom";
+import { useConfigAPI } from "../../../../../packages/api/config-api";
+import { useQuery } from "@tanstack/react-query";
+import {
+  DownOutlined,
+  PlayCircleOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
 
 export default function Course_Offline_Room() {
-  const items: CollapseProps["items"] = [
-    {
-      key: "1",
-      label: (
-        <div>
-          <div className="font-bold text-[16px]">1. Giới thiệu</div>
-          <div className="text-[12px] font-normal">0/3 | 15:00</div>
-        </div>
-      ),
-      children: (
-        <div className="flex flex-col">
-          <div className="px-[24px] bg-[#f01e1e99] pb-[5px] pt-[5px] hover:bg-[#f4999999] cursor-pointer">
-            <div className="font-medium">1. Giới thiệu môn học</div>
-            <div className="text-[12px] font-normal">14:00</div>
-          </div>
-          <div className="px-[24px] pb-[5px] pt-[5px] hover:bg-[#f4999999] cursor-pointer">
-            <div className="font-medium">2. Vòng lặp trong JavaScript</div>
-            <div className="text-[12px] font-normal">14:00</div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <div>
-          <div className="font-bold text-[16px]">2. JavaScript là gì?</div>
-          <div className="text-[12px] font-normal">1/3 | 15:00</div>
-        </div>
-      ),
-      children: (
-        <div className="flex flex-col">
-          <div className="px-[24px] pb-[5px] pt-[5px] hover:bg-[#f4999999] cursor-pointer">
-            <div className="font-medium">1. Giới thiệu môn học</div>
-            <div className="text-[12px] font-normal">14:00</div>
-          </div>
-          <div className="px-[24px] pb-[5px] pt-[5px] hover:bg-[#f4999999] cursor-pointer">
-            <div className="font-medium">2. Vòng lặp trong JavaScript</div>
-            <div className="text-[12px] font-normal">14:00</div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: nanoid(),
-      label: (
-        <div>
-          <div className="font-bold text-[16px]">2. JavaScript là gì?</div>
-          <div className="text-[12px] font-normal">1/3 | 15:00</div>
-        </div>
-      ),
-      children: (
-        <div className="flex flex-col">
-          <div className="px-[24px] pb-[5px] pt-[5px] hover:bg-[#f4999999] cursor-pointer">
-            <div className="font-medium">1. Giới thiệu môn học</div>
-            <div className="text-[12px] font-normal">14:00</div>
-          </div>
-          <div className="px-[24px] pb-[5px] pt-[5px] hover:bg-[#f4999999] cursor-pointer">
-            <div className="font-medium">2. Vòng lặp trong JavaScript</div>
-            <div className="text-[12px] font-normal">14:00</div>
-          </div>
-        </div>
-      ),
-    },
-  ];
   const windowSize = useWindowSize();
-
   const [isExpanded, setIsExpanded] = useState(false);
+  const [handleOpen, setHandleOpen] = useState(false);
+  const [linkVideo, setLinkVideo] = useState("");
+  const [videoRemark, setVideoRemark] = useState("");
+  const [infoVideo, setInfoVideo] = useState<any>({});
   const toggleReadMore = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const htmlContent = `
- <p>Đây là đoạn văn bản rất dài mà bạn muốn rút gọn khi hiển thị. Đoạn văn này có thể chứa các thẻ HTML như <strong>strong</strong>, <em>italic</em>, hoặc <a href="#">link</a>.</p>
-    <p>Đây là đoạn thứ hai, và có thể chứa nhiều thông tin quan trọng.</p>
-    <p>Đây là đoạn thứ ba. Bạn có thể tiếp tục thêm các nội dung khác vào đây.</p>
-    <p>Đây là đoạn thứ ba. Bạn có thể tiếp tục thêm các nội dung khác vào đây.</p>
-    <p>Đây là đoạn thứ ba. Bạn có thể tiếp tục thêm các nội dung khác vào đây.</p>
-    <p>Đây là đoạn thứ ba. Bạn có thể tiếp tục thêm các nội dung khác vào đây.</p>
-    <p>Đây là đoạn thứ ba. Bạn có thể tiếp tục thêm các nội dung khác vào đây.</p>
-`;
+  const nav = useNavigate();
+  const param = useParams();
+  const api = useConfigAPI();
+
+  const { data: Course_Detail, isLoading } = useQuery({
+    queryKey: ["Course_Detail_Video", param.idCourse],
+    queryFn: async () => {
+      const response = await api.Course_Detail(param.idCourse);
+      if (response.isSuccess) {
+        return response.data;
+      } else {
+        console.log(response);
+      }
+    },
+  });
+
+  const handleVideo = (u: any) => {
+    console.log("uuuu", u);
+    setInfoVideo(u);
+  };
 
   return (
     <div
       style={{
         height: windowSize.height - 50.1,
-      }}>
-      <div className="h-[50px] bg-slate-400">header</div>
+      }}
+    >
+      <div className="h-[50px] bg-slate-400">
+        {Course_Detail?.InforCourse.course_name}
+      </div>
 
       <div className="flex h-full">
         <div className="w-[calc(100%-340px)] bg-[#fff] overflow-y-scroll">
           <ReactPlayer
             width={"100%"}
             height={"550px"}
-            url="https://www.youtube.com/watch?v=MMgPOQ9gJhM"
+            url={
+              infoVideo?.course_lesson_LinkVideo
+                ? infoVideo?.course_lesson_LinkVideo
+                : "https://www.youtube.com/watch?v=MMgPOQ9gJhM"
+            }
             controls={true}
           />
           <div className="px-[40px]">
             <div className="bg-[#F2F2F2] mt-8 rounded-xl">
               <div className="px-4 py-2">
+                <h2 className="title-video-course-item">
+                  {infoVideo?.course_lesson_name}
+                </h2>
                 <div
                   className={`${
                     isExpanded ? "line-clamp-none" : "line-clamp-4"
                   } overflow-hidden `}
-                  dangerouslySetInnerHTML={{ __html: htmlContent }}
+                  dangerouslySetInnerHTML={{
+                    __html: infoVideo?.course_lesson_Remark ?? "",
+                  }}
                 />
+
                 <span
                   onClick={toggleReadMore}
-                  style={{ color: "blue", cursor: "pointer" }}>
+                  style={{
+                    color: "blue",
+                    cursor: "pointer",
+                    display: infoVideo?.course_lesson_Remark ? "block" : "none",
+                  }}
+                >
                   {isExpanded ? "Ẩn bớt" : "Xem thêm"}
                 </span>
               </div>
@@ -145,16 +120,58 @@ export default function Course_Offline_Room() {
           </div>
         </div>
         <div className="w-[340px] flex-1 overflow-y-scroll bg-[#fff] border-l-[1px]">
-          <Collapse
-            activeKey={items.map((item: any) => item.key)}
-            className="Collapse_course_offline"
-            style={{
-              width: "100%",
-            }}
-            expandIconPosition={"end"}
-            items={items}
-            bordered={false}
-          />
+          {Course_Detail?.InforCourse?.course_chapter.map((e: any) => {
+            return (
+              <>
+                <div
+                  className="course-content-title-parent"
+                  onClick={() => setHandleOpen(!handleOpen)}
+                >
+                  {handleOpen ? (
+                    <DownOutlined
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        marginRight: "10px",
+                        color: "#bb0000",
+                      }}
+                    />
+                  ) : (
+                    <RightOutlined
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        marginRight: "10px",
+                        color: "#bb0000",
+                      }}
+                    />
+                  )}
+                  {e.course_chapter_name}
+                </div>
+                {e.course_lesson.map((v: any) => {
+                  return (
+                    <div
+                      className="course-content-title-child"
+                      style={{
+                        display: handleOpen ? "block" : "none",
+                      }}
+                      onClick={(u) => handleVideo(v)}
+                    >
+                      <PlayCircleOutlined
+                        style={{
+                          fontSize: "16px",
+                          fontWeight: "bold",
+                          marginRight: "10px",
+                          color: "#bb0000",
+                        }}
+                      />{" "}
+                      {v.course_lesson_name}
+                    </div>
+                  );
+                })}
+              </>
+            );
+          })}
         </div>
       </div>
     </div>
