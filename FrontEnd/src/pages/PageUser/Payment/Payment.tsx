@@ -13,13 +13,13 @@ export default function Payment() {
   const nav = useNavigate();
   const infoCourseValue = useAtomValue(inforCourseArray);
   const api = useConfigAPI();
-
   const [isPaid, setIsPaid] = useState(false); // Quản lý trạng thái thanh toán
+
   const totalPrice = infoCourseValue.reduce(
     (total, item) => total + Number(item.course_price),
     0
   );
-
+  console.log("infoCourseValue", infoCourseValue);
   const { data: Get_Profile, isLoading } = useQuery({
     queryKey: ["Get_Profile_User"],
     queryFn: async () => {
@@ -32,11 +32,11 @@ export default function Payment() {
     },
   });
 
-  console.log("Get_Profile", Get_Profile);
-
   const linkPayment = `https://img.vietqr.io/image/MB-811200299999-compact.png?amount=${totalPrice}&addInfo=${
     Get_Profile?.id + totalPrice
   }`;
+
+  console.log("infoCourseValue", infoCourseValue);
 
   const checkPaid = async (price: number, content: any) => {
     try {
@@ -48,20 +48,18 @@ export default function Payment() {
       const lastPrice = lastPaid["Giá trị"];
       const lastContent = lastPaid["Mô tả"];
       const sanitizedString = content.replace(/[^a-zA-Z0-9 ]/g, "");
-      console.log("lastPrice >= price", lastPrice >= price);
-      console.log(
-        "lastContent.includes(content)",
-        lastContent.includes(content)
-      );
       if (lastPrice >= price && lastContent.includes(sanitizedString)) {
         setIsPaid(true); // Đánh dấu thanh toán thành công
+        await api.User_Courses_Create({
+          user_id: Get_Profile?.id,
+          course_id: infoCourseValue[0].course_id,
+        });
       } else console.log("Thanh toán không thành công");
     } catch (err) {
       console.error("Error checking payment:", err);
     }
   };
-
-  useEffect(() => {
+  -useEffect(() => {
     const interval = setInterval(() => {
       checkPaid(totalPrice, Get_Profile?.id);
     }, 5000); // Kiểm tra thanh toán mỗi 5 giây

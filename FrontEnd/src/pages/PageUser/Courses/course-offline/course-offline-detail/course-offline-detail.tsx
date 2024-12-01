@@ -6,7 +6,7 @@ import "./couse-offline-detail.scss";
 import { useRef, useState } from "react";
 import { match } from "ts-pattern";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { cartAtom } from "../../../../../packages/store/cart.store";
 import { nanoid } from "nanoid";
 import { useQuery } from "@tanstack/react-query";
@@ -29,6 +29,7 @@ export default function CourseOfflineDetail() {
   const setPrice = useSetAtom(totalPriceAtom);
   const setInfoCoursePayment = useSetAtom(inforCourseArray);
   const [handleOpen, setHandleOpen] = useState(false);
+  const infoCourseValue = useAtomValue(inforCourseArray);
 
   const { data: Course_Detail, isLoading } = useQuery({
     queryKey: ["Course_Detail", param.courseId],
@@ -44,7 +45,7 @@ export default function CourseOfflineDetail() {
 
   const { data: User_Course_List, isLoading: loading_User_Course_List } =
     useQuery({
-      queryKey: ["User_Course_List"],
+      queryKey: ["User_Course_List", param.courseId],
       queryFn: async () => {
         const response = await api.User_Course_GetAll();
         if (response.isSuccess) {
@@ -65,7 +66,9 @@ export default function CourseOfflineDetail() {
     if (found) {
       nav(`/learning/course/${param.courseId}`);
     } else {
-      setInfoCoursePayment(Course_Detail?.InforCourse ?? []);
+      setInfoCoursePayment(
+        Course_Detail?.InforCourse ? [Course_Detail.InforCourse] : []
+      );
       nav("/payment");
     }
   };
