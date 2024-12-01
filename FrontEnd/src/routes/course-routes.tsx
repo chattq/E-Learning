@@ -26,7 +26,7 @@ export const courseRoutes: RouteItem[] = [
   },
   {
     key: "course_offline",
-    path: "/learning/course",
+    path: "/learning/course/:idCourse",
     mainMenuTitle: "",
     mainMenuKey: "course",
     permissionCode: "",
