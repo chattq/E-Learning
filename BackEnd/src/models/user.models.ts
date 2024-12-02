@@ -4,7 +4,7 @@ import course from './course.models'
 import account_bank from './accountBank.models'
 import blog from './blogs.models'
 import purchased_course from './purchasedCourse.models'
-import cart from './cart.models'
+import cart_user from './cartUser.models'
 
 @Table
 class user extends Model {
@@ -106,8 +106,10 @@ class user extends Model {
   blog!: blog[]
   @HasMany(() => purchased_course, { onDelete: 'CASCADE' })
   purchased_course!: purchased_course[]
-  @HasMany(() => cart, { onDelete: 'CASCADE' })
-  cart!: cart[] // Thêm quan hệ với bảng Cart
+
+  @HasOne(() => cart_user, { onDelete: 'CASCADE' })
+  cart!: cart_user
+  // thực hiện mối quan hệ
 }
 
 export default user

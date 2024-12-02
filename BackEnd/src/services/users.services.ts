@@ -8,8 +8,12 @@ import { sendVerifyRegisterEmail } from '../utils/email'
 import { signToken, verifyToken } from '../utils/jwt'
 import { useGetTime } from '../utils/useGetTime'
 import { useRandomOTP } from '../utils/useRandomOTP'
+import cart_user from 'src/models/cartUser.models'
+import { useAutoCodeGen } from 'src/utils/auto-code-gent'
+import cart_user_item from 'src/models/cartItem.models'
 const { getTimeMoment } = useGetTime()
 const { generateRandomOTP } = useRandomOTP()
+const { autoCodeGen } = useAutoCodeGen()
 
 config()
 
@@ -54,6 +58,8 @@ class UserService {
   async registerUser(payload: RegisterReqBody) {
     const { email, name, password, role } = payload
     const OTP = generateRandomOTP()
+    const cartCode = autoCodeGen('CART')
+
     const timeMoment = getTimeMoment()
     const dataCreateUser = {
       user_id: email.toUpperCase(),
@@ -75,6 +81,11 @@ class UserService {
       token: Refresh_tokens,
       create_at: timeMoment
     })
+    await cart_user.create({
+      user_id: email.toUpperCase(),
+      cart_id: cartCode
+    })
+
     await sendVerifyRegisterEmail(payload.email, OTP)
     return {
       Access_token,
@@ -100,6 +111,7 @@ class UserService {
         }
       }
     )
+
     return {
       Access_token,
       Refresh_token,
