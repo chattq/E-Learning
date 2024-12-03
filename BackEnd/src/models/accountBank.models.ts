@@ -4,20 +4,24 @@ import user from './user.models'
 @Table
 class account_bank extends Model {
   @Column({
-    type: DataType.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
+    type: DataType.STRING(300),
+    primaryKey: true
   })
   declare account_bank_id: number
 
   @Column({
-    type: DataType.STRING(300),
-    allowNull: false
+    type: DataType.STRING(300)
   })
   account_name!: string
   @Column({
-    type: DataType.STRING(300),
+    type: DataType.STRING(100),
     allowNull: false
+  })
+  account_bank_code!: string
+  @Column({
+    type: DataType.STRING(300),
+    allowNull: false,
+    unique: true
   })
   account_number!: string
   @Column({

@@ -6,5 +6,6 @@ const account_bankRouters = Router()
 
 account_bankRouters.post('/GetListBank', accessTokenValidator, accountBankController.getListBank)
 account_bankRouters.post('/Create', accessTokenValidator, accountBankController.createBank)
+account_bankRouters.post('/AddAccBank', accessTokenValidator, accountBankController.addAccountBank)
 
 export default account_bankRouters
