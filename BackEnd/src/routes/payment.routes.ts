@@ -7,6 +7,6 @@ import paymentController from 'src/controllers/payment.controllers'
 const paymentRouter = Router()
 
 paymentRouter.post('/addPayment', accessTokenValidator, wrapRequestHandler(paymentController.addToPayment))
-paymentRouter.post('/GetListPayment', accessTokenValidator, wrapRequestHandler(paymentController.GetListPayment))
+paymentRouter.post('/GetListPaymentCart', accessTokenValidator, wrapRequestHandler(paymentController.GetListPayment))
 
 export default paymentRouter
