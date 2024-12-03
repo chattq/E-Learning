@@ -32,7 +32,7 @@ export default function Payment() {
     },
   });
 
-  const linkPayment = `https://img.vietqr.io/image/MB-811200299999-compact.png?amount=${totalPrice}&addInfo=${
+  const linkPayment = `https://img.vietqr.io/image/VCCB-9021049666251-compact.png?amount=${totalPrice}&addInfo=${
     Get_Profile?.id + totalPrice
   }`;
 
@@ -92,8 +92,7 @@ export default function Payment() {
             {infoCourseValue.map((e) => (
               <div
                 key={e.course_id}
-                className="flex justify-between gap-2 my-4 py-3 bg-[#857e7e] px-3 rounded-[6px]"
-              >
+                className="flex justify-between gap-2 my-4 py-3 bg-[#857e7e] px-3 rounded-[6px]">
                 <div className="flex gap-2">
                   <div className="h-[65px] w-[65px] rounded overflow-hidden">
                     <img
@@ -127,8 +126,7 @@ export default function Payment() {
         </div>
         <div
           className="absolute cursor-pointer top-[-8px] right-[-10px] h-[30px] w-[30px] border-[1px] flex justify-center items-center bg-[#ffff] rounded-full"
-          onClick={() => nav(-1)}
-        >
+          onClick={() => nav(-1)}>
           <AiOutlineClose size={18} />
         </div>
       </div>
