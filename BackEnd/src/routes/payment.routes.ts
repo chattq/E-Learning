@@ -8,5 +8,6 @@ const paymentRouter = Router()
 
 paymentRouter.post('/addPayment', accessTokenValidator, wrapRequestHandler(paymentController.addToPayment))
 paymentRouter.post('/GetListPaymentCart', accessTokenValidator, wrapRequestHandler(paymentController.GetListPayment))
+paymentRouter.post('/CoursePayment', accessTokenValidator, wrapRequestHandler(paymentController.PaymentCourse))
 
 export default paymentRouter
