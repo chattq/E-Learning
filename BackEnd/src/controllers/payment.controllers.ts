@@ -23,6 +23,16 @@ class PaymentController {
       data: dataListPayment
     })
   }
+  async PaymentCourse(req: Request, res: Response) {
+    const user_id = req.decoded_authorization?.user_id
+    const dataCoursePayment = await paymentService.getCoursePayment(req.body.CourseCode, user_id)
+
+    return res.json({
+      isSuccess: true,
+      message: 'Thông tin thanh toán',
+      data: dataCoursePayment
+    })
+  }
 }
 const paymentController = new PaymentController()
 export default paymentController

@@ -19,6 +19,10 @@ class account_bank extends Model {
   })
   account_bank_code!: string
   @Column({
+    type: DataType.TEXT
+  })
+  account_bank_sheet!: string
+  @Column({
     type: DataType.STRING(300),
     allowNull: false,
     unique: true

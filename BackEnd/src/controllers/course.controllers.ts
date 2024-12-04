@@ -42,6 +42,17 @@ class CourseController {
       data: null
     })
   }
+  async checkPurchasedCourse(req: Request, res: Response) {
+    const { CourseCode } = req.body
+    const user_id = req.decoded_authorization?.user_id
+    const result = await coursesService.checkPurchasedCourse(CourseCode, user_id as string)
+
+    return res.json({
+      isSuccess: true,
+      message: `Khóa học ${result ? 'đã' : 'chưa'} được thanh toán!`,
+      data: null
+    })
+  }
 }
 const courseController = new CourseController()
 export default courseController

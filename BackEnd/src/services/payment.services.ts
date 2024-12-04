@@ -22,6 +22,33 @@ class PaymentService {
   async create(req: any, user_id: string | undefined) {
     return null
   }
+  async getCoursePayment(course_code: any, user_id: string | undefined) {
+    const dataBank = await account_bank.findOne({
+      where: {
+        user_id: user_id?.toUpperCase(),
+        flag_active: '1'
+      }
+    })
+    const inforCouse = await course.findOne({
+      where: {
+        course_id: course_code
+      },
+      attributes: [
+        'course_id',
+        'course_price',
+        'course_name',
+        'course_discount',
+        'course_model',
+        'course_image',
+        'course_type'
+      ]
+    })
+    const linkPayment = `https://img.vietqr.io/image/${`${dataBank?.dataValues.account_bank_code}-${dataBank?.dataValues.account_number}`}-compact.png?amount=${inforCouse?.course_price}&addInfo=${inforCouse?.course_id}`
+    return {
+      ImagePayment: linkPayment,
+      InforCouse: inforCouse
+    }
+  }
   async getListPayment(req: any, user_id: string | undefined) {
     const dataCoursePayment: any[] = JSON.parse(req) || []
     const cartItemIds = dataCoursePayment.map((item: any) => item.CartItemPayemt)

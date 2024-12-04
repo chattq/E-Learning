@@ -6,6 +6,7 @@ import course_knowledge from '../models/courseKnowledge.models'
 import course_lesson from '../models/courseLesson.models'
 import course_requirement from '../models/courseRequirment.models'
 import { useAutoCodeGen } from '../utils/auto-code-gent'
+import purchased_course from 'src/models/purchasedCourse.models'
 
 export interface CategoryReqBody {
   InforBase: CourseInforBase
@@ -148,6 +149,12 @@ class CoursesService {
   }
   async getListCourse() {
     const result = await course.findAll()
+    return result
+  }
+  async checkPurchasedCourse(CourseCode: string, user_id: string) {
+    const result = await purchased_course.findOne({
+      where: { course_id: CourseCode, user_id: user_id }
+    })
     return result
   }
   async getCourseByCode(code: string) {
