@@ -36,6 +36,17 @@ class AccountBankController {
       })
     )
   }
+  async getSheetBank(req: Request, res: Response) {
+    const user_id = req.decoded_authorization?.user_id
+    const result = await accountBankServices.getLinkSheetBank(user_id as string)
+    return res.json(
+      new ResultsReturned({
+        isSuccess: true,
+        message: 'Lấy link sheet giao dịch thành công',
+        data: result
+      })
+    )
+  }
 }
 
 const accountBankController = new AccountBankController()

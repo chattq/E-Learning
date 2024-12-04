@@ -59,7 +59,7 @@ export default function Payment() {
       console.error("Error checking payment:", err);
     }
   };
-  -useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       checkPaid(totalPrice, Get_Profile?.id);
     }, 5000); // Kiểm tra thanh toán mỗi 5 giây
