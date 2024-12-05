@@ -31,8 +31,8 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
   const joinRoom = ({ roomId, peerId, userId }: IJoinRoomParams) => {
     console.log(16, 'user join', roomId, peerId, 'userId', userId)
     // check xem người dùng đã ở trong room hay chưa
-    const isExist = rooms.some((e: IJoinRoomParams) => e.userId === userId)
-    if (isExist) return socket.emit('Nguoi_dung_da_ton_tai', { roomId, peerId, userId })
+    // const isExist = rooms.some((e: IJoinRoomParams) => e.userId === userId)
+    // if (isExist) return socket.emit('Nguoi_dung_da_ton_tai', { roomId, peerId, userId })
     socket.join(roomId)
     rooms.push({ roomId: roomId, peerId: peerId, userId: userId })
 

@@ -5,8 +5,6 @@ import { ResultsReturned } from '../utils/results-api'
 class AccountBankController {
   //Thêm blog mới
   async getListBank(req: Request, res: Response) {
-    const user_id = req.decoded_authorization?.user_id
-    console.log(38, user_id)
     const result = await accountBankServices.getListBank()
     return res.json(
       new ResultsReturned({
@@ -24,6 +22,28 @@ class AccountBankController {
         isSuccess: true,
         message: 'Tạo thành công',
         data: []
+      })
+    )
+  }
+  async addAccountBank(req: Request, res: Response) {
+    const user_id = req.decoded_authorization?.user_id
+    await accountBankServices.addAccBank(req.body, user_id)
+    return res.json(
+      new ResultsReturned({
+        isSuccess: true,
+        message: 'Thêm tài khoản ngân hàng thành công!',
+        data: null
+      })
+    )
+  }
+  async getSheetBank(req: Request, res: Response) {
+    const user_id = req.decoded_authorization?.user_id
+    const result = await accountBankServices.getLinkSheetBank(user_id as string)
+    return res.json(
+      new ResultsReturned({
+        isSuccess: true,
+        message: 'Lấy link sheet giao dịch thành công',
+        data: result
       })
     )
   }

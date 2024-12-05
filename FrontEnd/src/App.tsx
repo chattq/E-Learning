@@ -13,27 +13,6 @@ import { profileStoreAtom } from "./packages/store/permission-store";
 import { showErrorAtom } from "./packages/ui/Error/error-store";
 
 function App() {
-  const api = useConfigAPI();
-  const setProfile = useSetAtom(profileStoreAtom);
-  const setShowError = useSetAtom(showErrorAtom);
-  useLayoutEffect(() => {
-    const fetchData = async () => {
-      const response = await api.Get_Profile_User();
-      if (response.isSuccess) {
-        setProfile(response?.data);
-      } else {
-        setShowError({
-          isSuccess: false,
-          message: response.message,
-          data: {
-            message: response.message,
-          },
-        });
-      }
-    };
-
-    fetchData();
-  }, []);
   return (
     <Routes>
       <Route path="/login" element={<Login />} />

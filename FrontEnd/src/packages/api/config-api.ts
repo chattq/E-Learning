@@ -66,7 +66,7 @@ export const createApiBase = () => {
     },
     function (error: AxiosError) {
       if (error?.response?.status === 401) {
-        // location.href = "/login";
+        location.href = "/login";
         setShowError({
           isSuccess: false,
           message: error.message,

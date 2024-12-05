@@ -12,8 +12,13 @@ coursesRouter.post(
   accessRoleValidator,
   wrapRequestHandler(courseController.courseCreate)
 )
-coursesRouter.post('/GetListCourse', accessTokenValidator, wrapRequestHandler(courseController.courseGetListCourse))
+coursesRouter.post('/GetListCourse', wrapRequestHandler(courseController.courseGetListCourse))
 coursesRouter.post('/GetCourseByCode', accessTokenValidator, wrapRequestHandler(courseController.GetCourseByCode))
 coursesRouter.post('/Delete', accessTokenValidator, wrapRequestHandler(courseController.DeleteCourseByCode))
+coursesRouter.post(
+  '/CheckPurchasedCourse',
+  accessTokenValidator,
+  wrapRequestHandler(courseController.checkPurchasedCourse)
+)
 
 export default coursesRouter

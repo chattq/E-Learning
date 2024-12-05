@@ -55,7 +55,7 @@ export default function CourseRoom() {
   const profileUser = getProfileFromLS();
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [isToggleShareScreen, setIsToggleShareScreen] = useState(true);
-  console.log("peers", peers);
+  console.log("peers", getProfile);
   const randomLoad = useAtomValue(randowStoreAtom);
 
   // const userID = nanoid();

@@ -1,6 +1,7 @@
 import { Op } from 'sequelize'
 import { useAutoCodeGen } from '../utils/auto-code-gent'
 import purchased_course from 'src/models/purchasedCourse.models'
+import course from 'src/models/course.models'
 
 export interface ReqBody {
   CourseId: string
@@ -9,24 +10,36 @@ export interface ReqBody {
 
 class UserCoursesService {
   async create(user_id: any, course_id: any) {
-    const { autoCodeGen } = useAutoCodeGen()
-    const userCourseId = autoCodeGen('USERCOURSE')
-
     const dbUserCourse = {
       user_id: user_id,
       course_id: course_id
     }
-    console.log('dbUserCourse', dbUserCourse)
     await purchased_course.create(dbUserCourse)
 
-    return {
-      status: true,
-      message: 'create successfully'
-    }
+    return null
   }
-  async getListUserCourse() {
-    const result = await purchased_course.findAll()
-    return result
+  async getListUserCourse(user_id: string) {
+    const result = await purchased_course.findAll({
+      where: {
+        user_id: user_id?.toUpperCase()
+      },
+      attributes: [],
+      include: [
+        {
+          model: course,
+          attributes: [
+            'course_id',
+            'course_name',
+            'course_image',
+            'course_price',
+            'course_intro_video',
+            'course_active'
+          ]
+        }
+      ]
+    })
+
+    return result.map((item: any) => item.course)
   }
   // async getCourseByCode(code: string) {
   //   const InforCourse = await course.findOne({

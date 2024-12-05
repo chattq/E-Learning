@@ -14,6 +14,7 @@ import {
 import Icongoogle from "../../../src/assets/img/icongoogle.png"; // Import hình ảnh
 import { useSetAtom } from "jotai";
 import { showErrorAtom } from "../../packages/ui/Error/error-store";
+import { profileStoreAtom } from "../../packages/store/permission-store";
 
 type FieldType = {
   email: string;
@@ -24,8 +25,10 @@ type FieldType = {
 export default function Login() {
   const api = useConfigAPI();
   const navigate = useNavigate();
-  const setShowError = useSetAtom(showErrorAtom);
   const [messageApi, contextHolder] = message.useMessage();
+
+  const setProfile = useSetAtom(profileStoreAtom);
+  const setShowError = useSetAtom(showErrorAtom);
 
   const success = () => {
     messageApi.open({
@@ -43,6 +46,18 @@ export default function Login() {
     const response = await api.login(values.email, values.password);
     if (response.isSuccess) {
       success();
+      const res: any = await api.Get_Profile_User();
+      if (res?.isSuccess) {
+        setProfile(res?.data);
+      } else {
+        setShowError({
+          isSuccess: false,
+          message: res.message,
+          data: {
+            message: res.message,
+          },
+        });
+      }
     } else {
       setShowError({
         isSuccess: false,
