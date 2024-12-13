@@ -67,7 +67,8 @@ export default function CourseRoom() {
   const profileUser = getProfileFromLS();
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [isToggleShareScreen, setIsToggleShareScreen] = useState(true);
-  const [listUserLayout, setListUserLayout] = useState([]);
+  const [meStream, setMeStream] = useState<MediaStream>();
+  const [toggleImgMe, setToggleImgMe] = useState<any>(false);
 
   const setShowError = useSetAtom(showErrorAtom);
   const [list_user_PeerId, setListUserPeerId] = useState<any>([]);
@@ -90,6 +91,15 @@ export default function CourseRoom() {
       setStatus("Approved");
       ws.on("get-list-user-approval", (data: any) => {
         setDataRequestApproval(data);
+      });
+      const getMediaStream = () => {
+        return navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+      };
+      getMediaStream().then((initialStream) => {
+        setMeStream(initialStream);
       });
     } else {
       ws.emit("request-approval", {
@@ -126,10 +136,19 @@ export default function CourseRoom() {
     ws.on("user_leave_room", (data: any) => {
       openNotification(data, "leave");
     });
+    ws.on("update-kick-user-other", (data) => {
+      setListUserPeerId(
+        list_user_PeerId?.filter((item: any) => item.userId !== data.userID)
+      );
+      if (profileUser?.id === data.userID) {
+        nav(`/course/detail/${idCourse}`);
+      }
+    });
     return () => {
       ws.on("user_leave_room", (data: any) => {
         openNotification(data, "leave");
       });
+      ws.off("update-kick-user-other");
     };
   }, []);
 
@@ -158,16 +177,16 @@ export default function CourseRoom() {
     };
     getMediaStream().then((initialStream) => {
       setStream(initialStream);
+      setToggleImgMe(true);
+      setMeStream(initialStream);
       peer.on("call", (call) => handleCall(call, initialStream));
 
       ws.on("user-joined-approved", ({ peerId, userId }) => {
-        console.log("user-joined-approved", peerId, userId);
         const call = peer.call(peerId, initialStream);
         handleCall(call, initialStream);
       });
     });
     const handleCall = (call: any, stream: MediaStream) => {
-      console.log("handleCall", stream);
       call.answer(stream);
       call.on("stream", (remoteStream: any) => {
         setPeers((prev: any) => ({
@@ -291,6 +310,7 @@ export default function CourseRoom() {
         turnOffMic();
       }
     });
+
     return () => {
       ws.off("turn-off-mic");
       ws.off("turn-off-camera");
@@ -300,6 +320,23 @@ export default function CourseRoom() {
   }, [stream, peers]);
 
   const toggleCamera = useCallback(() => {
+    if (meStream) {
+      if (isCameraOn) {
+        const tracks = meStream.getVideoTracks();
+        tracks[0].stop();
+        setToggleImgMe(false);
+        setIsCameraOn(false);
+      } else {
+        setToggleImgMe(true);
+        navigator.mediaDevices
+          .getUserMedia({ video: true, audio: true })
+          .then((newStream) => {
+            setIsCameraOn(true);
+            setToggleImgMe(true);
+            setMeStream(newStream);
+          });
+      }
+    }
     if (stream) {
       if (isCameraOn) {
         const tracks = stream.getVideoTracks();
@@ -337,9 +374,23 @@ export default function CourseRoom() {
           });
       }
     }
-  }, [isCameraOn, stream, peerId]);
+  }, [isCameraOn, stream, peerId, meStream]);
 
   const toggleMicrophone = useCallback(() => {
+    if (meStream) {
+      if (isMicroPhoneOn) {
+        const tracks = meStream.getAudioTracks();
+        tracks[0].stop();
+        setIsMicrophoneOn(false);
+      } else {
+        navigator.mediaDevices
+          .getUserMedia({ audio: true })
+          .then((newStream) => {
+            setIsMicrophoneOn(true);
+            setMeStream(newStream);
+          });
+      }
+    }
     if (stream) {
       if (isMicroPhoneOn) {
         const tracks = stream.getAudioTracks();
@@ -376,7 +427,7 @@ export default function CourseRoom() {
           });
       }
     }
-  }, [isMicroPhoneOn, stream, peerId]);
+  }, [isMicroPhoneOn, stream, peerId, meStream]);
 
   const turnOffCamera = () => {
     if (stream) {
@@ -433,6 +484,13 @@ export default function CourseRoom() {
       // set lại giá trị peers để cập nhật trạng thái đúng nhất
       setPeers(updatePeer);
     }
+  };
+  const onTurnKickUserOther = (data: any) => {
+    ws.emit("kick-user-other", {
+      userID: data?.userId,
+      peerId: data.peerId,
+      roomId: data.roomId,
+    });
   };
 
   const switchStream = (stream: MediaStream) => {
@@ -526,8 +584,14 @@ export default function CourseRoom() {
   const handleApproval = () => {
     modalApproveRef.current.setOpenModal(dataRequestApproval);
   };
-  console.log("peers", peers);
-  console.log("listUserLayout", listUserLayout);
+  console.log(
+    "mergeDataRoom",
+    mergeDataRoom(
+      list_user_PeerId,
+      Object.values(deleteKeyFromObject(peers, peerId))
+    )
+  );
+
   return (
     <div>
       {/* <Spin spinning={spinning} fullscreen /> */}
@@ -677,7 +741,9 @@ export default function CourseRoom() {
                   <ListUserRoom
                     onTurnOffMicUser={onTurnOffMicUser}
                     onTurnOffCameraUserOther={onTurnOffCameraUserOther}
+                    onTurnKickUserOther={onTurnKickUserOther}
                     peers={peers}
+                    toggleImgMe={toggleImgMe}
                     peerId={peerId}
                     isOwner={
                       createby === profileUser?.id && profileUser?.role === "1"
@@ -686,6 +752,7 @@ export default function CourseRoom() {
                       list_user_PeerId,
                       Object.values(deleteKeyFromObject(peers, peerId))
                     )}
+                    mestream={meStream}
                   />
                 </div>
                 {match(seletedOption)
