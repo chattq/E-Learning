@@ -19,40 +19,49 @@ class user extends Model {
     allowNull: true
   })
   user_email!: string
+
   @Column({
     type: DataType.STRING,
     defaultValue: ''
   })
   user_name!: string
+
   @Column({
     type: DataType.STRING(50),
     defaultValue: ''
   })
   user_phone!: string
+
   @Column({
     type: DataType.STRING(100)
   })
   user_password!: string
+
   @Column({
     type: DataType.STRING
   })
   user_address!: string
+
   @Column({
     type: DataType.STRING
   })
   user_avatar!: string
+
   @Column({
     type: DataType.STRING(25)
   })
   verify_cation_code!: string
+
   @Column({
     type: DataType.STRING(200)
   })
   expiresAt!: string
+
   @Column({
     type: DataType.STRING(300)
   })
   forgot_password_token!: string
+
   @Column({
     type: DataType.STRING(50),
     defaultValue: 'Unverified'
@@ -63,33 +72,49 @@ class user extends Model {
     type: DataType.STRING(100)
   })
   user_date_of_birth!: string
+
   @Column({
     type: DataType.STRING(200)
   })
   user_website!: string
+
   @Column({
     type: DataType.STRING(500)
   })
   user_bio!: string
+
   @Column({
     type: DataType.ENUM('1', '0', '2')
   })
   user_role!: string
+
   @Column({
     type: DataType.STRING(50),
     defaultValue: '1'
   })
   user_active!: string
+
   @Column({
     type: DataType.STRING(10),
     defaultValue: 'vi'
   })
   user_language!: string
+
   @Column({
     type: DataType.STRING(10),
     defaultValue: '7'
   })
   user_time_zone!: string
+
+  @Column({
+    type: DataType.INTEGER
+  })
+  login_attempts!: number
+
+  @Column({
+    type: DataType.DATE
+  })
+  last_login_time!: Date
 
   // thực hiện mối quan hệ
   @HasOne(() => refresh_token, { onDelete: 'CASCADE' })

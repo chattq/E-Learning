@@ -3,6 +3,7 @@ export const USERS_MESSAGES = {
   VALIDATION_ERROR: 'Validation error message',
   EMAIL_ALREADY_EXIST: 'Email already exists',
   EMAIL_AND_PASSWORD_REQUIRED: 'Email and password is required',
+  EMAIL_AND_PASSWORD_INCORRECT: 'Email or password incorrect ',
   NAME_IS_REQUIRED: 'Name is required',
   NAME_MUST_BE_A_STRING: 'Name must be a string',
   NAME_LENGTH_MUST_BE_FROM_1_TO_100: 'Name must be from 1 to 100 characters',
