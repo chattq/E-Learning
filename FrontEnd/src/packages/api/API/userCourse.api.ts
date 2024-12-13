@@ -18,11 +18,11 @@ export const useUserCoursesApi = (apiBase: AxiosInstance) => {
       );
     },
 
-    User_Courses_Create: async (data: any): Promise<ApiResponse<any[]>> => {
+    User_Courses_Create: async (code: any): Promise<ApiResponse<any[]>> => {
       return await apiBase.post<any, ApiResponse<any[]>>(
         "/user-course/create",
         {
-          ...data,
+          course_id: code,
         }
       );
     },
