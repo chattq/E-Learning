@@ -64,6 +64,11 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
     socket.on('toggle-micro-other', (data) => {
       socket.broadcast.to(data.roomId).emit('update-micro-status-other', data)
     })
+    socket.on('kick-user-other', (data) => {
+      console.log(68, data)
+      io.to(data.roomId).emit('update-kick-user-other', data)
+      kickUser({ roomId: data.roomId, peerId: data.peerId, userId: data.userID })
+    })
     // thông báo đến tất cả người trong nhóm trừ user vào, là có người mới online
     notificationsNewUserJoin(roomId, peerId, userId)
 
@@ -137,12 +142,27 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
     })
   }
   const leaveRoom = ({ roomId, peerId, userId }: IJoinRoomParams) => {
-    const index = rooms.findIndex((user) => user.peerId === peerId)
+    const index = rooms.findIndex((user) => user.userId === userId)
     rooms.splice(index, 1)
-    const indexlistUserApproved = rooms.findIndex((user) => user.peerId === peerId)
+    const indexlistUserApproved = rooms.findIndex((user) => user.userId === userId)
     listUserApproved.splice(indexlistUserApproved, 1)
     socket.broadcast.to(roomId).emit('user_leave_room', { roomId, peerId, userId })
     getListUsersRoom(roomId)
+  }
+
+  const kickUser = ({ roomId, peerId, userId }: any) => {
+    const roomIndex = rooms.findIndex((user) => user.userId === userId && user.roomId === roomId)
+    if (roomIndex !== -1) {
+      rooms.splice(roomIndex, 1)
+    }
+
+    // Xóa user khỏi danh sách listUserApproved
+    const approvedIndex = listUserApproved.findIndex((user) => user.userId === userId && user.roomId === roomId)
+    if (approvedIndex !== -1) {
+      listUserApproved.splice(approvedIndex, 1)
+    }
+
+    io.to(roomId).emit('list_users_rooms_online', rooms)
   }
   const notificationsNewUserJoin = (roomId: string, peerId: string, userId: string) => {
     io.to(roomId).emit('user-joined', { peerId: peerId, userId: userId })

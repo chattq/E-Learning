@@ -14,7 +14,7 @@ export default function RoomWait() {
   const apiCall = useConfigAPI();
   const { idCourse } = useParams();
   const accessToken = localStorage.getItem("access_token");
-  const [approved, setApproved] = useState(false);
+
   const [profileUser, setProfileUser] = useState<UserProfileResponse>();
   const nav = useNavigate();
   useEffect(() => {

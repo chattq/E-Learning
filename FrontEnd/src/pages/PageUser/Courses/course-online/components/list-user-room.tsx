@@ -8,6 +8,9 @@ export default function ListUserRoom({
   onTurnOffMicUser,
   onTurnOffCameraUserOther,
   isOwner,
+  mestream,
+  toggleImgMe,
+  onTurnKickUserOther,
 }: any) {
   const generateItems = (item: any): MenuProps["items"] => {
     if (isOwner) {
@@ -19,9 +22,9 @@ export default function ListUserRoom({
         {
           key: "2",
           label: <div>Tắt mic</div>,
-          // onClick: () => {
-          //   onTurnOffMicUser(item.peerId);
-          // },
+          onClick: () => {
+            onTurnOffMicUser(item);
+          },
         },
         {
           key: "3",
@@ -31,8 +34,11 @@ export default function ListUserRoom({
           },
         },
         {
-          key: "3",
-          label: <div>Cho phép chia sẻ màn hình</div>,
+          key: "4",
+          label: <div>Mời ra khỏi phòng</div>,
+          onClick: () => {
+            onTurnKickUserOther(item);
+          },
         },
       ];
     } else {
@@ -44,11 +50,35 @@ export default function ListUserRoom({
       ];
     }
   };
-
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: <div>Tôi</div>,
+    },
+  ];
   console.log("listUser", listUser);
 
   return (
     <div className="grid grid-cols-6 gap-2 px-2 py-2">
+      <Dropdown
+        menu={{ items }}
+        align={{
+          offset: [0, -10],
+        }}
+        arrow={{ pointAtCenter: false }}>
+        <div className="rounded-md overflow-hidden cursor-pointer">
+          {toggleImgMe ? (
+            <VideoPlayer className="h-full w-full " stream={mestream} />
+          ) : (
+            <img
+              src="https://w7.pngwing.com/pngs/613/636/png-transparent-computer-icons-user-profile-male-avatar-avatar-heroes-logo-black-thumbnail.png"
+              alt=""
+              className="h-full w-full"
+            />
+          )}
+        </div>
+      </Dropdown>
+
       {uniqBy(listUser, "userId")?.map((item: any) => {
         const items = generateItems(item);
         if (!item.isCameraOn)
