@@ -50,7 +50,9 @@ class CourseController {
     return res.json({
       isSuccess: true,
       message: `Khóa học ${result ? 'đã' : 'chưa'} được thanh toán!`,
-      data: null
+      data: {
+        FlagPayment: result ? '1' : '0'
+      }
     })
   }
 }

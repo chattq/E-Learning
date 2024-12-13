@@ -13,6 +13,17 @@ export const useCoursesApi = (apiBase: AxiosInstance) => {
     Course_Detail: async (id: any): Promise<ApiResponse<any>> => {
       return await apiBase.post<any, ApiResponse<any[]>>(
         "/course/GetCourseByCode",
+        { CourseCode: id },
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+    },
+    Course_CheckPurchasedCourse: async (id: any): Promise<ApiResponse<any>> => {
+      return await apiBase.post<any, ApiResponse<any[]>>(
+        "/course/CheckPurchasedCourse",
         { CourseCode: id }
       );
     },

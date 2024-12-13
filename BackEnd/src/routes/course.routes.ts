@@ -13,7 +13,7 @@ coursesRouter.post(
   wrapRequestHandler(courseController.courseCreate)
 )
 coursesRouter.post('/GetListCourse', wrapRequestHandler(courseController.courseGetListCourse))
-coursesRouter.post('/GetCourseByCode', accessTokenValidator, wrapRequestHandler(courseController.GetCourseByCode))
+coursesRouter.post('/GetCourseByCode', wrapRequestHandler(courseController.GetCourseByCode))
 coursesRouter.post('/Delete', accessTokenValidator, wrapRequestHandler(courseController.DeleteCourseByCode))
 coursesRouter.post(
   '/CheckPurchasedCourse',

@@ -24,17 +24,11 @@ export default function UserDasboard() {
   const api = useConfigAPI();
 
   const handleClickCourse = (item: any) => {
-    if (item.course_model === "online") {
-      popupSettingMediaRef.current.showPopup(item);
-    } else {
-      nav(`/course/detail/${item.course_id}`);
-    }
+    nav(`/course/detail/${item.course_id}`);
   };
 
-
-
   const { data: Course_GetAllActive, isLoading } = useQuery({
-    queryKey: ["Blogs_GetAllActive"],
+    queryKey: ["Course_GetAllActive"],
     queryFn: async () => {
       const response = await api.Course_GetAll();
       if (response.isSuccess) {
@@ -88,8 +82,7 @@ export default function UserDasboard() {
                         alt="example"
                         src={item.course_image}
                       />
-                    }
-                  >
+                    }>
                     <div>
                       <div className="font-bold text-[16px] line-clamp-2 leading-[20px]">
                         {item.course_name}
@@ -240,8 +233,7 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }
-        >
+          }>
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -253,8 +245,7 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }
-        >
+          }>
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>16 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -266,8 +257,7 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }
-        >
+          }>
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>
@@ -279,8 +269,7 @@ export default function UserDasboard() {
               alt="example"
               src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/68885816_504970150260077_8076612689331224576_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHPZBi1uuBF82Y8qEFxWPVaq4RijZhNHnKrhGKNmE0ecukakqaUNnYlpg9_605ysCqprOeTxgryHqpGZ8d_PYGm&_nc_ohc=1gG6k47TadIQ7kNvgFyme-F&_nc_ht=scontent.fhan17-1.fna&oh=00_AYA9WfRDweuOH7p-ALJIKsiYYGq08dIlNHy1UNpLih2s_A&oe=66DD2B54"
             />
-          }
-        >
+          }>
           <h5>Nguyễn Mạnh Thắng</h5>
           <p>6 năm kinh nghiệp giảng dạy với nhiều chứng chỉ</p>
         </Card>

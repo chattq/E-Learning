@@ -3,7 +3,7 @@ import { Button } from "antd";
 import { BiFilm, BiSolidUser } from "react-icons/bi";
 import { FaInfinity, FaUsers } from "react-icons/fa6";
 import "./couse-offline-detail.scss";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { match } from "ts-pattern";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAtomValue, useSetAtom } from "jotai";
@@ -20,6 +20,7 @@ import {
   PlayCircleOutlined,
   RightOutlined,
 } from "@ant-design/icons";
+import { showErrorAtom } from "../../../../../packages/ui/Error/error-store";
 
 export default function CourseOfflineDetail() {
   const nav = useNavigate();
@@ -30,6 +31,10 @@ export default function CourseOfflineDetail() {
   const setInfoCoursePayment = useSetAtom(inforCourseArray);
   const [handleOpen, setHandleOpen] = useState(false);
   const infoCourseValue = useAtomValue(inforCourseArray);
+  const [CheckPurchasedCourse, setCheckPurchasedCourse] = useState({
+    FlagPayment: "0",
+  });
+  const setShowError = useSetAtom(showErrorAtom);
 
   const { data: Course_Detail, isLoading } = useQuery({
     queryKey: ["Course_Detail", param.courseId],
@@ -43,28 +48,51 @@ export default function CourseOfflineDetail() {
     },
   });
 
-  const { data: User_Course_List, isLoading: loading_User_Course_List } =
-    useQuery({
-      queryKey: ["User_Course_List", param.courseId],
-      queryFn: async () => {
-        const response = await api.User_Course_GetAll();
-        if (response.isSuccess) {
-          return response.data;
-        } else {
-          console.log(response);
-        }
-      },
-    });
+  // const { data: CheckPurchasedCourse } = useQuery({
+  //   queryKey: ["User_Course_CheckPurchasedCourse", param.courseId],
+  //   queryFn: async () => {
+  //     const response = await api.User_Course_CheckPurchasedCourse(
+  //       param.courseId
+  //     );
+  //     if (response.isSuccess) {
+  //       return response.data;
+  //     } else {
+  //       console.log(response);
+  //     }
+  //   },
+  // });
+  useEffect(() => {
+    const fetchDataCheckCourse = async () => {
+      const response = await api.User_Course_CheckPurchasedCourse(
+        param.courseId
+      );
+      if (response.isSuccess) {
+        setCheckPurchasedCourse(response.data);
+      } else {
+        setShowError({
+          isSuccess: false,
+          message: response.message,
+          data: {
+            message: response.message,
+          },
+        });
+      }
+    };
+    const accessToken = localStorage.getItem("access_token");
+    if (accessToken) {
+      fetchDataCheckCourse();
+    }
+  }, [param.courseId]);
 
-  const found = User_Course_List?.find(
-    (e) =>
-      e.user_id === Course_Detail?.InforCourse?.course_create_by &&
-      e.course_id === param.courseId
-  );
-
-  const handlePayment = () => {
-    if (found) {
-      nav(`/learning/course/${param.courseId}`);
+  const handlePayment = (data: any) => {
+    if (CheckPurchasedCourse?.FlagPayment === "1") {
+      if (data.course_model === "online") {
+        nav(
+          `/admin/Course_online/room/${param.courseId}/${data.course_create_by}`
+        );
+      } else {
+        nav(`/learning/course/${param.courseId}`);
+      }
     } else {
       setInfoCoursePayment(
         Course_Detail?.InforCourse ? [Course_Detail.InforCourse] : []
@@ -108,8 +136,7 @@ export default function CourseOfflineDetail() {
                 </h2>
                 <div
                   id="course-objectives"
-                  className="px-[24px] pb-[24px] pt-[15px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff] boxShadow-couses"
-                >
+                  className="px-[24px] pb-[24px] pt-[15px] mb-[16px] rounded-[6px] box-shadow-card bg-[#fff] boxShadow-couses">
                   <div id="course-information" className="mt-[40px]">
                     <div className="font-semibold text-[1.55rem] text-[#1a1a1a] mb-[1rem]">
                       Thông tin khóa học
@@ -128,8 +155,7 @@ export default function CourseOfflineDetail() {
                           <>
                             <div
                               className="course-content-title-parent"
-                              onClick={() => setHandleOpen(!handleOpen)}
-                            >
+                              onClick={() => setHandleOpen(!handleOpen)}>
                               {handleOpen ? (
                                 <DownOutlined
                                   style={{
@@ -157,8 +183,7 @@ export default function CourseOfflineDetail() {
                                   className="course-content-title-child"
                                   style={{
                                     display: handleOpen ? "block" : "none",
-                                  }}
-                                >
+                                  }}>
                                   <PlayCircleOutlined
                                     style={{
                                       fontSize: "16px",
@@ -201,15 +226,15 @@ export default function CourseOfflineDetail() {
             <div className="flex flex-col gap-3 mt-3">
               <Button
                 onClick={handleAddCart}
-                className="bg-[#71869d hover:bg-[#82a5b0] button-couse-add-cart w-full text-[#b1b1b1] font-bold h-[40px] border-[1px] border-[#71869d] "
-              >
+                className="bg-[#71869d hover:bg-[#82a5b0] button-couse-add-cart w-full text-[#b1b1b1] font-bold h-[40px] border-[1px] border-[#71869d] ">
                 Thêm vào giỏ hàng
               </Button>
               <Button
                 className="bg-[#9a2424] w-full text-[#fff] font-bold h-[40px]"
-                onClick={handlePayment}
-              >
-                {found ? "Học ngay" : "Mua ngay"}
+                onClick={() => handlePayment(Course_Detail?.InforCourse)}>
+                {CheckPurchasedCourse?.FlagPayment === "1"
+                  ? "Học ngay"
+                  : "Mua ngay"}
               </Button>
             </div>
             <div>

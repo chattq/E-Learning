@@ -6,11 +6,6 @@ import { nanoid } from "nanoid";
 import UserDasboard from "./pages/PageUser/UserDasboard/UserDasboard";
 import Register from "./pages/Login/Register";
 import VerifyEmail from "./pages/Login/VerifyEmail";
-import { useEffect, useLayoutEffect } from "react";
-import { useConfigAPI } from "./packages/api/config-api";
-import { useSetAtom } from "jotai";
-import { profileStoreAtom } from "./packages/store/permission-store";
-import { showErrorAtom } from "./packages/ui/Error/error-store";
 
 function App() {
   return (
