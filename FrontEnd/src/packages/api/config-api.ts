@@ -54,10 +54,11 @@ export const createApiBase = () => {
       // console.log(39, url);
       if (url === "/users/login" || url === "/users/register") {
         if (data.isSuccess) {
-          console.log(data);
+          // console.log(data);
+          console.log(58, data);
           setAccessTokenToLS(data.data.Access_token);
 
-          localStorage.setItem("profile", JSON.stringify(data.data.InforUser));
+          // localStorage.setItem("profile", JSON.stringify(data.data.InforUser));
         }
         return result;
       } else {

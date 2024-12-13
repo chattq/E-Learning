@@ -5,6 +5,7 @@ import CartPage from "../pages/Cart-page/Cart-page";
 import CourseRoom from "../pages/PageUser/Courses/course-online/CourseRoom";
 import Course_Offline_Room from "../pages/PageUser/Courses/course-offline/course-offline-room/course-offline-room";
 import App from "../pages/TestANTD/test-antd";
+import RoomWait from "../pages/PageUser/Courses/course-online/components/RoomWait";
 
 export const courseRoutes: RouteItem[] = [
   {
@@ -18,12 +19,13 @@ export const courseRoutes: RouteItem[] = [
   {
     key: "Course_online",
     // path: "/admin/Course_online/room/20241405COURSEONLINE",
-    path: "/admin/Course_online/room/:idCourse",
+    path: "/admin/Course_online/room/:idCourse/:createby?",
     mainMenuTitle: "",
     mainMenuKey: "course",
     permissionCode: "",
-    getPageElement: () => <CourseRoom />,
+    getPageElement: () => <RoomWait />,
   },
+
   {
     key: "course_offline",
     path: "/learning/course/:idCourse",

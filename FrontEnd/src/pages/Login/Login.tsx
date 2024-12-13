@@ -15,6 +15,7 @@ import Icongoogle from "../../../src/assets/img/icongoogle.png"; // Import hình
 import { useSetAtom } from "jotai";
 import { showErrorAtom } from "../../packages/ui/Error/error-store";
 import { profileStoreAtom } from "../../packages/store/permission-store";
+import axios from "axios";
 
 type FieldType = {
   email: string;
@@ -34,29 +35,39 @@ export default function Login() {
     messageApi.open({
       type: "success",
       content: "Đăng nhập thành công",
-      onClose: () => {
+      onClose: async () => {
         navigate("/");
       },
       duration: 1,
     });
   };
+  // ,
   const onFinish: FormProps<FieldType>["onFinish"] = async (
     values: FieldType
   ) => {
     const response = await api.login(values.email, values.password);
     if (response.isSuccess) {
-      success();
-      const res: any = await api.Get_Profile_User();
-      if (res?.isSuccess) {
-        setProfile(res?.data);
-      } else {
-        setShowError({
-          isSuccess: false,
-          message: res.message,
-          data: {
-            message: res.message,
+      if (response.data.Access_token) {
+        const resp = await axios({
+          method: "POST",
+          url: `${import.meta.env.VITE_API_DOMAINBE}/users/me`,
+          headers: {
+            Authorization: `Bearer ${response.data.Access_token}`,
           },
         });
+        if (resp.data?.isSuccess) {
+          setProfile(resp.data?.data);
+          localStorage.setItem("profile", JSON.stringify(resp.data?.data));
+          success();
+        } else {
+          setShowError({
+            isSuccess: false,
+            message: resp.data.message,
+            data: {
+              message: resp.data.message,
+            },
+          });
+        }
       }
     } else {
       setShowError({
@@ -125,7 +136,7 @@ export default function Login() {
               rules={[
                 { required: true, message: "Please input your username!" },
               ]}>
-              <Input defaultValue={"chat.tq050902@gmail.com"} />
+              <Input />
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -134,7 +145,7 @@ export default function Login() {
               rules={[
                 { required: true, message: "Please input your password!" },
               ]}>
-              <Input.Password defaultValue={"123456@tQ"} />
+              <Input.Password />
             </Form.Item>
 
             <div className="remember">

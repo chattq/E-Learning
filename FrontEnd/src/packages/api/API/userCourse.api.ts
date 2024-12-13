@@ -9,6 +9,14 @@ export const useUserCoursesApi = (apiBase: AxiosInstance) => {
         {}
       );
     },
+    User_Course_CheckPurchasedCourse: async (
+      data: any
+    ): Promise<ApiResponse<any>> => {
+      return await apiBase.post<any, ApiResponse<any>>(
+        "/course/CheckPurchasedCourse",
+        { CourseCode: data }
+      );
+    },
 
     User_Courses_Create: async (data: any): Promise<ApiResponse<any[]>> => {
       return await apiBase.post<any, ApiResponse<any[]>>(

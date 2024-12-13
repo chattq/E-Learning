@@ -3,7 +3,7 @@ import { useWindowSize } from "../../../../../packages/hooks/useWindowSize";
 import { nanoid } from "nanoid";
 import ReactPlayer from "react-player";
 import "./course-offline-room.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextArea from "antd/es/input/TextArea";
 import { IoSend } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
@@ -15,21 +15,44 @@ import {
   PlayCircleOutlined,
   RightOutlined,
 } from "@ant-design/icons";
+import { useSetAtom } from "jotai";
+import { showErrorAtom } from "../../../../../packages/ui/Error/error-store";
 
 export default function Course_Offline_Room() {
   const windowSize = useWindowSize();
   const [isExpanded, setIsExpanded] = useState(false);
+  const nav = useNavigate();
+  const param = useParams();
+  const api = useConfigAPI();
   const [handleOpen, setHandleOpen] = useState(false);
+  const setShowError = useSetAtom(showErrorAtom);
   const [linkVideo, setLinkVideo] = useState("");
   const [videoRemark, setVideoRemark] = useState("");
   const [infoVideo, setInfoVideo] = useState<any>({});
   const toggleReadMore = () => {
     setIsExpanded(!isExpanded);
   };
-
-  const nav = useNavigate();
-  const param = useParams();
-  const api = useConfigAPI();
+  const [checkPayment, setCheckPayment] = useState("0");
+  useEffect(() => {
+    const fetchDataCheckCourse = async () => {
+      const response = await api.Course_CheckPurchasedCourse(param.idCourse);
+      if (response.isSuccess) {
+        setCheckPayment(response.data.FlagPayment);
+      } else {
+        setShowError({
+          isSuccess: false,
+          message: response.message,
+          data: {
+            message: response.message,
+          },
+        });
+      }
+    };
+    const accessToken = localStorage.getItem("access_token");
+    if (accessToken) {
+      fetchDataCheckCourse();
+    }
+  }, [param.idCourse]);
 
   const { data: Course_Detail, isLoading } = useQuery({
     queryKey: ["Course_Detail_Video", param.idCourse],
@@ -41,6 +64,7 @@ export default function Course_Offline_Room() {
         console.log(response);
       }
     },
+    enabled: checkPayment === "1",
   });
 
   const handleVideo = (u: any) => {
@@ -50,20 +74,31 @@ export default function Course_Offline_Room() {
   const backHomePage = () => {
     nav("/");
   };
+  if (checkPayment === "0") {
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        Khóa học chưa được kích hoạt. Vui lòng kích hoạt{" "}
+        <span
+          className="ml-1 cursor-pointer hover:underline hover:text-red-600"
+          onClick={() => nav(`/course/detail/${param.idCourse}`)}>
+          {" "}
+          Tại đây
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div
       style={{
         height: windowSize.height - 50.1,
-      }}
-    >
+      }}>
       <div className="h-[50px] header-video-course ">
         <LeftOutlined onClick={backHomePage} />
         <div
           style={{
             paddingLeft: "15px",
-          }}
-        >
+          }}>
           {" "}
           {Course_Detail?.InforCourse.course_name}
         </div>
@@ -102,8 +137,7 @@ export default function Course_Offline_Room() {
                     color: "blue",
                     cursor: "pointer",
                     display: infoVideo?.course_lesson_Remark ? "block" : "none",
-                  }}
-                >
+                  }}>
                   {isExpanded ? "Ẩn bớt" : "Xem thêm"}
                 </span>
               </div>
@@ -137,8 +171,7 @@ export default function Course_Offline_Room() {
               <>
                 <div
                   className="course-content-title-parent"
-                  onClick={() => setHandleOpen(!handleOpen)}
-                >
+                  onClick={() => setHandleOpen(!handleOpen)}>
                   {handleOpen ? (
                     <DownOutlined
                       style={{
@@ -167,8 +200,7 @@ export default function Course_Offline_Room() {
                       style={{
                         display: handleOpen ? "block" : "none",
                       }}
-                      onClick={(u) => handleVideo(v)}
-                    >
+                      onClick={(u) => handleVideo(v)}>
                       <PlayCircleOutlined
                         style={{
                           fontSize: "16px",
