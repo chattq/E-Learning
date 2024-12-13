@@ -13,6 +13,130 @@ import { verifyToken } from '../utils/jwt'
 
 config()
 
+const MAX_LOGIN_ATTEMPTS = 5 // Giới hạn số lần đăng nhập sai
+const LOCK_TIME = 15 * 60 * 1000 // Thời gian khóa tài khoản (15 phút)
+
+// export const loginValidator = validate(
+//   checkSchema(
+//     {
+//       email: {
+//         notEmpty: {
+//           errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED
+//         },
+//         in: ['body'],
+//         escape: true,
+//         isEmail: true,
+//         trim: true,
+//         custom: {
+//           options: async (value: string, { req }) => {
+//             const { email, password } = req.body
+//             const isExist = await user.findAll({
+//               where: {
+//                 user_email: email.toUpperCase(),
+//                 user_password: hasPassword(password)
+//               }
+//             })
+
+//             const userRecord = await user.findOne({
+//               where: { user_email: email.toUpperCase() }
+//             })
+
+//             const { login_attempts, last_login_time, verify } = userRecord?.dataValues
+
+//             // Nếu đã hết thời gian khóa, reset số lần thử
+//             if (
+//               login_attempts >= MAX_LOGIN_ATTEMPTS &&
+//               new Date().getTime() - new Date(last_login_time).getTime() >= LOCK_TIME
+//             ) {
+//               await user.update(
+//                 { login_attempts: 0, last_login_time: null },
+//                 { where: { user_email: email.toUpperCase() } }
+//               )
+//             }
+
+//             // Kiểm tra trạng thái khóa sau khi reset (nếu có)
+//             if (
+//               login_attempts >= MAX_LOGIN_ATTEMPTS &&
+//               new Date().getTime() - new Date(last_login_time).getTime() < LOCK_TIME
+//             ) {
+//               throw new ErrorWithStatus({
+//                 message: 'Tài khoản của bạn đã bị khóa. Vui lòng thử lại sau 15 phút.',
+//                 status: 403
+//               })
+//             }
+
+//             // Xác thực mật khẩu
+//             const isPasswordCorrect = await user.findOne({
+//               where: {
+//                 user_email: email.toUpperCase(),
+//                 user_password: hasPassword(password)
+//               }
+//             })
+
+//             if (!isPasswordCorrect) {
+//               // Cập nhật số lần đăng nhập sai và thời gian
+//               await user.update(
+//                 {
+//                   login_attempts: login_attempts + 1,
+//                   last_login_time: new Date().toLocaleString('vi-VN')
+//                 },
+//                 { where: { user_email: email.toUpperCase() } }
+//               )
+
+//               throw new ErrorWithStatus({
+//                 message: USERS_MESSAGES.EMAIL_AND_PASSWORD_INCORRECT,
+//                 status: 200
+//               })
+//             }
+
+//             // Reset số lần thử khi đăng nhập đúng
+//             await user.update(
+//               { login_attempts: 0, last_login_time: null },
+//               { where: { user_email: email.toUpperCase() } }
+//             )
+
+//             if (isExist.length > 0) {
+//               if (isExist[0].dataValues.verify === UserVerifyStatus.Unverified) {
+//                 throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_VERIFY_TOKEN_IS_REQUIRED, status: 200 })
+//               }
+
+//               if (isExist[0].dataValues.verify === UserVerifyStatus.Banned) {
+//                 throw new ErrorWithStatus({ message: 'Tài khoản của bạn đang bị khóa', status: 200 })
+//               }
+//             }
+
+//             if (isExist?.length === 0) {
+//               throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_AND_PASSWORD_REQUIRED, status: 200 })
+//             }
+
+//             return true
+//           }
+//         }
+//       },
+//       password: {
+//         notEmpty: true,
+//         isStrongPassword: {
+//           options: {
+//             minLength: 6,
+//             minLowercase: 1,
+//             minUppercase: 1,
+//             minNumbers: 1,
+//             minSymbols: 1
+//           },
+//           errorMessage:
+//             'Password must be at least 6 characters, and at least 1 lowercase,1 uppercase,1 numbers, 1 symbols'
+//         },
+//         in: ['body'],
+//         isLength: {
+//           options: { min: 6, max: 50 },
+//           errorMessage: 'Password must be at least 6 characters long'
+//         }
+//       }
+//     },
+//     ['body']
+//   )
+// )
+
 export const loginValidator = validate(
   checkSchema(
     {
@@ -27,25 +151,71 @@ export const loginValidator = validate(
         custom: {
           options: async (value: string, { req }) => {
             const { email, password } = req.body
-            const isExist = await user.findAll({
+            const userRecord = await user.findOne({
+              where: { user_email: email.toUpperCase() }
+            })
+
+            if (!userRecord) {
+              throw new ErrorWithStatus({
+                message: USERS_MESSAGES.USER_NOT_FOUND,
+                status: 404
+              })
+            }
+
+            const { login_attempts = 0, last_login_time, verify } = userRecord.dataValues
+
+            // Reset login attempts if lock time has passed
+            const isLockTimeElapsed =
+              login_attempts >= MAX_LOGIN_ATTEMPTS &&
+              new Date().getTime() - new Date(last_login_time || 0).getTime() >= LOCK_TIME
+
+            if (isLockTimeElapsed) {
+              await user.update(
+                { login_attempts: 0, last_login_time: null },
+                { where: { user_email: email.toUpperCase() } }
+              )
+            }
+
+            // Check if account is locked
+            if (
+              login_attempts >= MAX_LOGIN_ATTEMPTS &&
+              new Date().getTime() - new Date(last_login_time || 0).getTime() < LOCK_TIME
+            ) {
+              throw new ErrorWithStatus({
+                message: 'Tài khoản của bạn đã bị khóa. Vui lòng thử lại sau 15 phút.',
+                status: 403
+              })
+            }
+
+            // Check password
+            const isPasswordCorrect = await user.findOne({
               where: {
                 user_email: email.toUpperCase(),
                 user_password: hasPassword(password)
               }
             })
-            if (isExist.length > 0) {
-              if (isExist[0].dataValues.verify === UserVerifyStatus.Unverified) {
-                throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_VERIFY_TOKEN_IS_REQUIRED, status: 200 })
-              }
 
-              if (isExist[0].dataValues.verify === UserVerifyStatus.Banned) {
-                throw new ErrorWithStatus({ message: 'Tài khoản của bạn đang bị khóa', status: 200 })
-              }
+            if (!isPasswordCorrect) {
+              await user.update(
+                {
+                  login_attempts: login_attempts + 1,
+                  last_login_time: new Date().toISOString()
+                },
+                { where: { user_email: email.toUpperCase() } }
+              )
+
+              throw new ErrorWithStatus({
+                message: USERS_MESSAGES.EMAIL_AND_PASSWORD_INCORRECT,
+                status: 401
+              })
             }
 
-            if (isExist?.length === 0) {
-              throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_AND_PASSWORD_REQUIRED, status: 200 })
-            }
+            // Reset login attempts upon successful login
+            await user.update(
+              { login_attempts: 0, last_login_time: null },
+              { where: { user_email: email.toUpperCase() } }
+            )
+
             return true
           }
         }
@@ -73,6 +243,7 @@ export const loginValidator = validate(
     ['body']
   )
 )
+
 export const registerValidator = validate(
   checkSchema(
     {
