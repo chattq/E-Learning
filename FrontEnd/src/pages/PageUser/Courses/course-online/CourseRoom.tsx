@@ -48,7 +48,7 @@ export const deleteKeyFromObject = (obj: any, key: any) => {
 export default function CourseRoom() {
   const { idCourse, createby } = useParams();
   const [approved, setApproved] = useState(false);
-
+  const [screenStream, setScreenStream] = useState<MediaStream>();
   const [status, setStatus] = useState("");
   const [api, contextHolder] = notification.useNotification();
   const modalApproveRef = useRef<any>(null);
@@ -203,19 +203,24 @@ export default function CourseRoom() {
     ws.on("receive-message", (data: IMessage) => {
       setMessages((prevMessages) => [...prevMessages, data]);
     });
+    ws.on("user-started-sharing", (data) => {
+      // setScreenSharingId(data.peerId);
+    });
+    ws.on("user-stopped-sharing", () => setScreenSharingId(""));
 
     return () => {
       ws.off("user-joined");
       ws.off("join-room");
       ws.off("list_users_rooms_online", (data: any) => console.log(data));
-
+      ws.off("user-started-sharing");
+      ws.off("user-stopped-sharing");
       ws.off("receive-message");
       peer.destroy();
     };
   }, [approved]);
 
   const handleTogglePictureInPicture = () => {
-    if (stream && isCameraOn) {
+    if (stream) {
       stream.getTracks().forEach((track) => track.stop());
       setIsCameraOn(false);
       nav(-1);
@@ -224,6 +229,10 @@ export default function CourseRoom() {
         peerId: peerId,
         isCameraOn: false,
       });
+    }
+    if (meStream) {
+      meStream.getTracks().forEach((track) => track.stop());
+      nav(-1);
     }
     // if (document.pictureInPictureElement) {
     //   document.exitPictureInPicture().catch((error) => {
@@ -341,6 +350,7 @@ export default function CourseRoom() {
       if (isCameraOn) {
         const tracks = stream.getVideoTracks();
         tracks[0].stop();
+        stream.getTracks().forEach((track) => track.stop());
         setIsCameraOn(false);
         ws.emit("toggle-camera", {
           userID: profileUser?.id,
@@ -350,7 +360,7 @@ export default function CourseRoom() {
       } else {
         // logic để bật lại camera tạo ra 1 stream mới
         navigator.mediaDevices
-          .getUserMedia({ video: true, audio: true })
+          .getUserMedia({ video: true })
           .then((newStream) => {
             ws.emit("toggle-camera", {
               userID: profileUser?.id,
@@ -377,24 +387,9 @@ export default function CourseRoom() {
   }, [isCameraOn, stream, peerId, meStream]);
 
   const toggleMicrophone = useCallback(() => {
-    if (meStream) {
-      if (isMicroPhoneOn) {
-        const tracks = meStream.getAudioTracks();
-        tracks[0].stop();
-        setIsMicrophoneOn(false);
-      } else {
-        navigator.mediaDevices
-          .getUserMedia({ audio: true })
-          .then((newStream) => {
-            setIsMicrophoneOn(true);
-            setMeStream(newStream);
-          });
-      }
-    }
     if (stream) {
       if (isMicroPhoneOn) {
-        const tracks = stream.getAudioTracks();
-        tracks[0].stop();
+        stream?.getAudioTracks().forEach((track) => track.stop());
         setIsMicrophoneOn(false);
         ws.emit("toggle-microphone", {
           userID: profileUser?.id,
@@ -509,21 +504,35 @@ export default function CourseRoom() {
   };
 
   const shareScreen = () => {
-    if (screenSharingId) {
+    if (!isToggleShareScreen) {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
           switchStream(stream);
-          // setScreenStream(stream);
+          setMeStream(stream);
           setStream(stream);
         });
-      setIsToggleShareScreen(false);
-    } else {
+
       setIsToggleShareScreen(true);
+      ws.emit("stop-sharing", {
+        peerId: peerId,
+        roomId: idCourse,
+        userId: profileUser?.id,
+        showShareScreen: false,
+      });
+    } else {
+      setIsToggleShareScreen(false);
       navigator.mediaDevices.getDisplayMedia({}).then((stream) => {
         switchStream(stream);
-        // setScreenStream(stream);
+        setScreenStream(stream);
         setStream(stream);
+        setMeStream(stream);
+      });
+      ws.emit("start-sharing", {
+        peerId: peerId,
+        roomId: idCourse,
+        userId: profileUser?.id,
+        showShareScreen: true,
       });
     }
   };
@@ -584,14 +593,18 @@ export default function CourseRoom() {
   const handleApproval = () => {
     modalApproveRef.current.setOpenModal(dataRequestApproval);
   };
+  const screenSharingVideo =
+    screenSharingId === peerId ? screenStream : peers[screenSharingId]?.stream;
+  console.log("screenSharingId", peerRef.current?.id);
+
+  console.log(593, peers);
   console.log(
-    "mergeDataRoom",
+    593,
     mergeDataRoom(
       list_user_PeerId,
       Object.values(deleteKeyFromObject(peers, peerId))
     )
   );
-
   return (
     <div>
       {/* <Spin spinning={spinning} fullscreen /> */}
@@ -716,7 +729,7 @@ export default function CourseRoom() {
                     className="cursor-pointer flex flex-col"
                     onClick={shareScreen}>
                     <div className="m-auto">
-                      {!isToggleShareScreen ? (
+                      {isToggleShareScreen ? (
                         <MdStopScreenShare size={20} />
                       ) : (
                         <MdScreenShare size={20} />
@@ -742,12 +755,14 @@ export default function CourseRoom() {
                     onTurnOffMicUser={onTurnOffMicUser}
                     onTurnOffCameraUserOther={onTurnOffCameraUserOther}
                     onTurnKickUserOther={onTurnKickUserOther}
+                    screenSharingVideo={screenSharingVideo}
                     peers={peers}
                     toggleImgMe={toggleImgMe}
                     peerId={peerId}
                     isOwner={
                       createby === profileUser?.id && profileUser?.role === "1"
                     }
+                    isToggleShareScreen={isToggleShareScreen}
                     listUser={mergeDataRoom(
                       list_user_PeerId,
                       Object.values(deleteKeyFromObject(peers, peerId))
