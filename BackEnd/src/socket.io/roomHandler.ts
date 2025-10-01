@@ -185,5 +185,15 @@ export const roomHandler = (socket: Socket, io: Server<DefaultEventsMap, Default
     socket.emit('chat-history', chatHistory)
   }
 
+  const startSharing = (data: any) => {
+    socket.to(data.roomId).emit('user-started-sharing', data)
+  }
+
+  const stopSharing = (data: any) => {
+    socket.to(data.roomId).emit('user-stopped-sharing', data)
+  }
+  socket.on('start-sharing', startSharing)
+  socket.on('stop-sharing', stopSharing)
+
   socket.on('join-room', joinRoom)
 }

@@ -11,6 +11,8 @@ export default function ListUserRoom({
   mestream,
   toggleImgMe,
   onTurnKickUserOther,
+  screenSharingVideo,
+  isToggleShareScreen,
 }: any) {
   const generateItems = (item: any): MenuProps["items"] => {
     if (isOwner) {
@@ -59,29 +61,51 @@ export default function ListUserRoom({
   console.log("listUser", listUser);
 
   return (
-    <div className="grid grid-cols-6 gap-2 px-2 py-2">
-      <Dropdown
-        menu={{ items }}
-        align={{
-          offset: [0, -10],
-        }}
-        arrow={{ pointAtCenter: false }}>
-        <div className="rounded-md overflow-hidden cursor-pointer">
-          {toggleImgMe ? (
-            <VideoPlayer className="h-full w-full " stream={mestream} />
-          ) : (
-            <img
-              src="https://w7.pngwing.com/pngs/613/636/png-transparent-computer-icons-user-profile-male-avatar-avatar-heroes-logo-black-thumbnail.png"
-              alt=""
-              className="h-full w-full"
-            />
-          )}
-        </div>
-      </Dropdown>
+    <>
+      <div className="grid grid-cols-6 gap-2 px-2 py-2">
+        <Dropdown
+          menu={{ items }}
+          align={{
+            offset: [0, -10],
+          }}
+          arrow={{ pointAtCenter: false }}>
+          <div className="rounded-md overflow-hidden cursor-pointer">
+            {toggleImgMe ? (
+              <VideoPlayer className="h-full w-full " stream={mestream} />
+            ) : (
+              <img
+                src="https://w7.pngwing.com/pngs/613/636/png-transparent-computer-icons-user-profile-male-avatar-avatar-heroes-logo-black-thumbnail.png"
+                alt=""
+                className="h-full w-full"
+              />
+            )}
+          </div>
+        </Dropdown>
 
-      {uniqBy(listUser, "userId")?.map((item: any) => {
-        const items = generateItems(item);
-        if (!item.isCameraOn)
+        {uniqBy(listUser, "userId")?.map((item: any) => {
+          const items = generateItems(item);
+          if (!item.isCameraOn)
+            return (
+              <>
+                <Dropdown
+                  menu={{ items }}
+                  align={{
+                    offset: [0, -10],
+                  }}
+                  arrow={{ pointAtCenter: false }}>
+                  <div
+                    key={item.peerId}
+                    className="rounded-md overflow-hidden cursor-pointer">
+                    <img
+                      src="https://w7.pngwing.com/pngs/613/636/png-transparent-computer-icons-user-profile-male-avatar-avatar-heroes-logo-black-thumbnail.png"
+                      alt=""
+                      className="h-full w-full"
+                    />
+                  </div>
+                </Dropdown>
+              </>
+            );
+
           return (
             <>
               <Dropdown
@@ -93,33 +117,23 @@ export default function ListUserRoom({
                 <div
                   key={item.peerId}
                   className="rounded-md overflow-hidden cursor-pointer">
-                  <img
-                    src="https://w7.pngwing.com/pngs/613/636/png-transparent-computer-icons-user-profile-male-avatar-avatar-heroes-logo-black-thumbnail.png"
-                    alt=""
-                    className="h-full w-full"
+                  <VideoPlayer
+                    className="h-full w-full "
+                    stream={item.stream}
                   />
                 </div>
               </Dropdown>
             </>
           );
-
-        return (
-          <>
-            <Dropdown
-              menu={{ items }}
-              align={{
-                offset: [0, -10],
-              }}
-              arrow={{ pointAtCenter: false }}>
-              <div
-                key={item.peerId}
-                className="rounded-md overflow-hidden cursor-pointer">
-                <VideoPlayer className="h-full w-full " stream={item.stream} />
-              </div>
-            </Dropdown>
-          </>
-        );
-      })}
-    </div>
+        })}
+      </div>
+      {screenSharingVideo && (
+        <VideoPlayer
+          className="h-full w-full "
+          stream={screenSharingVideo}
+          isScaleX={false}
+        />
+      )}
+    </>
   );
 }
